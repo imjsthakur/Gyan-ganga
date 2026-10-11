@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gyan Ganga | ज्ञान गंगा</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f4f7ff;--fg:#1d2340;--card:#4f6df5;--face:#fff;--ok:#2fb36d;--bad:#e5484d;--muted:#5b6285}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141830;--fg:#eef0ff;--card:#6b84ff;--face:#232a4d;--ok:#3fd388;--bad:#ff6b70;--muted:#a3a9d1}}
+:root[data-theme="dark"]{--bg:#141830;--fg:#eef0ff;--card:#6b84ff;--face:#232a4d;--ok:#3fd388;--bad:#ff6b70;--muted:#a3a9d1}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Trebuchet MS","Noto Sans Devanagari","Nirmala UI",system-ui,sans-serif;text-align:center;padding:14px}
+h1{margin:6px 0 2px;font-size:1.5rem}
+p{color:var(--muted);margin:4px 0 10px}
+.bar{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+button,select{font:inherit;padding:7px 10px;border-radius:10px;border:2px solid var(--card);background:var(--face);color:var(--fg);cursor:pointer}
+.stat{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:10px}
+.stat span{background:var(--face);border:2px solid var(--card);border-radius:999px;padding:4px 10px;font-size:.9rem}
+.grid{display:grid;gap:8px;max-width:560px;margin:0 auto}
+.c{aspect-ratio:1/1;border-radius:12px;border:0;background:var(--card);color:transparent;display:flex;align-items:center;justify-content:center;padding:2px;line-height:1.1}
+.c:not(.up):not(.done)::after{content:"?";color:#fff;font-size:1.8rem}
+.c.up,.c.done{background:var(--face);color:var(--fg);border:3px solid var(--card);font-weight:bold;font-size:clamp(.65rem,3vw,1rem);animation:pop .25s}
+.c.done{border-color:var(--ok)}
+.c.bad{border-color:var(--bad)}
+.c.pic{font-size:clamp(1.6rem,8vw,3rem)}
+@keyframes pop{from{transform:scale(.7)}to{transform:scale(1)}}
+#toast{height:1.4em;color:var(--ok);font-weight:bold;margin:6px 0}
+#win{display:none;margin:14px auto;max-width:400px;padding:16px;border-radius:14px;background:var(--face);border:3px solid var(--ok)}
+.top{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.game{display:none}
+.hcards{display:grid;gap:10px;max-width:420px;margin:14px auto}
+.hc{padding:16px;border-radius:16px;text-align:left;font-size:1rem}
+.hc b{display:block;font-size:1.2rem}.hc span{color:var(--muted);font-size:.9rem}
+.big{font-size:4.5rem;margin:6px 0}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:420px;margin:10px auto}
+.o{padding:14px 8px;font-size:1.1rem;font-weight:bold}
+.o.ok{background:var(--ok);color:#fff;border-color:var(--ok)}.o.no{background:var(--bad);color:#fff;border-color:var(--bad)}
+.qres{margin:14px auto;max-width:400px;padding:16px;border-radius:14px;background:var(--face);border:3px solid var(--ok)}
+
+:root{--panel:#fff;--side:#1b2250;--line:#dde2f0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--panel:#1b2040;--side:#0a0d1f;--line:#2c3363}}
+:root[data-theme="dark"]{--panel:#1b2040;--side:#0a0d1f;--line:#2c3363}
+body{padding:0;text-align:left}
+button:hover{filter:brightness(1.07)}
+.app{display:flex;min-height:100vh}
+.side{width:220px;background:var(--side);color:#fff;padding:16px 12px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;align-self:flex-start;box-sizing:border-box}
+.logo{font-size:1.1rem;font-weight:bold;margin:4px 8px 16px}
+.ni{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:10px;border:0;background:transparent;color:#cfd5ff;text-align:left;font-size:.95rem;width:100%;margin-bottom:4px}
+.ni.on{background:#4f6df5;color:#fff;font-weight:bold}
+.sfoot{margin-top:auto;font-size:.75rem;color:#8f98d6;padding:8px}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.tb{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;font-size:1.05rem}
+.content{padding:18px;text-align:center}
+.content>.game{max-width:780px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 4px 18px rgba(30,40,100,.08)}
+.game h1{font-size:1.3rem}
+.tabs{display:none}
+.hero{background:linear-gradient(135deg,#4f6df5,#8a5cf6);color:#fff;border-radius:14px;padding:18px;text-align:left;margin-bottom:14px}
+.hero h1{margin:0 0 4px;font-size:1.3rem}.hero p{color:#e8ebff;margin:0}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.kpi{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px}
+.kpi b{display:block;font-size:1.4rem}.kpi span{font-size:.75rem;color:var(--muted)}
+.hcards{max-width:none;grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.hc{background:var(--bg);border:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.ic{font-style:normal;font-size:1.8rem;background:var(--card);width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:4px}
+.hc em{font-style:normal;color:var(--card);font-weight:bold;font-size:.85rem;margin-top:4px}
+@media(max-width:720px){.side{display:none}.tb{padding:10px 12px}.content{padding:10px 8px 84px}.content>.game{padding:12px}
+.tabs{display:flex;position:fixed;left:0;right:0;bottom:0;padding-bottom:env(safe-area-inset-bottom,0px);background:var(--panel);border-top:1px solid var(--line);z-index:6}
+.tabs button{flex:1;border:0;border-radius:0;background:transparent;padding:8px 2px;font-size:.68rem;color:var(--muted)}
+.tabs button.on{color:var(--card);font-weight:bold}}
+.tr{display:flex;justify-content:space-between;padding:10px 16px;border-radius:10px;background:var(--bg);margin:6px auto;max-width:320px;font-size:1.15rem;cursor:pointer}
+.tr:nth-child(even){background:var(--face);border:1px solid var(--line)}
+.hide .tr:not(.rv) b{visibility:hidden}
+.act{background:var(--card)!important;color:#fff}
+.chat{min-height:200px;max-height:50vh;overflow-y:auto;text-align:left;display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.m{padding:10px 12px;border-radius:14px;max-width:85%;line-height:1.45;white-space:pre-wrap}
+.m.u{align-self:flex-end;background:var(--card);color:#fff}
+.m.a{align-self:flex-start;background:var(--bg);border:1px solid var(--line)}
+.m button{margin-top:6px;font-size:.8rem;padding:3px 8px}
+.arow{display:flex;gap:6px}
+.arow input{flex:1;min-width:0;font:inherit;padding:8px 10px;border-radius:10px;border:2px solid var(--card);background:var(--face);color:var(--fg)}
+#mic.on{background:var(--bad);color:#fff;border-color:var(--bad)}
+.side{overflow-y:auto}
+@media(max-width:720px){.tabs{overflow-x:auto}.tabs button{flex:0 0 auto;min-width:70px}}
+.pb{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin-bottom:8px}.pb i{display:block;height:100%;background:var(--card)}
+.sw{width:34px;height:34px;border-radius:50%;padding:0;border:3px solid var(--line)}.sw.sel{border-color:var(--fg)}
+.cv{max-width:380px;margin:8px auto}.cv svg{width:100%;background:#eaf6ff;border-radius:12px}
+.r{fill:#fff;stroke:#333;stroke-width:2;cursor:pointer}
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:300px;margin:10px auto}
+.pt{aspect-ratio:1;font-size:2rem;font-weight:bold}.pt.e{visibility:hidden}
+.ng{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:340px;margin:10px auto}
+.nb{aspect-ratio:1;font-size:1.4rem;font-weight:bold}.nb.done{background:var(--ok);color:#fff;border-color:var(--ok)}.nb.bad{border-color:var(--bad)}
+.wa{font-size:1.8rem;letter-spacing:4px;min-height:2.2rem;margin:8px}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:260px;margin:12px auto}
+.sp{aspect-ratio:1;border-radius:16px;border:0;transition:.15s}
+.dg{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;max-width:320px;margin:6px auto}
+.dc{font-size:1.9rem;padding:4px;border-radius:8px;background:var(--bg);cursor:pointer}.dc.fd{background:var(--ok)}.dc.wr{background:var(--bad)}
+.gkg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:8px}
+.gt{padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;border-radius:12px;background:var(--bg);border:1px solid var(--line);font-size:.9rem}
+.gt i{font-style:normal;font-size:1.8rem}
+.kpis{grid-template-columns:repeat(4,1fr)}.kpi b{font-size:1.05rem}
+.xpb{height:10px;background:rgba(255,255,255,.3);border-radius:8px;overflow:hidden;margin:10px 0 4px}.xpb i{display:block;height:100%;background:#ffd84d}
+.chip{font-size:.85rem;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 10px;margin-left:auto;margin-right:10px}
+.ov{position:fixed;inset:0;background:rgba(10,13,31,.88);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+.ovc{background:var(--panel);padding:24px;border-radius:18px;max-width:340px;width:100%;text-align:center}
+.ovc input,.setr input{font:inherit;padding:9px 10px;border-radius:10px;border:2px solid var(--card);background:var(--face);color:var(--fg);width:100%;box-sizing:border-box;margin:10px 0}
+.xpt{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(90px + env(safe-area-inset-bottom,0px));background:var(--ok);color:#fff;padding:8px 16px;border-radius:999px;font-weight:bold;z-index:60}
+.bgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:10px}
+.bg{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 4px;font-size:.8rem}.bg i{display:block;font-style:normal;font-size:1.8rem}.bg.off{opacity:.35;filter:grayscale(1)}
+.setr{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.setr input{max-width:200px;margin:0}
+@media(max-width:720px){.chip{margin-right:6px;font-size:.75rem}}
+.wk{display:flex;gap:6px;align-items:flex-end;justify-content:center;height:120px}
+.wk div{flex:1;max-width:46px;text-align:center;font-size:.7rem}.wk i{display:block;background:var(--card);border-radius:6px 6px 0 0;min-height:3px}
+.rl{text-align:left;margin:4px 0}
+.avg{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin:8px 0}
+.av{font-size:1.3rem;padding:3px 0;border-radius:10px;border-width:2px}.av.sel{background:var(--card)}
+.avt{font-size:1.6rem;background:rgba(255,255,255,.25);border-radius:50%;padding:2px 8px}
+@media(max-width:380px){.avg{grid-template-columns:repeat(6,1fr)}}
+.pt{position:relative;padding:0}
+.tn{position:absolute;top:2px;left:4px;font-size:.6rem;line-height:1.3;background:rgba(0,0,0,.5);color:#fff;border-radius:6px;padding:0 4px}
+.ppv{width:90px;height:90px;margin:6px auto;border-radius:10px;background-size:cover;border:2px solid var(--line)}
+.ov.solid{background:var(--bg);align-items:flex-start;overflow-y:auto}
+.ov .ovc{margin:auto}
+.dc.hl{outline:3px solid #f5a524}
+.cc2{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:420px;margin:10px auto}
+.cc{padding:12px 6px;border-radius:14px}.cc b{display:block;font-size:2.4rem}
+.dots{font-size:1.1rem;line-height:1.3;word-break:break-all}
+.barw{height:12px;background:var(--line);border-radius:8px;overflow:hidden;margin-top:6px}.barw i{display:block;height:100%;background:var(--card)}
+.cc.ok{border-color:var(--ok);background:var(--ok);color:#fff}.cc.no{border-color:var(--bad)}
+.tipb{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:8px auto;max-width:420px}
+.nl{position:relative;height:46px;margin:22px 14px 8px;border-bottom:3px solid var(--fg)}
+.nlf,.nlt{position:absolute;top:8px;font-size:.7rem;color:var(--muted)}.nlf{left:0}.nlt{right:0}
+.mk{position:absolute;bottom:-9px;width:16px;height:16px;border-radius:50%;background:var(--card);transform:translateX(-50%);font-style:normal}
+.mk.big{background:var(--ok)}
+.mk u{position:absolute;top:-22px;left:50%;transform:translateX(-50%);text-decoration:none;font-size:.85rem;font-weight:bold}
+.cds{font-size:1.3rem;min-height:1.8rem;margin:8px}
+.cf{position:fixed;top:-14px;width:9px;height:14px;border-radius:2px;animation:cfall 2s linear forwards;pointer-events:none}
+@keyframes cfall{to{transform:translateY(108vh) rotate(540deg)}}
+.lvc{animation:lvpop .6s cubic-bezier(.2,1.6,.4,1)}
+@keyframes lvpop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.lvh{font-size:1.7rem;font-weight:bold;color:var(--card);animation:lvb 1s ease infinite}
+@keyframes lvb{50%{transform:scale(1.12)}}
+.lvt{font-size:1.1rem;font-weight:bold}
+.rw{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0}
+.rwi{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px 10px;min-width:84px;animation:lvpop .6s .25s both cubic-bezier(.2,1.6,.4,1)}
+.rwi b{display:block;font-size:1.3rem}.rwi span{font-size:.75rem;color:var(--muted)}
+.shg{display:grid;grid-template-columns:repeat(auto-fit,minmax(78px,1fr));gap:8px;margin:8px 0}
+.sh{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:12px;background:var(--bg);border:2px solid var(--line)}
+.sh i{font-style:normal;font-size:1.8rem}.sh span{font-size:.75rem}.sh.on{border-color:var(--ok)}
+.pk{grid-template-columns:repeat(auto-fit,minmax(125px,1fr))}
+.sb{display:flex;align-items:center;gap:8px;margin:7px 0;text-align:left;flex-wrap:wrap}.sbn{width:120px;flex:none}
+.sb code{font-family:monospace;letter-spacing:1px;flex:none}
+.rl{text-align:left;margin:5px 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:left}
+.bdg{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 10px;margin:2px;font-size:.85rem}
+.ni.sub{margin-left:16px;width:calc(100% - 16px);font-size:.85rem;padding:6px 10px;opacity:.95}
+#bk{padding:2px 10px;margin-right:8px;font-size:1.2rem}
+.story{text-align:left;line-height:1.6;font-size:1.05rem}
+.af label{display:block;text-align:left;font-size:.85rem;margin-top:8px}
+.af input:not([type=radio]):not([type=checkbox]),.af textarea,.af select,#as,#at,#aa,#aq{width:100%;box-sizing:border-box;font:inherit;padding:7px;border-radius:8px;border:2px solid var(--line);background:var(--face);color:var(--fg)}
+#as,#at,#aa{width:auto}
+.arow2{display:flex;gap:6px;align-items:center;margin-top:4px}
+.qr{text-align:left;border:1px solid var(--line);border-radius:12px;padding:10px;margin:8px 0;background:var(--bg)}.qr.off{opacity:.55}
+.qimg{max-height:130px;max-width:90%;border-radius:12px}
+.sp{padding:2px 8px;font-size:.9rem}
+.side{overflow:hidden}
+#nav{flex:1;min-height:0;overflow-y:auto}
+#navf{border-top:1px solid rgba(255,255,255,.18);padding-top:6px;margin-top:6px}
+.hb{padding:3px 9px;font-size:1.1rem;margin-right:6px}
+.tb{flex-wrap:wrap;gap:4px}
+.chip{max-width:48vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html.ts-l{font-size:125%}html.ts-x{font-size:150%}
+:focus-visible{outline:3px solid var(--card);outline-offset:2px}
+button,select{min-height:44px}
+input:not([type=radio]):not([type=checkbox]){min-height:44px}
+.sw{width:44px;height:44px}.tabs button{min-height:56px}.bar{gap:8px}
+.skip{position:absolute;left:-999px;top:0}.skip:focus{left:8px;top:8px;z-index:200;background:var(--card);color:#fff;padding:8px 12px;border-radius:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.o.ok{border-width:4px;border-style:solid}.o.no{border-width:4px;border-style:dashed}
+.fb{font-weight:bold;margin:8px 0}
+.c.done{position:relative}.c.done::after{content:"✔";position:absolute;top:2px;right:6px;font-size:.9rem}
+.dc{position:relative}.dc.fd::after{content:"✔";position:absolute;right:2px;bottom:0;font-size:.7rem}.dc.wr::after{content:"✘";position:absolute;right:2px;bottom:0;font-size:.8rem}
+.nb.done::after{content:" ✔"}.nb.bad::after{content:" ✘"}
+.cc.ok::after{content:" ✔"}.cc.no::after{content:" ✘"}
+.sp{font-size:2rem;color:#000;text-shadow:0 0 2px #fff}
+.rm *,.rm *::before,.rm *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+.rm .cf{display:none}
+:root.hc{--bg:#000;--fg:#fff;--face:#000;--panel:#000;--line:#fff;--card:#ffd400;--muted:#e8e8e8;--ok:#00e676;--bad:#ff5252;--side:#000}
+.hc button,.hc select,.hc input,.hc textarea{border-width:3px}
+.hc .act,.hc .ni.on,.hc .av.sel,.hc .tabs button.on{background:var(--card)!important;color:#000!important}
+.hc .ni{color:#fff}.hc .hero{background:#000;color:#fff;border:2px solid #fff}.hc .hero p{color:#fff}
+.hc .o.ok,.hc .cc.ok,.hc .nb.done,.hc .xpt{color:#000!important}
+.hc .c:not(.up):not(.done){background:#333}.hc .c:not(.up):not(.done)::after{color:#fff}
+.hc .ic{background:var(--card);color:#000}
+#navf:empty{display:none}
+.menu{max-width:340px;width:100%}
+.mh{display:flex;gap:10px;align-items:center;text-align:left;margin-bottom:10px}
+.mi{display:flex;gap:12px;align-items:center;width:100%;text-align:left;margin:5px 0;font-size:1rem}
+.mi span{width:1.6rem;text-align:center}
+.lgb button{flex:1;font-size:.85rem}
+.mx{margin-top:8px}
+.chip{cursor:pointer;font-size:.85rem}
+.lo{min-width:180px;font-size:1rem}
+.scn{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;margin:12px 0}
+.scn div{text-align:center;max-width:150px}.scn b{display:block;font-size:2.2rem}.scn small{display:block;color:var(--muted);font-size:.8rem}.scn .ar{font-size:1.6rem}
+.fcg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:380px;margin:10px auto}
+.fc{padding:10px 4px;font-size:.9rem}.fc i{display:block;font-style:normal;font-size:2.4rem}
+</style></head><body>
+<a href="#main" class="skip" onclick="event.preventDefault();document.getElementById('main').focus()">Skip to content</a><div id="srlive" class="sr" aria-live="polite"></div><div class="app"><aside class="side"><div class="logo">🌊 <span id="appt"></span></div><div id="nav"></div><div id="navf"></div><div class="sfoot">v2.0 · ज्ञान गंगा<br>© <span class="cy">2026</span> imjsthakur<br>All rights reserved</div></aside><main class="main" id="main" tabindex="-1"><header class="tb"><button id="bk" style="display:none">‹</button><b id="ptitle" tabindex="-1"></b><button id="xpchip" class="chip" aria-haspopup="dialog" aria-label="Menu"></button><select id="lang" style="display:none" aria-hidden="true" tabindex="-1"><option value="en">English</option><option value="hi">हिंदी</option><option value="both">English + हिंदी</option></select></header><div class="content">
+<div id="g_home" class="game"></div>
+<div id="g_quiz" class="game"><h1 id="qt"></h1><div class="bar" id="qlen"></div><div id="qbox"></div></div>
+<div id="g_math" class="game"><h1 id="mt"></h1><div class="bar"><select id="mlvl"></select></div><div id="mbox"></div></div>
+<div id="g_tables" class="game"><h1 id="tt"></h1><div class="bar"><button id="tl"></button><button id="tp"></button><select id="tn"></select></div><div id="tbox"></div></div>
+<div id="g_memory" class="game"><h1>🧠 Memory Match</h1>
+<p id="sub"></p>
+<div class="bar"><select id="mode"></select><select id="deck"></select><select id="lvl"></select></div>
+<div class="bar"><button id="new"></button><button id="hint"></button></div>
+<div class="stat"><span id="s1"></span><span id="s2"></span><span id="s3"></span><span id="s4"></span></div>
+<div id="toast"></div>
+<div class="grid" id="grid"></div>
+<div id="win"><h2 id="wt"></h2><p id="msg"></p></div>
+</div>
+</div></main><nav class="tabs" id="tabs"></nav></div>
+<script>
+const DECKS={
+animals:{n:["🐾 Animals","🐾 जानवर"],c:[["🦁","Lion","शेर"],["🐘","Elephant","हाथी"],["🐒","Monkey","बंदर"],["🐯","Tiger","बाघ"],["🦚","Peacock","मोर"],["🐄","Cow","गाय"],["🐕","Dog","कुत्ता"],["🐟","Fish","मछली"],["🐴","Horse","घोड़ा"],["🐢","Turtle","कछुआ"]]},
+fruits:{n:["🍎 Fruits","🍎 फल"],c:[["🍎","Apple","सेब"],["🍌","Banana","केला"],["🥭","Mango","आम"],["🍇","Grapes","अंगूर"],["🍊","Orange","संतरा"],["🍉","Watermelon","तरबूज"],["🍍","Pineapple","अनानास"],["🍓","Strawberry","स्ट्रॉबेरी"],["🍋","Lemon","नींबू"],["🥥","Coconut","नारियल"]]},
+food:{n:["🍞 Food & Nature","🍞 खाना और प्रकृति"],c:[["🥕","Carrot","गाजर"],["🍞","Bread","ब्रेड"],["🥛","Milk","दूध"],["🍚","Rice","चावल"],["🍫","Chocolate","चॉकलेट"],["🥚","Egg","अंडा"],["🌈","Rainbow","इंद्रधनुष"],["☁️","Cloud","बादल"],["🔥","Fire","आग"],["⛰️","Mountain","पहाड़"]]},
+more:{n:["🎒 More Things","🎒 और चीज़ें"],c:[["✏️","Pencil","पेंसिल"],["🎒","Bag","बैग"],["👓","Glasses","चश्मा"],["☂️","Umbrella","छाता"],["🔔","Bell","घंटी"],["🏆","Trophy","ट्रॉफ़ी"],["🚲","Bicycle","साइकिल"],["🚂","Train","रेलगाड़ी"],["🌊","Wave","लहर"],["❄️","Snow","बर्फ़"]]},
+things:{n:["🏠 Things","🏠 चीज़ें"],c:[["🏠","House","घर"],["🚌","Bus","बस"],["✈️","Aeroplane","हवाई जहाज़"],["📚","Book","किताब"],["⏰","Clock","घड़ी"],["🏏","Cricket","क्रिकेट"],["🌧️","Rain","बारिश"],["🔑","Key","चाबी"],["🎂","Cake","केक"],["🌻","Sunflower","सूरजमुखी"]]},
+colors:{n:["🎨 Colours","🎨 रंग"],c:[["🔴","Red","लाल"],["🟢","Green","हरा"],["🔵","Blue","नीला"],["🟡","Yellow","पीला"],["🟠","Orange colour","नारंगी रंग"],["🟣","Purple","बैंगनी"],["🟤","Brown","भूरा"],["⚫","Black","काला"],["⚪","White","सफ़ेद"],["💗","Pink","गुलाबी"]]},
+space:{n:["🚀 Space","🚀 अंतरिक्ष"],c:[["☀️","Sun","सूरज"],["🌙","Moon","चाँद"],["🌍","Earth","पृथ्वी"],["⭐","Star","तारा"],["🚀","Rocket","रॉकेट"],["☄️","Comet","धूमकेतु"],["🪐","Saturn","शनि"],["🧑‍🚀","Astronaut","अंतरिक्ष यात्री"],["🛰️","Satellite","उपग्रह"],["🌌","Galaxy","आकाशगंगा"]]}};
+const LV={easy:6,med:8,hard:10};
+const D={en:{sub:"Match each picture with its name!",nw:"New game",hint:"💡 Hint (-50)",mv:"Moves",pr:"Pairs",tm:"Time",sc:"Score",easy:"Easy",med:"Medium",hard:"Hard",win:"🎉 Great job!",best:"Best",combo:"Combo",nohint:"No hints left",p1:"Player 1",p2:"Player 2",one:"👤 1 Player",two:"👥 2 Players",turn:"turn",draw:"It's a draw!",wins:"wins!",nohint2:"No hints in 2-player"},
+hi:{sub:"हर तस्वीर को उसके नाम से मिलाओ!",nw:"नया खेल",hint:"💡 संकेत (-50)",mv:"चालें",pr:"जोड़ियाँ",tm:"समय",sc:"अंक",easy:"आसान",med:"मध्यम",hard:"कठिन",win:"🎉 शाबाश!",best:"सर्वश्रेष्ठ",combo:"कॉम्बो",nohint:"संकेत ख़त्म",p1:"खिलाड़ी 1",p2:"खिलाड़ी 2",one:"👤 1 खिलाड़ी",two:"👥 2 खिलाड़ी",turn:"की बारी",draw:"बराबरी!",wins:"जीता!",nohint2:"2 खिलाड़ी में संकेत नहीं"}};
+const $=id=>document.getElementById(id);
+let first=null,lock=false,moves=0,pairs=0,N=8,score=0,combo=0,secs=0,timer=null,hints=2,cur=0,pp=[0,0],ps=[0,0];
+const two=()=>$("mode").value==="2";
+const L=()=>$("lang").value;
+const S=k=>L()==="both"?D.en[k]+" / "+D.hi[k]:D[L()][k];
+const word=c=>L()==="hi"?c[2]:L()==="both"?c[1]+" / "+c[2]:c[1];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function key(){return "mm_"+$("deck").value+"_"+$("lvl").value}
+function getBest(){try{return parseInt(localStorage.getItem(key()))||0}catch(e){return 0}}
+function setBest(v){try{localStorage.setItem(key(),String(v))}catch(e){}}
+function stats(){
+ if(two()){$("s1").textContent=(cur===0?"👉 ":"")+S("p1")+": "+pp[0]+" · "+ps[0];$("s2").textContent=(cur===1?"👉 ":"")+S("p2")+": "+pp[1]+" · "+ps[1];$("s4").textContent=S("pr")+": "+pairs+"/"+N}
+ else{$("s1").textContent=S("mv")+": "+moves;$("s2").textContent=S("pr")+": "+pairs+"/"+N;$("s4").textContent="⭐ "+score+" · "+S("best")+": "+getBest()}
+ $("s3").textContent="⏱ "+Math.floor(secs/60)+":"+String(secs%60).padStart(2,"0");
+}
+function labels(){
+ const h=L()==="hi",d=$("deck").value||"animals",l=$("lvl").value||"med",m=$("mode").value||"1";
+ $("sub").textContent=S("sub");$("new").textContent=S("nw");$("hint").textContent=S("hint")+" ×"+hints;
+ $("deck").innerHTML="";Object.keys(DECKS).forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=L()==="both"?DECKS[k].n[0]+" / "+DECKS[k].n[1].slice(3):DECKS[k].n[h?1:0];$("deck").appendChild(o)});
+ $("lvl").innerHTML="";Object.keys(LV).forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=S(k)+" ("+LV[k]*2+")";$("lvl").appendChild(o)});
+ $("deck").value=d;$("lvl").value=l;
+ $("mode").innerHTML="";[["1","one"],["2","two"]].forEach(a=>{const o=document.createElement("option");o.value=a[0];o.textContent=S(a[1]);$("mode").appendChild(o)});$("mode").value=m;
+}
+function start(){
+ clearInterval(timer);timer=null;secs=0;score=0;combo=0;moves=0;pairs=0;hints=2;first=null;lock=false;cur=0;pp=[0,0];ps=[0,0];
+ labels();N=LV[$("lvl").value];$("toast").textContent="";$("win").style.display="none";
+ const g=$("grid");g.innerHTML="";g.style.gridTemplateColumns="repeat("+(N>8?5:4)+",1fr)";
+ const cards=[];
+ shuffle(DECKS[$("deck").value].c.slice()).slice(0,N).forEach((c,i)=>{cards.push({id:i,t:c[0],pic:1},{id:i,t:word(c)})});
+ shuffle(cards).forEach(c=>{const b=document.createElement("button");b.className="c";b.dataset.id=c.id;b.dataset.t=c.t;if(c.pic)b.dataset.pic=1;b.onclick=()=>flip(b);g.appendChild(b)});
+ stats();
+}
+function show(b){b.classList.add("up");b.textContent=b.dataset.t;if(b.dataset.pic)b.classList.add("pic")}
+function hide(b){b.className="c";b.textContent=""}
+function flip(b){
+ if(lock||b.classList.contains("up")||b.classList.contains("done"))return;
+ if(!timer)timer=setInterval(()=>{secs++;stats()},1000);
+ show(b);
+ if(!first){first=b;return}
+ moves++;
+ if(first.dataset.id===b.dataset.id&&!first.dataset.pic!==!b.dataset.pic){
+  [first,b].forEach(x=>{x.classList.remove("up");x.classList.add("done")});
+  combo++;const pts=100+(combo-1)*50;if(two()){ps[cur]+=pts;pp[cur]++}else score+=pts;pairs++;first=null;beep(1);
+  $("toast").textContent=combo>1?"🔥 "+S("combo")+" ×"+combo+"!":"✅";
+  stats();if(pairs===N)finish();
+ }else{
+  combo=0;beep(0);if(two()){cur=1-cur;$("toast").textContent="👉 "+(cur?S("p2"):S("p1"))+" "+S("turn")}else{score=Math.max(0,score-10);$("toast").textContent=""}
+  lock=true;const a=first;first=null;a.classList.add("bad");b.classList.add("bad");stats();
+  setTimeout(()=>{hide(a);hide(b);lock=false},900);
+ }
+}
+function finish(){
+ clearInterval(timer);timer=null;
+ if(two()){const a=pp[0],b=pp[1];$("wt").textContent="🏆 "+(a===b?S("draw"):(a>b?S("p1"):S("p2"))+" "+S("wins"));$("msg").textContent=S("p1")+": "+a+" ("+ps[0]+") · "+S("p2")+": "+b+" ("+ps[1]+") · ⏱ "+secs+"s";$("win").style.display="block";stats();return}
+ const bonus=Math.max(0,N*20-secs);score+=bonus;
+ const ratio=moves/N,stars=ratio<=1.6?3:ratio<=2.4?2:1;
+ const prev=getBest(),isBest=score>prev;if(isBest)setBest(score);
+ award(20+stars*10,0,0);$("wt").textContent=S("win")+" "+"⭐".repeat(stars);
+ $("msg").textContent=S("mv")+": "+moves+" · ⏱ "+secs+"s · "+S("sc")+": "+score+(isBest?" 🏆 NEW BEST!":"");
+ $("win").style.display="block";stats();
+}
+$("hint").onclick=()=>{
+ if(lock||first)return;
+ if(two()){$("toast").textContent=S("nohint2");return}
+ if(hints<=0){$("toast").textContent=S("nohint");return}
+ const open=[...document.querySelectorAll(".c:not(.done):not(.up)")];if(!open.length)return;
+ const id=open[0].dataset.id,pair=open.filter(x=>x.dataset.id===id);
+ hints--;score=Math.max(0,score-50);lock=true;pair.forEach(show);stats();$("hint").textContent=S("hint")+" ×"+hints;
+ setTimeout(()=>{pair.forEach(hide);lock=false},1200);
+};
+$("new").onclick=start;$("mode").onchange=start;$("deck").onchange=start;$("lvl").onchange=start;$("lang").onchange=()=>{ST.lang=$("lang").value;sv();go(page)};$("mlvl").onchange=mathInit;
+let page="home",HIST=[];
+const B=(e,h)=>L()==="hi"?h:L()==="both"?e+" / "+h:e;
+const ALL=Object.values(DECKS).flatMap(d=>d.c);
+function go(n,np){if(!LOGGED)return;const H0=HUBS()[n];if(H0&&H0.it.length===1&&!np){openA(H0.it[0][0]);return}const gt=["report","settings"].includes(n);if(n==="admin"&&!isAdminUser()){toast("🔒 "+B("Admin login required","एडमिन लॉगिन चाहिए"));return}if(n==="special"&&!canSpecial())return;gentle=false;if(n!=="special"){spCourse=null;spLesson=null}if(n==="report"&&!pinH()){pinSetup(()=>go("report"));return}if(gt&&pinH()&&!(UNL&&Date.now()-UNLT<300000)){askPin(()=>go(n));return}if(!gt)UNL=false;
+ if(!np&&page&&page!==n){HIST.push(page);if(HIST.length>30)HIST.shift()}
+ page=n;try{speechSynthesis.cancel()}catch(e){}
+ const H=HUBS(),isHub=!!H[n],key=isHub?"hub":n;
+ document.querySelectorAll(".game").forEach(g=>g.style.display="none");$("g_"+key).style.display="block";
+ $("appt").innerHTML="Gyan Ganga<br><small style='font-weight:normal'>ज्ञान गंगा</small>";
+ navBuild(n);document.querySelectorAll("#nav .on,#navf .on,#tabs .on").forEach(b=>b.setAttribute("aria-current","page"));const t=H[n]?[H[n].ic,H[n].t]:(LEAFF()[n]||["",n]);$("ptitle").textContent=t[0]+" "+t[1];$("bk").style.display=n==="home"?"none":"";chip();
+ if(isHub)hubInit(n);else ({home:homeInit,memory:start,quiz:quizInit,math:mathInit,tables:tablesInit,daily:dailyInit,hindi:hindiInit,shop:shopInit,report:reportInit,progress:progInit,settings:setInit,pattern:patInit,quick:quickInit,numbers:numInit,words:wordInit,puzzle:puzInit,diff:diffInit,shapes:shapeInit,color:colorInit,gk:gkInit,stories:storiesInit,special:specialInit,rewards:rewardsInit,bank:bankInit,admin:adminInit,p_weak:weakInit,p_rev:revInit})[n]();try{$("ptitle").focus({preventScroll:true})}catch(e){}if(A11.au)setTimeout(()=>speakT(cleanForSpeech(pageText())),500)}
+function homeInit(){
+ $("g_home").innerHTML="<div class='hero'><h1><span class='avt'>"+avd()+"</span> "+B("Namaste, ","नमस्ते, ")+(ST.n||B("Friend","दोस्त"))+"!</h1><p>"+B("Let's learn something new today","आज कुछ नया सीखें")+"</p><div class='xpb'><i style='width:"+(ST.xp%100)+"%'></i></div><small>⚡ "+ST.xp+" XP · ⭐ "+(ST.stars||0)+" · "+B("Level","स्तर")+" "+lvl()+" — "+lvtitle()+"</small></div>"+dailyCard()+secCards();
+}
+function play(box,items,again,onEnd,onAns){
+ const el=$(box);let i=0,sc=0,c=0,st=0;
+ function next(){
+  if(i>=items.length){const n=items.length,stars=c>=n*.9?3:c>=n*.6?2:c>=n*.3?1:0;award(sc,c,n,box==="gkbox"?"gk:"+gkTop:box==="cmsbox"?"cms:"+cmsTop:box==="scbox"?"sc:"+scTop:box);if(onEnd)onEnd(c,n);
+   el.innerHTML="<div class='qres'><h2>"+B("🎉 Well done!","🎉 शाबाश!")+" "+("⭐".repeat(stars)||"💪")+"</h2><p>"+B("Correct","सही")+": "+c+"/"+items.length+" · "+B("Score","अंक")+": "+sc+"</p><button id='ag'>"+B("Play again","फिर खेलो")+"</button> <button onclick=\"go('home')\">🏠 "+B("Home","होम")+"</button></div>";
+   $("ag").onclick=again;return}
+  const q=items[i];{const c0=q.o.find(z=>z.ok);if(c0)q.o=q.o.filter((z,k,a)=>z===c0||(z.l!==c0.l&&a.findIndex(w=>w.l===z.l)===k))}
+  el.innerHTML="<div class='pb'><i style='width:"+(i/items.length*100)+"%'></i></div><p>"+(i+1)+"/"+items.length+" · ⭐ "+sc+" · 🔥 "+st+"</p>"+(q.p?"<div class='big'>"+q.p+"</div>":"")+"<p>"+q.h+"</p><div class='opts'></div>";
+  const bx=el.querySelector(".opts");let done=false;
+  q.o.forEach(o=>{const b=document.createElement("button");b.className="o";b.textContent=o.l;
+   b.onclick=()=>{if(done)return;done=true;
+    beep(o.ok);if(onAns)onAns(q,o.ok);else if(!o.ok)logWrong(q);if(o.ok){b.classList.add("ok");b.textContent="✔ "+b.textContent;c++;st++;sc+=10+(st-1)*5;fbk(el,true,null,q)}
+    else{b.classList.add("no");b.textContent=(gentle?"":"✘ ")+b.textContent;st=0;[...bx.children].forEach((x,k)=>{if(q.o[k].ok){x.classList.add("ok");x.textContent="✔ "+x.textContent}});fbk(el,false,q.o.find(z=>z.ok),q)}
+    if(q.x){const ex=document.createElement("div");ex.className="tipb";ex.innerHTML="💡 "+q.x;el.appendChild(ex)}i++;setTimeout(next,q.x?Math.min(6500,1500+q.x.length*50):900)};
+   bx.appendChild(b)});
+  if(A11.aq)speakQ(q);
+ }
+ next();
+}
+let qn=10;
+function quizInit(n){if(n)qn=n;
+ $("qt").textContent="🖼️ "+B("Picture Quiz","तस्वीर क्विज़");
+ $("qlen").innerHTML=[10,20].map(k=>"<button class='ql"+(k===qn?" act":"")+"' data-n='"+k+"'>"+k+" "+B("questions","सवाल")+"</button>").join("");
+ $("qlen").querySelectorAll(".ql").forEach(x=>x.onclick=()=>quizInit(+x.dataset.n));
+ const items=shuffle(ALL.slice()).slice(0,qn).map(c=>({p:c[0],h:B("What is this?","यह क्या है?"),o:shuffle([c,...shuffle(ALL.filter(x=>x!==c)).slice(0,3)]).map(x=>({l:word(x),ok:x===c}))}));
+ play("qbox",items,()=>quizInit())}
+function mathInit(){
+ $("mt").textContent="➕ "+B("Math Sprint","गणित दौड़");
+ const sel=$("mlvl"),keep=sel.value||"easy";sel.innerHTML="";
+ [["easy","Easy","आसान"],["med","Medium","मध्यम"],["hard","Hard","कठिन"]].forEach(a=>{const o=document.createElement("option");o.value=a[0];o.textContent=B(a[1],a[2]);sel.appendChild(o)});sel.value=keep;
+ const lv=keep,R=n=>1+Math.floor(Math.random()*n),items=[];
+ const ops=lv==="easy"?["+","−"]:lv==="med"?["+","−","×"]:["×","÷","+","−"],m=lv==="easy"?20:lv==="med"?50:100;
+ for(let k=0;k<10;k++){
+  const op=ops[R(ops.length)-1];let a,b,ans;
+  if(op==="+"){a=R(m);b=R(m);ans=a+b}
+  else if(op==="−"){a=R(m);b=R(a);ans=a-b}
+  else if(op==="×"){const t=lv==="hard"?12:10;a=R(t);b=R(t);ans=a*b}
+  else{b=R(12);ans=R(12);a=b*ans}
+  const set=new Set([ans]);while(set.size<4){const d=ans+R(10)*(Math.random()<.5?-1:1);if(d>=0)set.add(d)}
+  items.push({p:"<span style='font-size:.55em'>"+a+" "+op+" "+b+" = ?</span>",h:B("Pick the answer","सही उत्तर चुनो"),o:shuffle([...set]).map(v=>({l:String(v),ok:v===ans}))});
+ }
+ play("mbox",items,mathInit)}
+let tmode="learn",hideAns=false;
+const TL=n=>B("Table of "+n,n+" का पहाड़ा");
+function tablesInit(m){
+ if(m)tmode=m;
+ $("tt").textContent="📒 "+B("Math Tables 2–20","गणित के पहाड़े 2–20");
+ $("tl").textContent="📖 "+B("Learn","याद करो");$("tp").textContent="✏️ "+B("Practice","अभ्यास");
+ $("tl").classList.toggle("act",tmode==="learn");$("tp").classList.toggle("act",tmode==="practice");
+ const sel=$("tn");let keep=sel.value||"2";if(tmode==="learn"&&keep==="0")keep="2";
+ sel.innerHTML="";
+ const add=(v,t)=>{const o=document.createElement("option");o.value=v;o.textContent=t;sel.appendChild(o)};
+ if(tmode==="practice")add("0",B("Mix 2–20","मिक्स 2–20"));
+ for(let i=2;i<=20;i++)add(String(i),TL(i));
+ sel.value=keep;
+ const t=+sel.value;
+ if(tmode==="learn"){
+  let rows="";for(let k=1;k<=10;k++)rows+="<div class='tr' onclick=\"this.classList.toggle('rv')\"><span>"+t+" × "+k+"</span><b>= "+t*k+"</b></div>";
+  $("tbox").innerHTML="<h2>"+TL(t)+"</h2><p><button id='th'>"+(hideAns?"👁 "+B("Show answers","उत्तर दिखाओ"):"🙈 "+B("Hide answers (test yourself)","उत्तर छिपाओ (खुद जाँचो)"))+"</button></p>"+(hideAns?"<p>"+B("Tap a row to reveal its answer","उत्तर देखने के लिए पंक्ति दबाओ")+"</p>":"")+"<div class='"+(hideAns?"hide":"")+"'>"+rows+"</div>";
+  $("th").onclick=()=>{hideAns=!hideAns;tablesInit()};
+ }else{
+  const R=n=>1+Math.floor(Math.random()*n),items=[];
+  for(let k=0;k<10;k++){
+   const a=t||R(19)+1,b=R(10),ans=a*b;
+   const c=shuffle([ans+a,ans-a,ans+1,ans-1,ans+10,ans-10,ans+2,ans-2].filter(v=>v>0&&v!==ans));
+   items.push({p:"<span style='font-size:.55em'>"+a+" × "+b+" = ?</span>",h:B("Pick the answer","सही उत्तर चुनो"),o:shuffle([...new Set([ans,...c])].slice(0,4)).map(v=>({l:String(v),ok:v===ans}))});
+  }
+  play("tbox",items,()=>tablesInit());
+ }
+}
+$("tl").onclick=()=>tablesInit("learn");$("tp").onclick=()=>tablesInit("practice");$("tn").onchange=()=>tablesInit();
+const hasDev=t=>/[\u0900-\u097F]/.test(t);
+function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang=hasDev(t)?"hi-IN":"en-IN";u.rate=.95;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+let actx=null;
+function beep(ok){if(!ST.sound||(gentle&&!ok))return;try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator(),g=actx.createGain();o.connect(g);g.connect(actx.destination);o.frequency.value=ok?660:200;g.gain.value=.08;o.start();o.stop(actx.currentTime+(ok?.12:.25))}catch(e){}}
+const BB=(e,h)=>e===h?e:B(e,h);
+const head=(id,t)=>{$("h_"+id).textContent=t};
+function EXTRA(){return [["hindi","अ",B("Hindi Practice","हिंदी अभ्यास"),B("Varnamala and matra practice","वर्णमाला और मात्रा का अभ्यास"),B("Hindi","हिंदी")],["shop","🛍️",B("Star Shop","सितारा दुकान"),B("Spend stars on avatars and hats","सितारों से अवतार और टोपियाँ लो"),B("Shop","दुकान")],["gk","🌍",B("General Knowledge","सामान्य ज्ञान"),B("18 topics: India, space, animals and more","18 विषय: भारत, अंतरिक्ष, जानवर और भी"),B("GK","सामान्य ज्ञान")],
+["color","🎨",B("Coloring","रंग भरो"),B("Tap a part and fill it with colour","हिस्से पर दबाओ और रंग भरो"),B("Coloring","रंग")],
+["puzzle","🧩",B("Puzzles","पहेलियाँ"),B("Slide the tiles into order","टाइल सरकाकर क्रम में लगाओ"),B("Puzzles","पहेली")],
+["numbers","🔢",B("Number Games","संख्या खेल"),B("Small & big numbers, missing numbers, tap in order","छोटी-बड़ी संख्या, छूटी संख्या, क्रम से दबाओ"),B("Numbers","संख्या")],
+["words","🔤",B("Word Games","शब्द खेल"),B("Unscramble the letters","अक्षर सजाकर शब्द बनाओ"),B("Words","शब्द")],
+["pattern","🧠",B("Pattern Memory","पैटर्न याद करो"),B("Repeat the colour pattern","रंगों का क्रम दोहराओ"),B("Pattern","पैटर्न")],
+["diff","🔎",B("Find the Difference","अंतर खोजो"),B("Spot the 3 changes","3 बदलाव ढूँढो"),B("Differences","अंतर")],
+["quick","🎯",B("Quick Quiz","क्विक क्विज़"),B("10 fast general-knowledge questions","10 तेज़ सामान्य ज्ञान के सवाल"),B("Quick Quiz","क्विक")],
+["shapes","🧱",B("Shape Games","आकृति खेल"),B("Names and sides of shapes","आकृतियों के नाम और भुजाएँ"),B("Shapes","आकृति")]]}
+["hub","special","stories","rewards","p_weak","p_rev","bank","admin","hindi","shop","daily","report","progress","settings","gk","pattern","quick","numbers","words","puzzle","diff","shapes","color"].forEach(id=>{const d=document.createElement("div");d.id="g_"+id;d.className="game";d.innerHTML="<h1 id='h_"+id+"'></h1><div id='b_"+id+"'></div>";document.querySelector(".content").appendChild(d)});
+/* Coloring */
+const PAL=["#e5484d","#f5a524","#f7d230","#2fb36d","#4f6df5","#8a5cf6","#ec5fa6","#8b5a2b","#00b8d9","#a3e635","#9aa3b2","#222222","#ffffff"];
+let cc="#e5484d",cpic=0;
+const PICS=["<svg viewBox='0 0 200 160'><rect class='r' x='0' y='120' width='200' height='40'/><circle class='r' cx='165' cy='30' r='18'/><rect class='r' x='50' y='65' width='80' height='60'/><polygon class='r' points='40,65 90,25 140,65'/><rect class='r' x='80' y='90' width='20' height='35'/><rect class='r' x='58' y='75' width='16' height='16'/></svg>",
+"<svg viewBox='0 0 200 160'><polygon class='r' points='80,48 100,18 112,50'/><ellipse class='r' cx='90' cy='80' rx='60' ry='35'/><polygon class='r' points='145,80 185,50 185,110'/><circle class='r' cx='60' cy='72' r='7'/><circle class='r' cx='30' cy='130' r='8'/><circle class='r' cx='55' cy='142' r='5'/></svg>",
+"<svg viewBox='0 0 200 160'><rect class='r' x='96' y='60' width='8' height='95'/><ellipse class='r' cx='78' cy='120' rx='18' ry='8'/><circle class='r' cx='100' cy='28' r='15'/><circle class='r' cx='100' cy='80' r='15'/><circle class='r' cx='74' cy='54' r='15'/><circle class='r' cx='126' cy='54' r='15'/><circle class='r' cx='100' cy='54' r='13'/></svg>"];
+function colorInit(){head("color","🎨 "+B("Coloring","रंग भरो"));
+ const b=$("b_color");
+ b.innerHTML="<div class='bar'>"+PICS.map((_,i)=>"<button class='cp"+(i===cpic?" act":"")+"' data-i='"+i+"'>"+PIC_ICONS[i]+"</button>").join("")+"<button id='crs'>↺ "+B("Clear","साफ़")+"</button><button id='cdn'>✅ "+B("Done","हो गया")+"</button></div><div class='bar'>"+PAL.map(c=>"<button class='sw"+(c===cc?" sel":"")+"' data-c='"+c+"' style='background:"+c+"'></button>").join("")+"</div><div id='cv' class='cv'>"+PICS[cpic]+"</div>";
+ b.querySelectorAll(".cp").forEach(x=>x.onclick=()=>{cpic=+x.dataset.i;colorInit()});
+ b.querySelectorAll(".sw").forEach(x=>x.onclick=()=>{cc=x.dataset.c;b.querySelectorAll(".sw").forEach(y=>y.classList.toggle("sel",y===x))});
+ $("crs").onclick=colorInit;$("cdn").onclick=()=>{if(!cdone.has(cpic)){cdone.add(cpic);award(10,0,0)}else toast("👍")};
+ $("cv").onclick=e=>{if(e.target.classList.contains("r")){e.target.style.fill=cc;beep(1)}};
+}
+/* Sliding puzzle */
+let pz=[],pm=0,pn=3,pt0=0,pmode="num",pimg=0;
+const PXP={3:30,4:50,5:80};
+function puzInit(lv){if(lv)pn={easy:3,med:4,hard:5}[lv];head("puzzle","🧩 "+B("Sliding Puzzle","सरकाओ पहेली"));
+ const T=pn*pn;pz=[...Array(T).keys()].map(i=>i+1);pz[T-1]=0;pm=0;pt0=Date.now();
+ for(let k=0;k<T*pn*8;k++){const z=pz.indexOf(0),nb=[];if(z%pn>0)nb.push(z-1);if(z%pn<pn-1)nb.push(z+1);if(z>=pn)nb.push(z-pn);if(z<T-pn)nb.push(z+pn);const j=nb[Math.floor(Math.random()*nb.length)];[pz[z],pz[j]]=[pz[j],pz[z]]}
+ puzDraw()}
+const SCN=[
+"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><rect width='200' height='200' fill='#8fd3ff'/><circle cx='155' cy='42' r='24' fill='#ffd84d'/><ellipse cx='45' cy='40' rx='26' ry='11' fill='#ffffff'/><ellipse cx='60' cy='215' rx='140' ry='85' fill='#4cbf6b'/><ellipse cx='170' cy='225' rx='110' ry='70' fill='#36a85a'/><rect x='70' y='105' width='60' height='50' fill='#f4a261'/><polygon points='62,107 100,72 138,107' fill='#e5484d'/><rect x='92' y='125' width='16' height='30' fill='#8b5a2b'/><rect x='76' y='115' width='12' height='12' fill='#bfe6ff'/><rect x='24' y='120' width='8' height='40' fill='#8b5a2b'/><circle cx='28' cy='112' r='22' fill='#2fb36d'/><circle cx='165' cy='150' r='6' fill='#e5484d'/></svg>",
+"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><rect width='200' height='200' fill='#1b2250'/><circle cx='30' cy='30' r='2' fill='#fff'/><circle cx='90' cy='20' r='2' fill='#fff'/><circle cx='170' cy='25' r='2' fill='#fff'/><circle cx='20' cy='120' r='2' fill='#fff'/><circle cx='185' cy='95' r='2' fill='#fff'/><circle cx='60' cy='180' r='2' fill='#fff'/><circle cx='40' cy='62' r='18' fill='#dddddd'/><circle cx='150' cy='150' r='32' fill='#f5a524'/><ellipse cx='150' cy='150' rx='52' ry='9' fill='none' stroke='#ffd84d' stroke-width='4'/><polygon points='84,125 66,150 84,150' fill='#e5484d'/><polygon points='116,125 134,150 116,150' fill='#e5484d'/><ellipse cx='100' cy='95' rx='17' ry='42' fill='#ffffff'/><polygon points='84,70 100,38 116,70' fill='#e5484d'/><circle cx='100' cy='92' r='8' fill='#4f6df5'/><polygon points='90,135 100,170 110,135' fill='#ffa500'/></svg>",
+"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><rect width='200' height='200' fill='#3aa7e8'/><rect y='168' width='200' height='32' fill='#f4d58d'/><ellipse cx='30' cy='150' rx='8' ry='28' fill='#2fb36d'/><ellipse cx='165' cy='145' rx='9' ry='32' fill='#2fb36d'/><ellipse cx='100' cy='90' rx='46' ry='28' fill='#ff8a3d'/><polygon points='140,90 178,62 178,118' fill='#ff8a3d'/><circle cx='78' cy='82' r='6' fill='#ffffff'/><circle cx='76' cy='82' r='3' fill='#222222'/><circle cx='40' cy='50' r='7' fill='none' stroke='#ffffff' stroke-width='2'/><circle cx='55' cy='30' r='4' fill='none' stroke='#ffffff' stroke-width='2'/><circle cx='150' cy='40' r='6' fill='none' stroke='#ffffff' stroke-width='2'/><ellipse cx='60' cy='150' rx='14' ry='8' fill='#e5484d'/><polygon points='74,150 86,142 86,158' fill='#e5484d'/></svg>"
+].map(x=>'url("data:image/svg+xml,'+encodeURIComponent(x)+'")');
+function puzDraw(){
+ const T=pn*pn,ok=pz.every((v,i)=>v===(i<T-1?i+1:0)),bx=$("b_puzzle"),img=pmode==="img";
+ if(ok&&!pz.aw){pz.aw=1;pz.secs=Math.round((Date.now()-pt0)/1000);award(PXP[pn]+(img?10:0),0,0)}
+ const lv=[["easy",3,B("Easy 3×3","आसान 3×3")],["med",4,B("Medium 4×4","मध्यम 4×4")],["hard",5,B("Hard 5×5","कठिन 5×5")]];
+ const fs=pn===3?"2rem":pn===4?"1.5rem":"1.2rem";
+ bx.innerHTML="<div class='bar'>"+lv.map(x=>"<button class='pl"+(x[1]===pn?" act":"")+"' data-l='"+x[0]+"'>"+x[2]+"</button>").join("")+"</div><div class='bar'><button id='pm1' class='"+(img?"":"act")+"'>🔢 "+B("Numbers","संख्या")+"</button><button id='pm2' class='"+(img?"act":"")+"'>🖼️ "+B("Picture","तस्वीर")+"</button>"+(img?["🏡","🚀","🐠"].map((e,k)=>"<button class='ps"+(k===pimg?" act":"")+"' data-k='"+k+"'>"+e+"</button>").join(""):"")+"</div><p>"+(img?B("Rebuild the picture. Tap a piece next to the empty space.","तस्वीर पूरी करो। खाली जगह के पास का टुकड़ा दबाओ।"):B("Put the numbers in order. Tap a tile next to the empty space.","संख्याओं को क्रम में लगाओ। खाली जगह के पास की टाइल दबाओ।"))+"</p><p>"+B("Moves","चालें")+": "+pm+" · +"+(PXP[pn]+(img?10:0))+" XP</p>"+(img?"<div id='ppv' class='ppv'></div>":"")+"<div class='pg' style='grid-template-columns:repeat("+pn+",1fr);max-width:"+(pn*74)+"px'>"+pz.map((v,i)=>{const w=v||(ok?T:0);return "<button class='pt"+(w?"":" e")+"' style='font-size:"+fs+"' data-i='"+i+"' data-w='"+w+"'>"+(img?(w?"<span class='tn'>"+w+"</span>":""):(w||""))+"</button>"}).join("")+"</div>"+(ok?"<h2>🎉 "+B("Solved in ","हल हो गया! ")+pm+" "+B("moves","चालों में")+" · "+pz.secs+"s</h2>":"")+"<button id='pnw'>↺ "+B("New puzzle","नई पहेली")+"</button>";
+ if(img){$("ppv").style.backgroundImage=SCN[pimg];
+  bx.querySelectorAll(".pt").forEach(t=>{const w=+t.dataset.w;if(w){const c=(w-1)%pn,rw=Math.floor((w-1)/pn);t.style.backgroundImage=SCN[pimg];t.style.backgroundSize=pn*100+"% "+pn*100+"%";t.style.backgroundPosition=(c/(pn-1)*100)+"% "+(rw/(pn-1)*100)+"%";t.style.backgroundRepeat="no-repeat"}})}
+ bx.querySelectorAll(".pl").forEach(x=>x.onclick=()=>puzInit(x.dataset.l));
+ $("pm1").onclick=()=>{pmode="num";puzInit()};$("pm2").onclick=()=>{pmode="img";puzInit()};
+ bx.querySelectorAll(".ps").forEach(x=>x.onclick=()=>{pimg=+x.dataset.k;puzDraw()});
+ $("pnw").onclick=()=>puzInit();
+ if(!ok)bx.querySelectorAll(".pt").forEach(t=>t.onclick=()=>{const i=+t.dataset.i,z=pz.indexOf(0),d=Math.abs(i-z);if(d===pn||(d===1&&Math.floor(i/pn)===Math.floor(z/pn))){[pz[i],pz[z]]=[pz[z],pz[i]];pm++;beep(1);puzDraw()}});
+}
+/* Number games */
+let nmode="cmp";
+function numInit(m){if(m)nmode=m;head("numbers",nmode==="cmp"?"↔️ "+B("Small & Big numbers","छोटी-बड़ी संख्या"):nmode==="ord"?"🔢 "+B("Tap in order","क्रम से दबाओ"):"🔢 "+B("Missing numbers","छूटी संख्या"));
+ $("b_numbers").innerHTML="<div class='bar'><button id='n1' class='"+(nmode==="miss"?"act":"")+"'>"+B("Missing number","छूटी संख्या")+"</button><button id='n2' class='"+(nmode==="ord"?"act":"")+"'>"+B("Tap in order","क्रम से दबाओ")+"</button><button id='n3' class='"+(nmode==="cmp"?"act":"")+"'>↔️ "+B("Small & Big","छोटी-बड़ी")+"</button></div><div id='nbox'></div>";
+ $("n1").onclick=()=>numInit("miss");$("n2").onclick=()=>numInit("ord");$("n3").onclick=()=>numInit("cmp");{$("n1").style.display="none";$("n2").style.display="none";$("n3").style.display="none"}
+ const R=n=>1+Math.floor(Math.random()*n);
+ if(nmode==="cmp"){cmpInit();return}
+ if(nmode==="miss"){const items=[];
+  for(let k=0;k<10;k++){const st=R(10),d=R(k<5?4:9),seq=[0,1,2,3,4].map(i=>st+d*i),h=1+Math.floor(Math.random()*3),ans=seq[h];
+   const set=[...new Set([ans,ans+d,ans-d,ans+1,ans-1,ans+2].filter(v=>v>0))].slice(0,4);
+   items.push({p:"<span style='font-size:.5em'>"+seq.map((v,i)=>i===h?"__":v).join(" , ")+"</span>",h:B("Which number is missing?","कौन सी संख्या छूटी है?"),o:shuffle(set).map(v=>({l:String(v),ok:v===ans}))})}
+  play("nbox",items,()=>numInit());
+ }else{let nx=1;const t0=Date.now(),g=document.createElement("div");g.className="ng";
+  $("nbox").innerHTML="<p id='ni'>"+B("Tap 1, 2, 3 … in order","1, 2, 3 … क्रम से दबाओ")+"</p>";$("nbox").appendChild(g);
+  shuffle([...Array(12)].map((_,i)=>i+1)).forEach(v=>{const bt=document.createElement("button");bt.className="nb";bt.textContent=v;
+   bt.onclick=()=>{if(v===nx){bt.classList.add("done");bt.disabled=true;beep(1);nx++;if(nx>12)award(25,0,0);if(nx>12)$("ni").textContent="🎉 "+B("Done in ","पूरा! ")+Math.round((Date.now()-t0)/1000)+"s"}else{beep(0);bt.classList.add("bad");setTimeout(()=>bt.classList.remove("bad"),400)}};g.appendChild(bt)});
+  const nb=document.createElement("button");nb.textContent="↺ "+B("Again","फिर से");nb.onclick=()=>numInit();$("nbox").appendChild(nb)}
+}
+/* Small & big numbers */
+let cmode="learn",crng=10;
+function cmpInit(m,rg){if(m)cmode=m;if(rg)crng=rg;
+ $("nbox").innerHTML="<div class='bar'><button id='cl' class='"+(cmode==="learn"?"act":"")+"'>📖 "+B("Learn","सीखो")+"</button><button id='cp' class='"+(cmode==="practice"?"act":"")+"'>✏️ "+B("Practice","अभ्यास")+"</button><button id='co' class='"+(cmode==="order"?"act":"")+"'>🔀 "+B("Order","क्रम")+"</button><button id='cb' class='"+(cmode==="ba"?"act":"")+"'>⏮⏭ "+B("Before & After","पहले-बाद")+"</button></div><div class='bar'>"+[10,100,1000].map(k=>"<button class='cr"+(k===crng?" act":"")+"' data-r='"+k+"'>1–"+k+"</button>").join("")+"</div><div id='cbox'></div>";
+ $("cl").onclick=()=>cmpInit("learn");$("cp").onclick=()=>cmpInit("practice");$("co").onclick=()=>cmpInit("order");$("cb").onclick=()=>cmpInit("ba");
+ document.querySelectorAll("#nbox .cr").forEach(x=>x.onclick=()=>cmpInit(null,+x.dataset.r));
+ ({learn:cmpLearn,practice:cmpPractice,order:cmpOrder,ba:cmpBA})[cmode]()}
+function cmpLearn(){
+ const R=n=>1+Math.floor(Math.random()*n);let a=R(crng),b=R(crng);while(b===a)b=R(crng);
+ const askBig=Math.random()<.6,big=Math.max(a,b),sm=Math.min(a,b);
+ const vis=(n,i)=>crng<=10?"<div class='dots'>"+(i?"🟠":"🔵").repeat(n)+"</div>":"<div class='barw'><i style='width:"+(n/crng*100)+"%'></i></div>";
+ $("cbox").innerHTML="<p class='tipb'>💡 "+B("More = BIGGER. Less = SMALLER.","ज़्यादा = बड़ा। कम = छोटा।")+"</p><p><b>"+(askBig?B("Tap the BIGGER number","बड़ी संख्या दबाओ"):B("Tap the SMALLER number","छोटी संख्या दबाओ"))+"</b></p><div class='cc2'><button class='cc' data-n='"+a+"'><b>"+a+"</b>"+vis(a,0)+"</button><button class='cc' data-n='"+b+"'><b>"+b+"</b>"+vis(b,1)+"</button></div><div id='cfb'></div>";
+ let done=false;
+ document.querySelectorAll("#cbox .cc").forEach(c=>c.onclick=()=>{if(done)return;done=true;
+  const n=+c.dataset.n,ok=askBig?n===big:n===sm;beep(ok);
+  document.querySelectorAll("#cbox .cc").forEach(x=>{const v=+x.dataset.n;if(askBig?v===big:v===sm)x.classList.add("ok")});if(!ok)c.classList.add("no");
+  const nl="<div class='nl'><span class='nlf'>0</span><span class='nlt'>"+crng+"</span><i class='mk' style='left:"+(sm/crng*100)+"%'><u>"+sm+"</u></i><i class='mk big' style='left:"+(big/crng*100)+"%'><u>"+big+"</u></i></div>";
+  $("cfb").innerHTML="<p><b>"+(ok?"✅ "+B("Correct!","सही!"):"❌ "+B("Not quite — look again","थोड़ा गलत — फिर देखो"))+"</b></p><p style='font-size:1.3rem'>"+big+" &gt; "+sm+"</p><p>"+B(big+" is BIGGER (more). "+sm+" is SMALLER (less).",big+" बड़ी है (ज़्यादा)। "+sm+" छोटी है (कम)।")+"</p>"+nl+"<p class='tipb'>💡 "+B("On the number line, bigger numbers are further to the RIGHT.","number line पर बड़ी संख्या और दाईं ओर होती है।")+"</p><button id='cnx'>▶ "+B("Next","आगे")+"</button>";
+  $("cnx").onclick=cmpLearn})}
+function cmpPractice(){
+ const R=n=>1+Math.floor(Math.random()*n),items=[];
+ const dist=k=>{const s=new Set();while(s.size<k)s.add(R(crng));return [...s]};
+ shuffle([0,1,2,3,4,0,1,4,2,3]).forEach(t=>{
+  if(t===0||t===1){const [a,b]=dist(2),want=t===0?Math.max(a,b):Math.min(a,b);
+   items.push({p:"<span style='font-size:.55em'>"+a+" &nbsp;or&nbsp; "+b+"</span>",h:t===0?B("Which is BIGGER?","कौन सी संख्या बड़ी है?"):B("Which is SMALLER?","कौन सी संख्या छोटी है?"),o:shuffle([a,b]).map(v=>({l:String(v),ok:v===want}))})}
+  else if(t===2||t===3){const d=dist(3),want=t===2?Math.max(...d):Math.min(...d);
+   items.push({p:"<span style='font-size:.5em'>"+d.join(" , ")+"</span>",h:t===2?B("Which is the BIGGEST?","सबसे बड़ी संख्या कौन सी है?"):B("Which is the SMALLEST?","सबसे छोटी संख्या कौन सी है?"),o:shuffle(d).map(v=>({l:String(v),ok:v===want}))})}
+  else{let a=R(crng),b=Math.random()<.2?a:R(crng);const sg=a>b?">":a<b?"<":"=";
+   items.push({p:"<span style='font-size:.55em'>"+a+" &nbsp;❓&nbsp; "+b+"</span>",h:B("Pick the correct sign","सही चिह्न चुनो")+" ( &gt; &nbsp;&lt; &nbsp;= )",o:shuffle([">","<","="]).map(v=>({l:v,ok:v===sg}))})}
+ });
+ play("cbox",items,()=>cmpInit())}
+function cmpOrder(){
+ const R=n=>1+Math.floor(Math.random()*n),st=new Set();while(st.size<5)st.add(R(crng));
+ const nums=[...st],asc=Math.random()<.5,sorted=nums.slice().sort((a,b)=>asc?a-b:b-a);let k=0;
+ $("cbox").innerHTML="<p><b>"+(asc?B("Tap from SMALLEST to BIGGEST","सबसे छोटी से सबसे बड़ी तक दबाओ"):B("Tap from BIGGEST to SMALLEST","सबसे बड़ी से सबसे छोटी तक दबाओ"))+"</b></p><div class='ng' style='grid-template-columns:repeat(5,1fr);max-width:380px'></div><div class='cds' id='cseq'></div><p id='cmsg'></p>";
+ const g=document.querySelector("#cbox .ng");
+ shuffle(nums.slice()).forEach(v=>{const b=document.createElement("button");b.className="nb";b.textContent=v;b.style.fontSize="1.1rem";
+  b.onclick=()=>{if(v===sorted[k]){b.classList.add("done");b.disabled=true;beep(1);$("cseq").textContent=sorted.slice(0,k+1).join(asc?" < ":" > ");k++;
+   if(k===5){award(15,0,0,"cbox");$("cmsg").innerHTML="🎉 "+B("Perfect!","बहुत बढ़िया!")+" <button id='cnx2'>▶ "+B("Next","आगे")+"</button>";$("cnx2").onclick=cmpOrder}}
+   else{beep(0);b.classList.add("bad");setTimeout(()=>b.classList.remove("bad"),400)}};g.appendChild(b)})}
+function cmpBA(){
+ const R=n=>1+Math.floor(Math.random()*n),items=[];
+ for(let k=0;k<10;k++){const t=k%3;let n,ans,p,h;
+  if(t===0){n=R(crng-1)+1;ans=n-1;p=String(n);h=B("Which number comes just BEFORE "+n+"?","ठीक "+n+" से पहले कौन सी संख्या आती है?")}
+  else if(t===1){n=R(crng);ans=n+1;p=String(n);h=B("Which number comes just AFTER "+n+"?","ठीक "+n+" के बाद कौन सी संख्या आती है?")}
+  else{n=R(crng-1);ans=n+1;p=n+" , ❓ , "+(n+2);h=B("Which number comes in the middle?","बीच में कौन सी संख्या आएगी?")}
+  const c=shuffle([ans+1,ans-1,ans+2,ans-2,ans+10,ans-10].filter(v=>v>=0&&v!==ans)).slice(0,3);
+  items.push({p:"<span style='font-size:.55em'>"+p+"</span>",h:h,o:shuffle([ans,...c]).map(v=>({l:String(v),ok:v===ans}))})}
+ play("cbox",shuffle(items),()=>cmpInit())}
+const HV=[["🍇","अंगूर","अ"],["🥭","आम","आ"],["🦉","उल्लू","उ"],["🐪","ऊँट","ऊ"],["🐢","कछुआ","क"],["🐰","खरगोश","ख"],["🐄","गाय","ग"],["⏰","घड़ी","घ"],["🌙","चाँद","च"],["☂️","छाता","छ"],["🚢","जहाज़","ज"],["🍅","टमाटर","ट"],["⭐","तारा","त"],["🥛","दूध","द"],["⛵","नाव","न"],["✏️","पेंसिल","प"],["🌸","फूल","फ"],["🦆","बतख","ब"],["🐻","भालू","भ"],["🐟","मछली","म"],["🚂","रेल","र"],["🍎","सेब","स"],["🐘","हाथी","ह"]];
+const HC=["क","ख","ग","च","त","द","न","प","ब","म","र","ल","स","ह"];
+const HM=[["ा","आ"],["ि","इ"],["ी","ई"],["ु","उ"],["ू","ऊ"],["े","ए"],["ै","ऐ"],["ो","ओ"],["ौ","औ"]];
+let hmode="varn";
+function hindiInit(m){if(m)hmode=m;head("hindi","अ "+B("Hindi Practice","हिंदी अभ्यास"));
+ const box=hmode==="varn"?"hvbox":"hmbox";
+ $("b_hindi").innerHTML="<div class='bar'><button id='hb1' class='"+(hmode==="varn"?"act":"")+"'>🔤 "+B("Varnamala","वर्णमाला")+"</button><button id='hb2' class='"+(hmode==="matra"?"act":"")+"'>ा "+B("Matra","मात्रा")+"</button></div><div id='"+box+"'></div>";
+ $("hb1").onclick=()=>hindiInit("varn");$("hb2").onclick=()=>hindiInit("matra");
+ let items;
+ if(hmode==="varn"){const letters=[...new Set(HV.map(x=>x[2]))];
+  items=shuffle(HV.slice()).slice(0,10).map(x=>({p:x[0]+" <span style='font-size:.4em'>"+x[1]+"</span>",h:B(x[1]+" starts with which letter?",x[1]+" किस अक्षर से शुरू होता है?"),o:shuffle([x[2],...shuffle(letters.filter(l=>l!==x[2])).slice(0,3)]).map(l=>({l:l,ok:l===x[2]}))}))}
+ else{items=[];for(let k=0;k<10;k++){const c=HC[Math.floor(Math.random()*HC.length)],m=HM[Math.floor(Math.random()*HM.length)],ans=c+m[0];
+   const others=shuffle(HM.filter(y=>y!==m)).slice(0,3).map(y=>c+y[0]);
+   items.push({p:"<span style='font-size:.6em'>"+c+" + ◌"+m[0]+"</span>",h:B("Join the letter and the matra ("+m[1]+" ki matra)","अक्षर और मात्रा जोड़ो ("+m[1]+" की मात्रा)"),o:shuffle([ans,...others]).map(w=>({l:w,ok:w===ans}))})}}
+ play(box,items,()=>hindiInit())}
+/* Word scramble */
+let wi=0,wl=[],wsc=0;
+function wordInit(){head("words","🔤 "+B("Word Scramble","शब्द पहेली"));
+ wl=shuffle(ALL.filter(c=>/^[A-Za-z]+$/.test(c[1])).slice()).slice(0,6);wi=0;wsc=0;wordShow()}
+function wordShow(){
+ const b=$("b_words");
+ if(wi>=wl.length){award(wsc*10,wsc,wl.length,"words");b.innerHTML="<div class='qres'><h2>🎉 "+B("Well done!","शाबाश!")+"</h2><p>"+B("Score","अंक")+": "+wsc+"/"+wl.length+"</p><button id='wag'>"+B("Play again","फिर खेलो")+"</button></div>";$("wag").onclick=wordInit;return}
+ const c=wl[wi],w=c[1].toUpperCase();let sc=shuffle(w.split(""));if(sc.join("")===w)sc.reverse();let ans=[];
+ b.innerHTML="<p>"+(wi+1)+"/"+wl.length+"</p><div class='big'>"+c[0]+"</div><p>"+B("Hindi: ","हिंदी: ")+c[2]+"</p><div id='wans' class='wa'></div><div id='wtl' class='bar'></div><div class='bar'><button id='wcl'>↺ "+B("Clear","मिटाओ")+"</button><button id='wsk'>⏭ "+B("Skip","छोड़ो")+"</button></div><p id='wmsg'></p>";
+ const draw=()=>{$("wans").textContent=ans.map(x=>sc[x]).join(" ")||"_ ".repeat(w.length);$("wtl").innerHTML="";
+  sc.forEach((ch,i)=>{const bt=document.createElement("button");bt.className="o";bt.style.width="48px";bt.textContent=ch;bt.disabled=ans.includes(i);
+   bt.onclick=()=>{ans.push(i);draw();if(ans.length===w.length){if(ans.map(x=>sc[x]).join("")===w){wsc++;$("wmsg").textContent="✅ "+B("Correct!","सही!");beep(1);wi++;setTimeout(wordShow,900)}else{$("wmsg").textContent="❌ "+B("Try again","फिर कोशिश करो");beep(0);ans=[];setTimeout(draw,500)}}};$("wtl").appendChild(bt)})};
+ draw();$("wcl").onclick=()=>{ans=[];draw()};$("wsk").onclick=()=>{wi++;wordShow()};
+}
+/* Pattern memory */
+let pseq=[],pin=0,plock=true;
+function flash(b){b.style.filter="brightness(1.7)";b.style.transform="scale(.92)";setTimeout(()=>{b.style.filter="";b.style.transform=""},300)}
+function patInit(){head("pattern","🧠 "+B("Pattern Memory","पैटर्न याद करो"));pseq=[];plock=true;
+ $("b_pattern").innerHTML="<p id='pi'>"+B("Watch the colours, then repeat them!","रंगों का क्रम देखो, फिर दोहराओ!")+"</p><div class='sg'>"+["#e5484d","#2fb36d","#4f6df5","#f7d230"].map((c,i)=>"<button class='sp' data-i='"+i+"' aria-label='Pad "+(i+1)+"' style='background:"+c+"'>"+["▲","●","■","★"][i]+"</button>").join("")+"</div><button id='psb'>▶ "+B("Start","शुरू")+"</button>";
+ $("psb").onclick=patNext;
+ $("b_pattern").querySelectorAll(".sp").forEach(b=>b.onclick=()=>{if(plock)return;flash(b);const i=+b.dataset.i;
+  if(i!==pseq[pin]){plock=true;beep(0);award(Math.max(0,pseq.length-1)*10,0,0);$("pi").textContent="❌ "+B("Rounds completed: ","पूरे राउंड: ")+(pseq.length-1)+" · "+B("tap Start to retry","फिर से शुरू दबाओ");pseq=[];return}
+  beep(1);pin++;if(pin===pseq.length){plock=true;$("pi").textContent="✅";setTimeout(patNext,800)}})}
+function patNext(){
+ const pads=[...document.querySelectorAll("#b_pattern .sp")];
+ pseq.push(Math.floor(Math.random()*4));pin=0;plock=true;
+ $("pi").textContent=B("Round ","राउंड ")+pseq.length+" — "+B("watch…","देखो…");
+ pseq.forEach((v,k)=>setTimeout(()=>{flash(pads[v]);beep(1)},700*(k+1)));
+ setTimeout(()=>{plock=false;$("pi").textContent=B("Your turn!","तुम्हारी बारी!")},700*pseq.length+500)}
+/* Find the difference */
+let dfound=[],dA=[],dB=[],dDiff=[],dlv="easy",dt0=0,dh=2;
+const DL={easy:{c:5,r:4,n:3,xp:20},med:{c:6,r:5,n:5,xp:35},hard:{c:7,r:6,n:7,xp:60}};
+const POOL=["🍎","🐶","⭐","🚗","🌳","🎈","🐱","🌙","🍕","⚽","🎁","🦋"];
+const SIM=[["🍎","🍅"],["🐶","🐺"],["🌙","🌛"],["⭐","🌟"],["🐱","🐯"],["🚗","🚕"],["🎈","🔴"],["🍕","🧀"],["⚽","🏀"],["🌳","🌲"],["🎁","📦"],["🦋","🐝"]];
+const SM={};SIM.forEach(x=>{SM[x[0]]=x[1];SM[x[1]]=x[0]});
+function diffInit(lv){if(lv)dlv=lv;head("diff","🔎 "+B("Find the Difference","अंतर खोजो"));
+ const c0=DL[dlv],T=c0.c*c0.r,pk=a=>a[Math.floor(Math.random()*a.length)],hard=dlv==="hard";
+ dA=[...Array(T)].map(()=>hard?pk(SIM)[Math.random()<.5?0:1]:pk(POOL));dB=dA.slice();
+ dDiff=shuffle([...Array(T).keys()]).slice(0,c0.n);
+ dDiff.forEach(i=>{if(hard)dB[i]=SM[dA[i]];else{let n;do{n=pk(POOL)}while(n===dA[i]);dB[i]=n}});
+ dfound=[];dh=2;dt0=Date.now();diffDraw()}
+function diffDraw(hl){
+ const c0=DL[dlv],bx=$("b_diff"),done=dfound.length===c0.n;
+ if(done&&!dfound.aw){dfound.aw=1;dfound.secs=Math.round((Date.now()-dt0)/1000);award(c0.xp,0,0)}
+ const fs=c0.c===5?"1.9rem":c0.c===6?"1.6rem":"1.3rem";
+ const g=(a,h)=>"<div class='dg' style='grid-template-columns:repeat("+c0.c+",1fr);max-width:"+(c0.c*52)+"px'>"+a.map((e,i)=>"<span class='dc"+(dfound.includes(i)?" fd":"")+(h===i?" hl":"")+"' style='font-size:"+fs+"' data-i='"+i+"'>"+e+"</span>").join("")+"</div>";
+ const lv=[["easy",B("Easy","आसान")],["med",B("Medium","मध्यम")],["hard",B("Hard","कठिन")]];
+ bx.innerHTML="<div class='bar'>"+lv.map(x=>"<button class='dl"+(x[0]===dlv?" act":"")+"' data-l='"+x[0]+"'>"+x[1]+"</button>").join("")+"</div><p>"+B("Tap the lower picture where it is different","नीचे की तस्वीर में जहाँ फ़र्क है वहाँ दबाओ")+"</p>"+g(dA)+"<p>⬇</p>"+g(dB,hl)+"<p>🔎 "+dfound.length+"/"+c0.n+" · +"+c0.xp+" XP "+(done?"🎉 "+B("Sharp eyes!","बहुत बढ़िया!")+" "+dfound.secs+"s":"")+"</p><button id='dhn'>💡 "+B("Hint","संकेत")+" ×"+dh+"</button> <button id='dn'>↺ "+B("New picture","नई तस्वीर")+"</button>";
+ bx.querySelectorAll(".dl").forEach(x=>x.onclick=()=>diffInit(x.dataset.l));
+ $("dn").onclick=()=>diffInit();
+ $("dhn").onclick=()=>{if(done||dh<=0)return;const rem=dDiff.filter(i=>!dfound.includes(i));if(!rem.length)return;dh--;diffDraw(rem[0]);setTimeout(()=>diffDraw(),1200)};
+ bx.querySelectorAll(".dg")[1].querySelectorAll(".dc").forEach(c=>c.onclick=()=>{const i=+c.dataset.i;
+  if(dDiff.includes(i)){if(!dfound.includes(i)){dfound.push(i);beep(1);diffDraw()}}else{beep(0);c.classList.add("wr");setTimeout(()=>c.classList.remove("wr"),400)}})}
+/* Quick quiz */
+const GK=[
+["How many days are in a week?","एक सप्ताह में कितने दिन होते हैं?",["7","7"],[["5","5"],["6","6"],["10","10"]]],
+["Which planet do we live on?","हम किस ग्रह पर रहते हैं?",["Earth","पृथ्वी"],[["Mars","मंगल"],["Venus","शुक्र"],["Jupiter","बृहस्पति"]]],
+["What colour is the sky on a clear day?","साफ़ दिन में आसमान का रंग क्या होता है?",["Blue","नीला"],[["Green","हरा"],["Red","लाल"],["Yellow","पीला"]]],
+["Which animal is called the King of the Jungle?","जंगल का राजा किसे कहते हैं?",["Lion","शेर"],[["Elephant","हाथी"],["Tiger","बाघ"],["Bear","भालू"]]],
+["Which is the national bird of India?","भारत का राष्ट्रीय पक्षी कौन सा है?",["Peacock","मोर"],[["Parrot","तोता"],["Crow","कौआ"],["Sparrow","गौरैया"]]],
+["How many months are in a year?","एक साल में कितने महीने होते हैं?",["12","12"],[["10","10"],["11","11"],["13","13"]]],
+["What do plants need to make food?","पौधों को भोजन बनाने के लिए क्या चाहिए?",["Sunlight","धूप"],[["Plastic","प्लास्टिक"],["Sand","रेत"],["Sound","आवाज़"]]],
+["Which is the capital of India?","भारत की राजधानी कौन सी है?",["New Delhi","नई दिल्ली"],[["Mumbai","मुंबई"],["Kolkata","कोलकाता"],["Chennai","चेन्नई"]]],
+["Which gas do we breathe in to live?","जीने के लिए हम कौन सी गैस साँस में लेते हैं?",["Oxygen","ऑक्सीजन"],[["Smoke","धुआँ"],["Helium","हीलियम"],["Carbon dioxide","कार्बन डाइऑक्साइड"]]],
+["How many sides does a triangle have?","त्रिभुज की कितनी भुजाएँ होती हैं?",["3","3"],[["4","4"],["5","5"],["2","2"]]],
+["Which is the largest planet?","सबसे बड़ा ग्रह कौन सा है?",["Jupiter","बृहस्पति"],[["Earth","पृथ्वी"],["Mars","मंगल"],["Venus","शुक्र"]]]];
+function quickInit(){head("quick","🎯 "+B("Quick Quiz","क्विक क्विज़"));
+ const items=shuffle(GK.slice()).slice(0,10).map(g=>({p:"❓",h:B(g[0],g[1]),o:shuffle([g[2],...g[3]]).map(x=>({l:BB(x[0],x[1]),ok:x===g[2]}))}));
+ play("b_quick",items,quickInit)}
+/* Shape games */
+const SH=[["🔺","Triangle","त्रिभुज",3],["🟦","Square","वर्ग",4],["▬","Rectangle","आयत",4],["⬟","Pentagon","पंचभुज",5],["⬡","Hexagon","षट्भुज",6],["⭕","Circle","वृत्त",0],["⭐","Star","तारा",0],["❤️","Heart","दिल",0]];
+function shapeInit(){head("shapes","🧱 "+B("Shape Games","आकृति खेल"));const items=[];
+ shuffle(SH.slice()).slice(0,6).forEach(c=>items.push({p:c[0],h:B("What is this shape?","यह कौन सी आकृति है?"),o:shuffle([c,...shuffle(SH.filter(x=>x!==c)).slice(0,3)]).map(x=>({l:B(x[1],x[2]),ok:x===c}))}));
+ shuffle(SH.filter(x=>x[3]>0)).slice(0,4).forEach(c=>items.push({p:c[0]+" <span style='font-size:.3em'>"+B(c[1],c[2])+"</span>",h:B("How many sides does it have?","इसकी कितनी भुजाएँ हैं?"),o:shuffle([3,4,5,6]).map(v=>({l:String(v),ok:v===c[3]}))}));
+ play("b_shapes",shuffle(items),shapeInit)}
+const GKD={
+india:["🇮🇳","India","भारत",[
+["What is the capital of India?|भारत की राजधानी क्या है?","New Delhi|नई दिल्ली","Mumbai|मुंबई","Kolkata|कोलकाता","Chennai|चेन्नई"],
+["When is Independence Day in India?|भारत का स्वतंत्रता दिवस कब होता है?","15 August|15 अगस्त","26 January|26 जनवरी","2 October|2 अक्टूबर","14 November|14 नवंबर"],
+["Which river is the national river of India?|भारत की राष्ट्रीय नदी कौन सी है?","Ganga|गंगा","Yamuna|यमुना","Godavari|गोदावरी","Narmada|नर्मदा"],
+["Which mountains lie in the north of India?|भारत के उत्तर में कौन से पहाड़ हैं?","Himalayas|हिमालय","Aravalli|अरावली","Vindhya|विंध्य","Nilgiri|नीलगिरि"],
+["Who is called the Father of the Nation?|राष्ट्रपिता किसे कहते हैं?","Mahatma Gandhi|महात्मा गांधी","Jawaharlal Nehru|जवाहरलाल नेहरू","Subhas Chandra Bose|सुभाष चंद्र बोस","Bhagat Singh|भगत सिंह"]]],
+states:["🗺️","Indian States","भारतीय राज्य",[
+["Mumbai is the capital of which state?|मुंबई किस राज्य की राजधानी है?","Maharashtra|महाराष्ट्र","Gujarat|गुजरात","Goa|गोवा","Karnataka|कर्नाटक"],
+["Which state has the capital Jaipur?|जयपुर किस राज्य की राजधानी है?","Rajasthan|राजस्थान","Gujarat|गुजरात","Punjab|पंजाब","Bihar|बिहार"],
+["The Taj Mahal is in which state?|ताजमहल किस राज्य में है?","Uttar Pradesh|उत्तर प्रदेश","Rajasthan|राजस्थान","Punjab|पंजाब","Bihar|बिहार"],
+["What is the capital of Kerala?|केरल की राजधानी क्या है?","Thiruvananthapuram|तिरुवनंतपुरम","Kochi|कोच्चि","Chennai|चेन्नई","Bengaluru|बेंगलुरु"],
+["Darjeeling is famous for tea in which state?|दार्जिलिंग की चाय किस राज्य में होती है?","West Bengal|पश्चिम बंगाल","Kerala|केरल","Punjab|पंजाब","Goa|गोवा"],
+["How many states are there in India?|भारत में कितने राज्य हैं?","28|28","25|25","30|30","29|29"]]],
+symbols:["🏅","National Symbols","राष्ट्रीय प्रतीक",[
+["What is the national animal of India?|भारत का राष्ट्रीय पशु कौन सा है?","Tiger|बाघ","Lion|शेर","Elephant|हाथी","Leopard|तेंदुआ"],
+["What is the national bird of India?|भारत का राष्ट्रीय पक्षी कौन सा है?","Peacock|मोर","Parrot|तोता","Sparrow|गौरैया","Crow|कौआ"],
+["What is the national flower of India?|भारत का राष्ट्रीय फूल कौन सा है?","Lotus|कमल","Rose|गुलाब","Marigold|गेंदा","Jasmine|चमेली"],
+["What is the national fruit of India?|भारत का राष्ट्रीय फल कौन सा है?","Mango|आम","Banana|केला","Apple|सेब","Orange|संतरा"],
+["Which colour is at the top of the Indian flag?|भारतीय झंडे में सबसे ऊपर कौन सा रंग है?","Saffron|केसरिया","White|सफ़ेद","Green|हरा","Blue|नीला"],
+["What is the national tree of India?|भारत का राष्ट्रीय वृक्ष कौन सा है?","Banyan|बरगद","Mango|आम","Neem|नीम","Peepal|पीपल"]]],
+animals:["🐘","Animals","जानवर",[
+["Which is the largest land animal?|सबसे बड़ा ज़मीनी जानवर कौन सा है?","Elephant|हाथी","Giraffe|जिराफ़","Rhino|गैंडा","Hippo|दरियाई घोड़ा"],
+["Which animal gives us wool?|कौन सा जानवर हमें ऊन देता है?","Sheep|भेड़","Cow|गाय","Dog|कुत्ता","Horse|घोड़ा"],
+["Which is the fastest land animal?|सबसे तेज़ दौड़ने वाला जानवर कौन सा है?","Cheetah|चीता","Lion|शेर","Horse|घोड़ा","Tiger|बाघ"],
+["What is a baby cow called?|गाय के बच्चे को क्या कहते हैं?","Calf|बछड़ा","Puppy|पिल्ला","Kitten|बिल्ली का बच्चा","Cub|शावक"],
+["Which animal has a very long neck?|किस जानवर की गर्दन बहुत लंबी होती है?","Giraffe|जिराफ़","Zebra|ज़ेबरा","Camel|ऊँट","Deer|हिरन"],
+["Which animal is called the ship of the desert?|रेगिस्तान का जहाज़ किसे कहते हैं?","Camel|ऊँट","Horse|घोड़ा","Donkey|गधा","Elephant|हाथी"]]],
+birds:["🦜","Birds","पक्षी",[
+["Which of these birds cannot fly?|इनमें से कौन सा पक्षी उड़ नहीं सकता?","Penguin|पेंगुइन","Crow|कौआ","Eagle|चील","Pigeon|कबूतर"],
+["Which bird sings 'koo-hoo'?|कौन सा पक्षी 'कू-हू' गाता है?","Cuckoo|कोयल","Crow|कौआ","Owl|उल्लू","Hen|मुर्गी"],
+["Which bird can copy human speech?|कौन सा पक्षी इंसान की बोली की नकल कर सकता है?","Parrot|तोता","Crow|कौआ","Sparrow|गौरैया","Eagle|चील"],
+["Which bird is active at night?|कौन सा पक्षी रात में जागता है?","Owl|उल्लू","Peacock|मोर","Pigeon|कबूतर","Parrot|तोता"],
+["Which is the largest bird in the world?|दुनिया का सबसे बड़ा पक्षी कौन सा है?","Ostrich|शुतुरमुर्ग","Eagle|चील","Peacock|मोर","Penguin|पेंगुइन"]]],
+fruits:["🍎","Fruits","फल",[
+["Which fruit is called the king of fruits?|फलों का राजा किसे कहते हैं?","Mango|आम","Apple|सेब","Banana|केला","Grapes|अंगूर"],
+["Which fruit is yellow and curved?|कौन सा फल पीला और मुड़ा हुआ होता है?","Banana|केला","Apple|सेब","Grapes|अंगूर","Orange|संतरा"],
+["Which fruit is rich in Vitamin C?|किस फल में विटामिन C भरपूर होता है?","Orange|संतरा","Banana|केला","Coconut|नारियल","Papaya|पपीता"],
+["Which fruit has its seeds on the outside?|किस फल के बीज बाहर होते हैं?","Strawberry|स्ट्रॉबेरी","Mango|आम","Apple|सेब","Banana|केला"],
+["Which fruit has water inside it?|किस फल के अंदर पानी होता है?","Coconut|नारियल","Mango|आम","Papaya|पपीता","Guava|अमरूद"]]],
+veg:["🥕","Vegetables","सब्ज़ियाँ",[
+["Which orange vegetable is good for the eyes?|कौन सी नारंगी सब्ज़ी आँखों के लिए अच्छी है?","Carrot|गाजर","Potato|आलू","Onion|प्याज़","Cabbage|पत्तागोभी"],
+["Which vegetable makes us cry when we cut it?|कौन सी सब्ज़ी काटने पर रुलाती है?","Onion|प्याज़","Tomato|टमाटर","Potato|आलू","Carrot|गाजर"],
+["Which vegetable grows under the ground?|कौन सी सब्ज़ी ज़मीन के नीचे उगती है?","Potato|आलू","Tomato|टमाटर","Brinjal|बैंगन","Spinach|पालक"],
+["Which is a green leafy vegetable?|इनमें से हरी पत्तेदार सब्ज़ी कौन सी है?","Spinach|पालक","Carrot|गाजर","Potato|आलू","Onion|प्याज़"],
+["Which red vegetable is used to make ketchup?|केचप बनाने में कौन सी लाल सब्ज़ी काम आती है?","Tomato|टमाटर","Carrot|गाजर","Potato|आलू","Peas|मटर"]]],
+solar:["☀️","Solar System","सौरमंडल",[
+["What is at the centre of our solar system?|हमारे सौरमंडल के केंद्र में क्या है?","Sun|सूरज","Earth|पृथ्वी","Moon|चाँद","Mars|मंगल"],
+["How many planets are in our solar system?|हमारे सौरमंडल में कितने ग्रह हैं?","8|8","7|7","9|9","10|10"],
+["Which is the hottest planet?|सबसे गर्म ग्रह कौन सा है?","Venus|शुक्र","Mercury|बुध","Mars|मंगल","Jupiter|बृहस्पति"],
+["What is Earth's natural satellite?|पृथ्वी का प्राकृतिक उपग्रह कौन सा है?","Moon|चाँद","Sun|सूरज","Mars|मंगल","Star|तारा"],
+["Which planet is called the Red Planet?|लाल ग्रह किसे कहते हैं?","Mars|मंगल","Venus|शुक्र","Jupiter|बृहस्पति","Saturn|शनि"]]],
+planets:["🪐","Planets","ग्रह",[
+["Which is the largest planet?|सबसे बड़ा ग्रह कौन सा है?","Jupiter|बृहस्पति","Earth|पृथ्वी","Saturn|शनि","Neptune|वरुण"],
+["Which planet is famous for its rings?|किस ग्रह के छल्ले मशहूर हैं?","Saturn|शनि","Mars|मंगल","Earth|पृथ्वी","Mercury|बुध"],
+["Which planet is closest to the Sun?|सूरज के सबसे पास कौन सा ग्रह है?","Mercury|बुध","Venus|शुक्र","Earth|पृथ्वी","Mars|मंगल"],
+["Which is the smallest planet?|सबसे छोटा ग्रह कौन सा है?","Mercury|बुध","Mars|मंगल","Venus|शुक्र","Earth|पृथ्वी"],
+["Which planet is third from the Sun?|सूरज से तीसरा ग्रह कौन सा है?","Earth|पृथ्वी","Venus|शुक्र","Mars|मंगल","Mercury|बुध"]]],
+space:["🚀","Space","अंतरिक्ष",[
+["Who was the first Indian citizen to go to space?|अंतरिक्ष जाने वाले पहले भारतीय नागरिक कौन थे?","Rakesh Sharma|राकेश शर्मा","Kalpana Chawla|कल्पना चावला","Sunita Williams|सुनीता विलियम्स","Vikram Sarabhai|विक्रम साराभाई"],
+["What is the name of India's space agency?|भारत की अंतरिक्ष एजेंसी का नाम क्या है?","ISRO|इसरो","NASA|नासा","DRDO|डीआरडीओ","BARC|बार्क"],
+["Who was the first man to walk on the Moon?|चाँद पर चलने वाले पहले इंसान कौन थे?","Neil Armstrong|नील आर्मस्ट्रांग","Yuri Gagarin|यूरी गागरिन","Buzz Aldrin|बज़ एल्ड्रिन","Rakesh Sharma|राकेश शर्मा"],
+["Chandrayaan is a mission to which place?|चंद्रयान किस जगह का मिशन है?","Moon|चाँद","Mars|मंगल","Sun|सूरज","Jupiter|बृहस्पति"],
+["What do we call a person who travels in space?|अंतरिक्ष में जाने वाले को क्या कहते हैं?","Astronaut|अंतरिक्ष यात्री","Pilot|पायलट","Sailor|नाविक","Driver|चालक"]]],
+places:["🏛️","Famous Places","प्रसिद्ध स्थान",[
+["In which city is the Taj Mahal?|ताजमहल किस शहर में है?","Agra|आगरा","Delhi|दिल्ली","Jaipur|जयपुर","Mumbai|मुंबई"],
+["India Gate is in which city?|इंडिया गेट किस शहर में है?","New Delhi|नई दिल्ली","Mumbai|मुंबई","Agra|आगरा","Kolkata|कोलकाता"],
+["The Gateway of India is in which city?|गेटवे ऑफ़ इंडिया किस शहर में है?","Mumbai|मुंबई","Delhi|दिल्ली","Chennai|चेन्नई","Jaipur|जयपुर"],
+["The Qutub Minar is in which city?|क़ुतुब मीनार किस शहर में है?","Delhi|दिल्ली","Agra|आगरा","Jaipur|जयपुर","Lucknow|लखनऊ"],
+["In which country is the Eiffel Tower?|एफ़िल टावर किस देश में है?","France|फ्रांस","Italy|इटली","England|इंग्लैंड","Japan|जापान"],
+["In which country are the great Pyramids?|विशाल पिरामिड किस देश में हैं?","Egypt|मिस्र","India|भारत","China|चीन","Brazil|ब्राज़ील"]]],
+festivals:["🪔","Festivals","त्योहार",[
+["Which festival is called the festival of lights?|रोशनी का त्योहार किसे कहते हैं?","Diwali|दीवाली","Holi|होली","Eid|ईद","Christmas|क्रिसमस"],
+["Which festival is the festival of colours?|रंगों का त्योहार कौन सा है?","Holi|होली","Diwali|दीवाली","Lohri|लोहड़ी","Onam|ओणम"],
+["Which festival is celebrated on 25 December?|25 दिसंबर को कौन सा त्योहार मनाया जाता है?","Christmas|क्रिसमस","Eid|ईद","Diwali|दीवाली","Baisakhi|बैसाखी"],
+["Eid-ul-Fitr comes at the end of which month?|ईद-उल-फ़ित्र किस महीने के अंत में आती है?","Ramadan|रमज़ान","Navratri|नवरात्रि","Lent|लेंट","Holi|होली"],
+["Onam is mainly celebrated in which state?|ओणम मुख्य रूप से किस राज्य में मनाया जाता है?","Kerala|केरल","Punjab|पंजाब","Bengal|बंगाल","Gujarat|गुजरात"],
+["Raksha Bandhan is a bond between whom?|रक्षाबंधन किसके रिश्ते का त्योहार है?","Brother and sister|भाई और बहन","Mother and child|माँ और बच्चा","Teacher and student|शिक्षक और छात्र","Friends|दोस्त"]]],
+transport:["🚆","Transport","यातायात",[
+["Which vehicle runs on tracks?|कौन सा वाहन पटरियों पर चलता है?","Train|रेलगाड़ी","Bus|बस","Car|कार","Cycle|साइकिल"],
+["Which vehicle flies in the sky?|कौन सा वाहन आसमान में उड़ता है?","Aeroplane|हवाई जहाज़","Ship|जहाज़","Train|रेलगाड़ी","Truck|ट्रक"],
+["On what does a boat travel?|नाव किस पर चलती है?","Water|पानी","Road|सड़क","Rail track|पटरी","Air|हवा"],
+["What does a red traffic light mean?|लाल बत्ती का क्या मतलब है?","Stop|रुको","Go|चलो","Turn|मुड़ो","Park|गाड़ी खड़ी करो"],
+["Which vehicle has two wheels and pedals?|किस वाहन के दो पहिये और पैडल होते हैं?","Bicycle|साइकिल","Car|कार","Bus|बस","Train|रेलगाड़ी"],
+["Where do aeroplanes land?|हवाई जहाज़ कहाँ उतरते हैं?","Airport|हवाई अड्डा","Station|स्टेशन","Port|बंदरगाह","Bus stand|बस अड्डा"]]],
+sports:["🏏","Sports","खेल",[
+["How many players are in a cricket team?|क्रिकेट टीम में कितने खिलाड़ी होते हैं?","11|11","9|9","12|12","15|15"],
+["Which sport uses a bat, a ball and wickets?|किस खेल में बल्ला, गेंद और विकेट होते हैं?","Cricket|क्रिकेट","Football|फुटबॉल","Hockey|हॉकी","Tennis|टेनिस"],
+["In which sport do we use a racket and a shuttlecock?|किस खेल में रैकेट और शटलकॉक होता है?","Badminton|बैडमिंटन","Cricket|क्रिकेट","Football|फुटबॉल","Hockey|हॉकी"],
+["The Olympic Games are held every how many years?|ओलंपिक खेल कितने साल में होते हैं?","4 years|4 साल","2 years|2 साल","5 years|5 साल","1 year|1 साल"],
+["Who is known as the Flying Sikh?|फ़्लाइंग सिख किसे कहा जाता है?","Milkha Singh|मिल्खा सिंह","Sachin Tendulkar|सचिन तेंदुलकर","Neeraj Chopra|नीरज चोपड़ा","PV Sindhu|पी वी सिंधु"],
+["Neeraj Chopra won Olympic gold in which sport?|नीरज चोपड़ा ने ओलंपिक स्वर्ण किस खेल में जीता?","Javelin throw|भाला फेंक","Hockey|हॉकी","Boxing|मुक्केबाज़ी","Shooting|निशानेबाज़ी"]]],
+science:["🔬","Basic Science","बुनियादी विज्ञान",[
+["At what temperature does water freeze?|पानी किस तापमान पर जमता है?","0°C|0°C","100°C|100°C","50°C|50°C","10°C|10°C"],
+["Which gas do plants give out?|पौधे कौन सी गैस छोड़ते हैं?","Oxygen|ऑक्सीजन","Carbon dioxide|कार्बन डाइऑक्साइड","Smoke|धुआँ","Hydrogen|हाइड्रोजन"],
+["Which force pulls things down to the ground?|कौन सा बल चीज़ों को नीचे खींचता है?","Gravity|गुरुत्वाकर्षण","Wind|हवा","Sound|ध्वनि","Light|प्रकाश"],
+["At what temperature does water boil?|पानी किस तापमान पर उबलता है?","100°C|100°C","50°C|50°C","0°C|0°C","200°C|200°C"],
+["Which one is a source of light?|इनमें से प्रकाश का स्रोत कौन सा है?","Sun|सूरज","Stone|पत्थर","Table|मेज़","Book|किताब"],
+["Ice is which state of matter?|बर्फ़ पदार्थ की कौन सी अवस्था है?","Solid|ठोस","Liquid|द्रव","Gas|गैस","Plasma|प्लाज़्मा"]]],
+body:["🦴","Human Body","मानव शरीर",[
+["How many bones does an adult human have?|एक वयस्क इंसान में कितनी हड्डियाँ होती हैं?","206|206","106|106","306|306","150|150"],
+["Which organ pumps blood?|कौन सा अंग खून को पंप करता है?","Heart|दिल","Lungs|फेफड़े","Brain|दिमाग़","Stomach|पेट"],
+["Which organs do we use to see?|देखने के लिए हम कौन से अंग का उपयोग करते हैं?","Eyes|आँखें","Ears|कान","Nose|नाक","Tongue|जीभ"],
+["Which organs help us breathe?|साँस लेने में कौन से अंग मदद करते हैं?","Lungs|फेफड़े","Heart|दिल","Liver|यकृत","Kidney|गुर्दा"],
+["How many teeth does an adult normally have?|एक वयस्क के सामान्यतः कितने दाँत होते हैं?","32|32","20|20","28|28","40|40"],
+["Which is the largest organ of the body?|शरीर का सबसे बड़ा अंग कौन सा है?","Skin|त्वचा","Heart|दिल","Brain|दिमाग़","Liver|यकृत"]]],
+nature:["🌳","Nature","प्रकृति",[
+["How many colours are in a rainbow?|इंद्रधनुष में कितने रंग होते हैं?","7|7","5|5","6|6","8|8"],
+["Which season is the hottest in India?|भारत में सबसे गर्म मौसम कौन सा है?","Summer|गर्मी","Winter|सर्दी","Spring|वसंत","Monsoon|बरसात"],
+["What do trees give us to breathe?|साँस लेने के लिए पेड़ हमें क्या देते हैं?","Oxygen|ऑक्सीजन","Plastic|प्लास्टिक","Smoke|धुआँ","Sand|रेत"],
+["Where does rain fall from?|बारिश कहाँ से गिरती है?","Clouds|बादल","Mountains|पहाड़","Sun|सूरज","Wind|हवा"],
+["Which is the largest ocean?|सबसे बड़ा महासागर कौन सा है?","Pacific Ocean|प्रशांत महासागर","Indian Ocean|हिंद महासागर","Atlantic Ocean|अटलांटिक महासागर","Arctic Ocean|आर्कटिक महासागर"]]],
+days:["📅","Important Days","महत्वपूर्ण दिन",[
+["When is Republic Day in India?|भारत में गणतंत्र दिवस कब होता है?","26 January|26 जनवरी","15 August|15 अगस्त","2 October|2 अक्टूबर","14 November|14 नवंबर"],
+["When is Children's Day in India?|भारत में बाल दिवस कब मनाया जाता है?","14 November|14 नवंबर","5 September|5 सितंबर","15 August|15 अगस्त","26 January|26 जनवरी"],
+["When is Teachers' Day in India?|भारत में शिक्षक दिवस कब मनाया जाता है?","5 September|5 सितंबर","14 November|14 नवंबर","2 October|2 अक्टूबर","25 December|25 दिसंबर"],
+["When is Gandhi Jayanti?|गांधी जयंती कब होती है?","2 October|2 अक्टूबर","15 August|15 अगस्त","26 January|26 जनवरी","31 October|31 अक्टूबर"],
+["When is World Environment Day?|विश्व पर्यावरण दिवस कब होता है?","5 June|5 जून","14 February|14 फ़रवरी","1 January|1 जनवरी","8 March|8 मार्च"],
+["When is International Yoga Day?|अंतर्राष्ट्रीय योग दिवस कब होता है?","21 June|21 जून","5 June|5 जून","15 August|15 अगस्त","10 October|10 अक्टूबर"]]]};
+function gkInit(){head("gk","🌍 "+B("General Knowledge","सामान्य ज्ञान"));
+ const b=$("b_gk");
+ b.innerHTML="<p>"+B("Pick a topic","एक विषय चुनो")+"</p><div class='gkg'>"+Object.keys(GKD).map(k=>"<button class='gt' data-k='"+k+"'><i>"+GKD[k][0]+"</i>"+B(GKD[k][1],GKD[k][2])+"</button>").join("")+"<button class='gt' data-k='mix'><i>🎲</i>"+B("Mix of all","सब मिलाकर")+"</button></div>";
+ b.querySelectorAll(".gt").forEach(x=>x.onclick=()=>gkStart(x.dataset.k));
+}
+let gkTop="mix";
+function gkStart(k){gkTop=k;
+ const pool=k==="mix"?Object.values(GKD).flatMap(v=>v[3].map(q=>({q}))):GKD[k][3].map(q=>({q}));
+ const items=shuffle(pool.slice()).slice(0,10).map(gkItem);
+ $("b_gk").innerHTML="<button id='gkb'>← "+B("Topics","विषय")+"</button><div id='gkbox'></div>";
+ $("gkb").onclick=gkInit;
+ play("gkbox",items,()=>gkStart(k));
+}
+const DEF=()=>({id:"p"+Date.now().toString(36)+Math.floor(Math.random()*99),n:"",xp:0,played:0,right:0,total:0,streak:0,last:"",daily:"",sound:true,theme:"auto",lang:"both",hist:{},by:{},av:"🙂",stars:0,lb:[],items:[],acc:[],hat:"",sm:[],secs:0,wr:[],sp:{},lc:0});
+let LOGGED=false,ALLP=[],ST=DEF();
+try{const d=JSON.parse(localStorage.getItem("gg_v2")||"null");
+ if(d&&d.list&&d.list.length){ALLP=d.list.map(x=>Object.assign(DEF(),x));ST=ALLP.find(x=>x.id===d.cur)||ALLP[0]}
+ else{const o=JSON.parse(localStorage.getItem("gg_v1")||"null");if(o){Object.assign(ST,o);ALLP=[ST]}}}catch(e){}
+ST=DEF();
+const save=()=>{try{localStorage.setItem("gg_v2",JSON.stringify({cur:LOGGED?ST.id:"",list:ALLP}))}catch(e){}};
+const sv=()=>{if(!LOGGED)return;if(!ALLP.includes(ST))ALLP.push(ST);save()};
+const today=()=>new Date().toLocaleDateString("en-CA");
+const lvl=()=>Math.floor(ST.xp/100)+1;
+const LT=[["Little Explorer","नन्हा खोजी"],["Curious Learner","जिज्ञासु विद्यार्थी"],["Smart Learner","होशियार विद्यार्थी"],["Quiz Star","क्विज़ स्टार"],["Brain Champion","दिमाग़ी चैंपियन"],["Super Scholar","सुपर विद्वान"],["Gyan Guru","ज्ञान गुरु"]];
+const lvtitle=()=>{const t=LT[Math.min(lvl()-1,6)];return B(t[0],t[1])};
+function chip(){const c=$("xpchip");if(c)c.textContent=avd()+" "+esc(ST.n||"")+" · ⚡ "+ST.xp+" · ⭐ "+(ST.stars||0)+" · 🔥 "+ST.streak;c.onclick=accMenu;c.style.cursor="pointer"}
+function toast(t){const d=document.createElement("div");d.className="xpt";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
+function award(xp,right,total,topic,np){
+ let bonus=0;const msgs=[];const before=lvl();ST.xp+=xp;if(!np)ST.played++;ST.right+=right;ST.total+=total;
+ const t=today();const hh=(ST.hist[t]=ST.hist[t]||{xp:0,g:0,r:0,n:0});hh.xp+=xp;if(!np)hh.g++;hh.r+=right;hh.n+=total;if(topic&&total){const bb=(ST.by[topic]=ST.by[topic]||{r:0,n:0});bb.r+=right;bb.n+=total}if(ST.last!==t){const y=new Date(Date.now()-864e5).toLocaleDateString("en-CA");const cont=ST.last===y;ST.streak=cont?ST.streak+1:1;if(!cont)ST.sm=[];ST.last=t;const SB={3:10,7:30,14:50,30:100};if(SB[ST.streak]&&!ST.sm.includes(ST.streak)){ST.sm.push(ST.streak);bonus+=SB[ST.streak];msgs.push("🔥 "+B(ST.streak+"-day streak! +"+SB[ST.streak]+" ⭐",ST.streak+" दिन लगातार! +"+SB[ST.streak]+" ⭐"))}}
+ if(total>=5&&right===total&&!np){const pd=(ST.pfd&&ST.pfd.d===t)?ST.pfd:(ST.pfd={d:t,n:0});if(pd.n<3){pd.n++;bonus+=5;msgs.push("🎯 "+B("Perfect! +5 ⭐","एकदम सही! +5 ⭐"))}}if(bonus)ST.stars=(ST.stars||0)+bonus;sv();chip();toast("+"+xp+" XP");msgs.forEach((m,i)=>setTimeout(()=>toast(m),1300*(i+1)));checkLevel();
+}
+function applyTheme(){const d=document.documentElement;if(ST.theme==="auto")d.removeAttribute("data-theme");else d.setAttribute("data-theme",ST.theme)}
+function dailyCard(){const done=ST.daily===today();
+ return "<button class='hc' style='width:100%;margin-bottom:12px;flex-direction:row;align-items:center;gap:12px' onclick=\"go('daily')\"><i class='ic' style='margin:0'>🗓️</i><span style='flex:1;color:var(--fg)'><b>"+B("Daily Challenge","आज की चुनौती")+"</b><span style='display:block;color:var(--muted)'>"+(done?"✅ "+B("Done today! Come back tomorrow","आज पूरा हुआ! कल फिर आओ"):B("20 GK questions · +100 bonus XP","20 सामान्य ज्ञान सवाल · +100 बोनस XP"))+"</span></span></button>"}
+function gkItem(x){const q=x.q,qq=q[0].split("|");return{p:(x.i!==undefined?x.i:picQ(q)),ap:(x.i!==undefined?"":picA(q)),h:BB(qq[0],qq[1]),o:shuffle(q.slice(1)).map(a=>{const t=a.split("|");return{l:BB(t[0],t[1]),ok:a===q[1]}})}}
+function dailyInit(){head("daily","🗓️ "+B("Daily Challenge","आज की चुनौती"));
+ const pool=Object.values(GKD).flatMap(v=>v[3].map(q=>({q})));
+ let h=[...today()].reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,7);const rnd=()=>(h=(h*1664525+1013904223)>>>0)/4294967296;
+ for(let i=pool.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
+ play("b_daily",pool.slice(0,20).map(gkItem),dailyInit,()=>{if(ST.daily!==today()){ST.daily=today();ST.stars=(ST.stars||0)+10;sv();award(100,0,0,null,true)}})}
+function progInit(){head("progress","📊 "+B("My Progress","मेरी प्रगति"));
+ const acc=ST.total?Math.round(ST.right*100/ST.total):0;
+ const BG=[["🥇",B("First Step","पहला कदम"),ST.played>=1],["⭐",B("Quiz Star (25 right)","क्विज़ स्टार (25 सही)"),ST.right>=25],["🔥",B("3-day Streak","3 दिन लगातार"),ST.streak>=3],["💯",B("100 XP","100 XP"),ST.xp>=100],["🎓",B("Scholar (20 games)","विद्वान (20 खेल)"),ST.played>=20],["🎯",B("Sharp (80%+)","तेज़ (80%+)"),ST.total>=20&&acc>=80],["🏆",B("500 XP","500 XP"),ST.xp>=500]].concat((ST.lb||[]).map(l=>{const b=lvBadge(l);return [b[0],B(b[1],b[2])+" (L"+l+")",true]}));
+ $("b_progress").innerHTML="<h2>"+avd()+" "+(ST.n||B("Friend","दोस्त"))+" · "+B("Level","स्तर")+" "+lvl()+" — "+lvtitle()+" · ⭐ "+(ST.stars||0)+"</h2><div class='xpb' style='background:var(--line)'><i style='width:"+(ST.xp%100)+"%;background:var(--card)'></i></div><small>"+(100-ST.xp%100)+" XP "+B("to next level","अगले स्तर तक")+"</small><div class='kpis' style='margin-top:12px'>"+[["⚡",ST.xp,"XP"],["🔥",ST.streak,B("Day streak","दिन लगातार")],["🎮",ST.played,B("Played","खेले")],["🎯",acc+"%",B("Accuracy","सटीकता")]].map(k=>"<div class='kpi'><b>"+k[0]+" "+k[1]+"</b><span>"+k[2]+"</span></div>").join("")+"</div><h3>🏅 "+B("Badges","बैज")+"</h3><div class='bgs'>"+BG.map(b=>"<div class='bg"+(b[2]?"":" off")+"'><i>"+b[0]+"</i>"+b[1]+"</div>").join("")+"</div>"}
+function setInit(){head("settings","⚙️ "+B("Settings","सेटिंग"));
+ $("b_settings").innerHTML="<div class='setr'><label>"+B("Your name","तुम्हारा नाम")+"</label><input id='sn' maxlength='20'></div><div class='setr'><label>"+B("Avatar","अवतार")+"</label></div>"+avH(ST.av)+"<div class='setr'><label>"+B("Theme","थीम")+"</label><select id='sth'><option value='auto'>Auto</option><option value='light'>☀️ Light</option><option value='dark'>🌙 Dark</option></select></div><div class='setr'><label>"+B("Sound effects","आवाज़ प्रभाव")+"</label><button id='ssd'></button></div><div class='setr'><label>"+B("Reset all progress","सारी प्रगति मिटाओ")+"</label><button id='srs'>🗑</button></div><div class='setr'><label>"+B("Account","खाता")+"</label><span><button id='spw'>🔑 "+B("Change password","पासवर्ड बदलो")+"</button></span></div><div class='setr'><label>🔒 "+B("Parent PIN","अभिभावक PIN")+"</label><span><button id='pps'></button> <button id='ppx'>✖</button></span></div><div class='setr'><label>♿ "+B("Accessibility","सुगम्यता")+"</label><button id='sac'>♿</button></div><p id='sm'></p>";
+ $("sn").value=ST.n||"";$("sac").onclick=a11yPanel;$("spw").onclick=chgPw;avBind($("b_settings"),a=>{ST.av=a;sv();chip()});
+ const pu=()=>{$("pps").textContent=pinH()?B("Change PIN","PIN बदलो"):B("Set PIN","PIN लगाओ");$("ppx").style.display=pinH()?"":"none"};pu();
+ $("pps").onclick=()=>{$("sm").innerHTML="<input id='np1' type='password' inputmode='numeric' maxlength='4' placeholder='"+B("New 4-digit PIN","नया 4 अंकों का PIN")+"' style='max-width:180px'> <button id='npok'>OK</button>";
+  $("npok").onclick=()=>{const v=$("np1").value;if(!/^\d{4}$/.test(v)){$("sm").textContent="⚠️ "+B("Enter exactly 4 digits","ठीक 4 अंक लिखो");return}setPinH(hp("gg"+v));UNL=true;pu();$("sm").textContent="✅ "+B("PIN saved","PIN सेव हो गया")}};
+ $("ppx").onclick=()=>{setPinH("");pu();$("sm").textContent="✅ "+B("PIN removed","PIN हटा दिया")};$("sn").onchange=()=>{ST.n=$("sn").value.trim().slice(0,20);sv();toast("✅")};
+ $("sth").value=ST.theme;$("sth").onchange=()=>{ST.theme=$("sth").value;applyTheme();sv()};
+ const sd=()=>{$("ssd").textContent=ST.sound?"🔊 ON":"🔇 OFF"};sd();$("ssd").onclick=()=>{ST.sound=!ST.sound;sv();sd()};
+ let ask=false;$("srs").onclick=()=>{if(!ask){ask=true;$("sm").textContent=B("Tap 🗑 again to confirm","पक्का करने के लिए 🗑 फिर दबाओ");return}
+  Object.assign(ST,{xp:0,played:0,right:0,total:0,streak:0,last:"",daily:""});sv();chip();setInit()}}
+const GKX={
+india:[["Who was the first Prime Minister of India?|भारत के पहले प्रधानमंत्री कौन थे?","Jawaharlal Nehru|जवाहरलाल नेहरू","Mahatma Gandhi|महात्मा गांधी","Sardar Patel|सरदार पटेल","Dr. Rajendra Prasad|डॉ. राजेंद्र प्रसाद"],["Which is India's national anthem?|भारत का राष्ट्रगान कौन सा है?","Jana Gana Mana|जन गण मन","Vande Mataram|वंदे मातरम्","Saare Jahan Se Achha|सारे जहाँ से अच्छा","Jai Hind|जय हिंद"]],
+states:[["Bhopal is the capital of which state?|भोपाल किस राज्य की राजधानी है?","Madhya Pradesh|मध्य प्रदेश","Rajasthan|राजस्थान","Bihar|बिहार","Gujarat|गुजरात"],["The Golden Temple is in which state?|स्वर्ण मंदिर किस राज्य में है?","Punjab|पंजाब","Haryana|हरियाणा","Rajasthan|राजस्थान","Bihar|बिहार"]],
+symbols:[["What is the national emblem of India?|भारत का राष्ट्रीय चिह्न क्या है?","Lion Capital of Ashoka|अशोक स्तंभ का सिंह शीर्ष","Taj Mahal|ताजमहल","Lotus|कमल","Peacock|मोर"],["Which is India's national aquatic animal?|भारत का राष्ट्रीय जलीय जीव कौन सा है?","Ganges River Dolphin|गंगा की डॉल्फ़िन","Whale|व्हेल","Shark|शार्क","Octopus|ऑक्टोपस"]],
+animals:[["Which is the largest animal in the world?|दुनिया का सबसे बड़ा जानवर कौन सा है?","Blue whale|नीला व्हेल","Elephant|हाथी","Shark|शार्क","Giraffe|जिराफ़"],["Which animal carries its baby in a pouch?|कौन सा जानवर अपने बच्चे को थैली में रखता है?","Kangaroo|कंगारू","Cow|गाय","Dog|कुत्ता","Horse|घोड़ा"]],
+birds:[["Which bird is a symbol of peace?|शांति का प्रतीक कौन सा पक्षी है?","Dove|सफ़ेद कबूतर","Crow|कौआ","Owl|उल्लू","Eagle|चील"],["Which is one of the smallest birds?|इनमें सबसे छोटा पक्षी कौन सा है?","Hummingbird|हमिंगबर्ड","Sparrow|गौरैया","Crow|कौआ","Parrot|तोता"]],
+fruits:[["Which fruit is called 'Anar' in Hindi?|हिंदी में 'अनार' किस फल को कहते हैं?","Pomegranate|अनार","Mango|आम","Apple|सेब","Grapes|अंगूर"],["Which fruit is dried to make raisins?|किशमिश किस फल को सुखाकर बनती है?","Grapes|अंगूर","Apple|सेब","Mango|आम","Orange|संतरा"]],
+veg:[["Which vegetable is used to make French fries?|फ़्रेंच फ़्राइज़ किस सब्ज़ी से बनती है?","Potato|आलू","Carrot|गाजर","Onion|प्याज़","Peas|मटर"],["Which vegetable is called 'Bhindi' in Hindi?|हिंदी में 'भिंडी' किसे कहते हैं?","Okra (Lady finger)|भिंडी","Brinjal|बैंगन","Cabbage|पत्तागोभी","Pumpkin|कद्दू"]],
+solar:[["Which star is closest to Earth?|पृथ्वी के सबसे पास कौन सा तारा है?","Sun|सूरज","Moon|चाँद","Mars|मंगल","Polaris|ध्रुव तारा"],["What is the path of a planet around the Sun called?|ग्रह के सूरज के चारों ओर रास्ते को क्या कहते हैं?","Orbit|कक्षा","Road|सड़क","Line|रेखा","Wave|तरंग"]],
+planets:[["Which planet is called the Blue Planet?|नीला ग्रह किसे कहते हैं?","Earth|पृथ्वी","Mars|मंगल","Venus|शुक्र","Mercury|बुध"],["Which planet is farthest from the Sun?|सूरज से सबसे दूर कौन सा ग्रह है?","Neptune|वरुण","Saturn|शनि","Mars|मंगल","Uranus|अरुण"]],
+space:[["What is a rocket used for?|रॉकेट किस काम आता है?","Going to space|अंतरिक्ष में जाना","Cooking|खाना पकाना","Cutting|काटना","Swimming|तैरना"],["What shines and twinkles in the night sky?|रात के आसमान में क्या चमकता और टिमटिमाता है?","Stars|तारे","Clouds|बादल","Birds|पक्षी","Kites|पतंगें"]],
+places:[["The Charminar is in which city?|चारमीनार किस शहर में है?","Hyderabad|हैदराबाद","Delhi|दिल्ली","Agra|आगरा","Pune|पुणे"],["In which country is the Statue of Liberty?|स्टैच्यू ऑफ़ लिबर्टी किस देश में है?","USA|अमेरिका","India|भारत","France|फ्रांस","Japan|जापान"]],
+festivals:[["On which festival are kites flown in Gujarat?|गुजरात में किस त्योहार पर पतंगें उड़ाते हैं?","Makar Sankranti|मकर संक्रांति","Diwali|दीवाली","Holi|होली","Eid|ईद"],["Which festival celebrates Guru Nanak's birth?|गुरु नानक के जन्म का त्योहार कौन सा है?","Gurpurab|गुरुपर्व","Diwali|दीवाली","Lohri|लोहड़ी","Baisakhi|बैसाखी"]],
+transport:[["Which is the fastest means of transport?|सबसे तेज़ यातायात का साधन कौन सा है?","Aeroplane|हवाई जहाज़","Bus|बस","Cycle|साइकिल","Bullock cart|बैलगाड़ी"],["Which vehicle takes sick people to hospital?|बीमार लोगों को अस्पताल कौन सा वाहन ले जाता है?","Ambulance|एम्बुलेंस","Fire engine|दमकल","Taxi|टैक्सी","Tractor|ट्रैक्टर"]],
+sports:[["How many rings are in the Olympic symbol?|ओलंपिक चिह्न में कितने छल्ले होते हैं?","5|5","4|4","6|6","7|7"],["Which sport is played at Wimbledon?|विंबलडन में कौन सा खेल खेला जाता है?","Tennis|टेनिस","Cricket|क्रिकेट","Football|फुटबॉल","Hockey|हॉकी"]],
+science:[["What does a plant need to grow?|पौधे को बढ़ने के लिए क्या चाहिए?","Water and sunlight|पानी और धूप","Plastic|प्लास्टिक","Sand|रेत","Oil|तेल"],["What does a magnet attract?|चुंबक किसे खींचता है?","Iron|लोहा","Wood|लकड़ी","Paper|कागज़","Plastic|प्लास्टिक"]],
+body:[["Which organ helps us think?|कौन सा अंग हमें सोचने में मदद करता है?","Brain|दिमाग़","Heart|दिल","Lungs|फेफड़े","Stomach|पेट"],["How many senses do we usually name?|हम आमतौर पर कितनी इंद्रियाँ गिनते हैं?","5|5","3|3","4|4","6|6"]],
+nature:[["Which gas makes up most of the air?|हवा में सबसे ज़्यादा कौन सी गैस होती है?","Nitrogen|नाइट्रोजन","Oxygen|ऑक्सीजन","Hydrogen|हाइड्रोजन","Carbon dioxide|कार्बन डाइऑक्साइड"],["What comes out of a seed first?|बीज से सबसे पहले क्या निकलता है?","Seedling|अंकुर","Fruit|फल","Root of a tree|पेड़ की जड़","Leaf|पत्ता"]],
+days:[["When is New Year's Day?|नया साल कब शुरू होता है?","1 January|1 जनवरी","15 August|15 अगस्त","26 January|26 जनवरी","25 December|25 दिसंबर"],["When is World Earth Day?|विश्व पृथ्वी दिवस कब होता है?","22 April|22 अप्रैल","5 June|5 जून","21 June|21 जून","1 May|1 मई"]]};
+Object.keys(GKX).forEach(k=>GKD[k][3].push(...GKX[k]));
+const GKP={"india": ["🇮🇳|🏛️", "🇮🇳|📅", "🇮🇳|🌊", "🗺️|🏔️", "🇮🇳|-", "🇮🇳|-", "🎵|🎶"], "states": ["🏙️|🗺️", "🏰|🐪", "🕌|🗺️", "🌴|🏙️", "🍵|🗺️", "🗺️|🔢", "🏙️|🗺️", "🛕|🗺️"], "symbols": ["🇮🇳|🐅", "🇮🇳|🦚", "🇮🇳|-", "🇮🇳|🥭", "🇮🇳|🟠", "🇮🇳|🌳", "🇮🇳|🦁", "🇮🇳|🐬"], "animals": ["🌍|🐘", "🧶|🐑", "💨|🐆", "🐄|🐮", "-|🦒", "🏜️|🐪", "🌊|🐋", "👜|🦘"], "birds": ["🐦|🐧", "🎶|🐦", "🗣️|🦜", "🌙|🦉", "🐦|-", "☮️|🕊️", "🐦|🐦"], "fruits": ["👑|🥭", "-|🍌", "💪|🍊", "🌱|🍓", "💧|🥥", "-|-", "-|🍇"], "veg": ["👀|🥕", "😢|🧅", "🌱|🥔", "🌿|🥬", "🍟|🍅", "🍟|🥔", "-|-"], "solar": ["🪐|☀️", "🪐|8️⃣", "🔥|-", "🌍|🌙", "🔴|-", "⭐|☀️", "🪐|⭕"], "planets": ["🪐|-", "💍|🪐", "☀️|-", "🪐|-", "☀️|🌍", "💙|🌍", "🪐|-"], "space": ["🇮🇳|🧑‍🚀", "🇮🇳|🚀", "🌙|🧑‍🚀", "🚀|🌙", "🚀|🧑‍🚀", "🚀|🌌", "🌌|⭐"], "places": ["🕌|-", "🏛️|🏙️", "🏛️|🌆", "🗼|🏙️", "🗼|🇫🇷", "🏜️|🇪🇬", "🕌|🏙️", "🗽|🇺🇸"], "festivals": ["💡|🪔", "🎨|🌈", "📅|🎄", "🕌|🌙", "🌸|🌴", "🧵|👫", "🌬️|🪁", "🕯️|🙏"], "transport": ["🛤️|🚆", "☁️|✈️", "⛵|🌊", "🚦|🛑", "🦵|🚲", "✈️|🛬", "⚡|✈️", "🏥|🚑"], "sports": ["🏏|🔢", "-|🏏", "-|🏸", "🏅|📅", "🏃|-", "🥇|-", "🏅|⭕", "🏆|🎾"], "science": ["💧|🧊", "🌱|💨", "🍎|⬇️", "♨️|🌡️", "💡|☀️", "🧊|-", "🌱|☀️", "🧲|🔩"], "body": ["🧍|🦴", "🩸|❤️", "-|👀", "💨|-", "😁|🦷", "🧍|-", "💭|🧠", "👁️|5️⃣"], "nature": ["🌈|7️⃣", "🌡️|☀️", "🌳|💨", "🌧️|☁️", "🌊|🌊", "🌬️|-", "🌰|🌱"], "days": ["📅|🇮🇳", "🧒|🎈", "📚|🍎", "🇮🇳|📅", "🌍|🌳", "🧘|☀️", "🎆|🎉", "🌍|🌎"]};
+Object.keys(GKP).forEach(k=>GKP[k].forEach((c,i)=>{if(GKD[k]&&GKD[k][3][i])GKD[k][3][i].pic=c}));
+const picQ=q=>{const c=((q&&q.pic)||"-|-").split("|")[0];return c==="-"?"":c},picA=q=>{const c=((q&&q.pic)||"-|-").split("|")[1];return c==="-"?"":(c||"")};
+const LBD={2:["🌱","Fresh Sprout","नया अंकुर"],3:["🧠","Smart Learner","होशियार विद्यार्थी"],4:["🎯","Sharp Shooter","निशानेबाज़"],5:["🚀","Rocket Brain","रॉकेट दिमाग़"],6:["🏅","Super Scholar","सुपर विद्वान"],7:["👑","Gyan Guru","ज्ञान गुरु"]};
+const lvBadge=l=>LBD[l]||["🌟","Legend "+l,"महान "+l];
+const EXTRAAV=["🦖","🧙","🦸","🐉","🛸","👑","🧜","🐺","🦅","🐲"];
+function fanfare(){if(!ST.sound)return;try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();[523,659,784,1047].forEach((f,i)=>{const o=actx.createOscillator(),g=actx.createGain();o.connect(g);g.connect(actx.destination);o.frequency.value=f;g.gain.value=.08;const t=actx.currentTime+i*.12;o.start(t);o.stop(t+.18)})}catch(e){}}
+function checkLevel(){
+ const cur=lvl();if(cur<=(ST.lc||0))return;
+ const nb=[],ni=[];let stars=0;
+ for(let l=ST.lc+1;l<=cur;l++){stars+=50;nb.push(lvBadge(l));ST.lb.push(l);const it=EXTRAAV[(l-2)%EXTRAAV.length];if(!ST.items.includes(it)){ST.items.push(it);ni.push(it)}}
+ ST.lc=cur;ST.stars=(ST.stars||0)+stars;sv();chip();
+ setTimeout(()=>celebrate(cur,stars,nb,ni),500)}
+function celebrate(l,stars,nb,ni){
+ document.querySelectorAll(".lvov").forEach(x=>x.remove());
+ const t=LT[Math.min(l-1,6)],o=document.createElement("div");o.className="ov lvov";o.style.zIndex=90;
+ const cf=[...Array(36)].map((_,i)=>"<i class='cf' style='left:"+(Math.random()*100).toFixed(1)+"%;background:"+["#f7d230","#e5484d","#4f6df5","#2fb36d","#ec5fa6","#f5a524"][i%6]+";animation-delay:"+(Math.random()*.8).toFixed(2)+"s;animation-duration:"+(1.6+Math.random()*1.2).toFixed(2)+"s'></i>").join("");
+ const b=nb[nb.length-1],it=ni[ni.length-1];
+ o.innerHTML=cf+"<div class='ovc lvc'><div class='lvh'>🎉 "+B("LEVEL UP!","लेवल अप!")+"</div><h2>"+B("Congratulations!","बधाई हो!")+" 🎊</h2><p class='lvt'>"+B("You reached Level "+l+" — "+t[0]+"!","तुम लेवल "+l+" पर पहुँच गए — "+t[1]+"!")+"</p><div class='rw'><div class='rwi'><b>⭐ "+stars+"</b><span>"+B("Stars","सितारे")+"</span></div><div class='rwi'><b>🏅 "+b[0]+"</b><span>"+B(b[1],b[2])+"</span></div>"+(it?"<div class='rwi'><b>🎁 "+it+"</b><span>"+B("New avatar item","नया अवतार")+"</span></div>":"")+"</div>"+(it?"<button id='lvw'>"+it+" "+B("Wear it now","अभी पहनो")+"</button> ":"")+"<button id='lvok'>"+B("Awesome!","शानदार!")+"</button></div>";
+ document.body.appendChild(o);fanfare();
+ const fin=()=>{o.remove();if(page==="home")go("home")};
+ $("lvok").onclick=fin;
+ if(it)$("lvw").onclick=()=>{ST.av=it;sv();chip();toast("✅");fin()}}
+const avd=()=>(ST.hat||"")+(ST.av||"🙂");
+const SHOPAV=[["🐙",30],["🦈",30],["🦩",30],["🐳",40],["🦚",40],["🐅",40],["🤠",50],["🐊",60]];
+const SHOPHAT=[["🧢",30],["🎀",30],["⛑️",30],["🎩",40],["😎",40],["🎓",50],["🎧",50],["👒",60]];
+function shopInit(){head("shop","🛍️ "+B("Star Shop","सितारा दुकान"));
+ const st=ST.stars||0;
+ const hasAv=e=>AVS.includes(e)||ST.items.includes(e);
+ const cell=(k,e,c)=>{const has=k==="av"?hasAv(e):ST.acc.includes(e),on=k==="av"?ST.av===e:ST.hat===e;
+  return "<button class='sh"+(on?" on":"")+"' data-k='"+k+"' data-e='"+e+"' data-c='"+c+"'><i>"+e+"</i><span>"+(on?"✔ "+B("Wearing","पहना है"):has?B("Wear","पहनो"):"⭐ "+c)+"</span></button>"};
+ $("b_shop").innerHTML="<h2>⭐ "+st+" "+B("stars","सितारे")+"</h2><p class='tipb'>💡 "+B("Earn stars: level up +50 · Daily Challenge +10 · perfect quiz +5 · streak 3 days +10, 7 days +30, 14 days +50, 30 days +100.","सितारे कमाओ: लेवल अप +50 · आज की चुनौती +10 · एकदम सही क्विज़ +5 · लगातार 3 दिन +10, 7 दिन +30, 14 दिन +50, 30 दिन +100।")+"</p><h3>🦁 "+B("Avatars","अवतार")+"</h3><div class='shg'>"+SHOPAV.map(x=>cell("av",x[0],x[1])).join("")+"</div><h3>🎩 "+B("Hats & accessories","टोपी और सामान")+"</h3><div class='shg'>"+(ST.hat?"<button class='sh' data-k='hat' data-e='' data-c='0'><i>🚫</i><span>"+B("Remove","हटाओ")+"</span></button>":"")+SHOPHAT.map(x=>cell("hat",x[0],x[1])).join("")+"</div><p id='shm'></p>";
+ let pend=null;
+ document.querySelectorAll("#b_shop .sh").forEach(b=>b.onclick=()=>{const k=b.dataset.k,e=b.dataset.e,c=+b.dataset.c;
+  const has=k==="av"?hasAv(e):(e===""||ST.acc.includes(e));
+  if(has){if(k==="av")ST.av=e;else ST.hat=e;sv();chip();beep(1);shopInit();return}
+  if((ST.stars||0)<c){beep(0);$("shm").textContent="⚠️ "+B("Not enough stars yet","अभी सितारे कम हैं");return}
+  if(pend!==b){pend=b;$("shm").textContent=B("Tap again to buy for "+c+" ⭐","खरीदने के लिए फिर दबाओ: "+c+" ⭐");return}
+  ST.stars-=c;(k==="av"?ST.items:ST.acc).push(e);if(k==="av")ST.av=e;else ST.hat=e;sv();chip();fanfare();toast("🎉 "+e);shopInit()})}
+const esc=t=>String(t).replace(/[<>&"']/g,"");
+const TN={qbox:["🖼️","Picture Quiz","तस्वीर क्विज़"],mbox:["➕","Math Sprint","गणित दौड़"],tbox:["📒","Tables","पहाड़े"],nbox:["🔢","Number Games","संख्या खेल"],cbox:["↔️","Small & Big","छोटी-बड़ी"],hvbox:["अ","Hindi Varnamala","हिंदी वर्णमाला"],rvbox:["🔁","Revision","दोहराव"],stbox:["📖","Stories","कहानियाँ"],hmbox:["ा","Hindi Matra","हिंदी मात्रा"],b_quick:["🎯","Quick Quiz","क्विक क्विज़"],b_shapes:["🧱","Shapes","आकृति"],b_daily:["🗓️","Daily Challenge","आज की चुनौती"],words:["🔤","Words","शब्द"],"gk:mix":["🎲","GK Mix","GK मिक्स"]};
+const tl=k=>{const g=k.startsWith("gk:")?GKD[k.slice(3)]:null;const t=g?[g[0],g[1],g[2]]:k.startsWith("sc:")?["💛","Special Classes","विशेष कक्षाएँ"]:k.startsWith("cms:")?["📝",k.slice(4),SJL[k.slice(4)]||k.slice(4)]:(TN[k]||["📘",k,k]);return t[0]+" "+B(t[1],t[2])};
+let rpid=null;
+const SUBJ=[["math","🔢","Math","गणित"],["eng","🔤","English","अंग्रेज़ी"],["hin","अ","Hindi","हिंदी"],["gk","🌍","GK","सामान्य ज्ञान"],["sci","🔬","Science","विज्ञान"]];
+const SCI=["animals","birds","nature","body","science","solar","planets","space"];
+function subjOf(k){
+ if(k.startsWith("cms:")){const m={Math:"math",Hindi:"hin",English:"eng",GK:"gk",Science:"sci"};return m[k.slice(4)]||null}
+ if(["mbox","tbox","nbox","cbox","b_shapes"].includes(k))return "math";
+ if(["words","qbox","stbox"].includes(k))return "eng";
+ if(["hvbox","hmbox"].includes(k))return "hin";
+ if(k.startsWith("gk:"))return SCI.includes(k.slice(3))?"sci":"gk";
+ if(["b_quick","b_daily"].includes(k))return "gk";
+ return null}
+function subjStats(q){const o={};SUBJ.forEach(x=>o[x[0]]={r:0,n:0});
+ Object.entries(q.by).forEach(e=>{const sj=subjOf(e[0]);if(sj){o[sj].r+=e[1].r;o[sj].n+=e[1].n}});
+ return SUBJ.map(x=>({id:x[0],ic:x[1],en:x[2],hi:x[3],n:o[x[0]].n,a:o[x[0]].n?Math.round(o[x[0]].r*100/o[x[0]].n):0}))}
+function badgesOf(p){const acc=p.total?Math.round(p.right*100/p.total):0;
+ return [["🥇",B("First Step","पहला कदम"),p.played>=1],["⭐",B("Quiz Star","क्विज़ स्टार"),p.right>=25],["🔥",B("3-day Streak","3 दिन लगातार"),p.streak>=3],["💯","100 XP",p.xp>=100],["🎓",B("Scholar","विद्वान"),p.played>=20],["🎯",B("Sharp 80%+","तेज़ 80%+"),p.total>=20&&acc>=80],["🏆","500 XP",p.xp>=500]].filter(x=>x[2]).concat((p.lb||[]).map(l=>{const b=lvBadge(l);return [b[0],B(b[1],b[2]),true]}))}
+const fmtT=t=>{t=t||0;if(t<60)return t+" "+B("sec","सेकंड");const m=Math.round(t/60);return m>=60?Math.floor(m/60)+"h "+(m%60)+"m":m+" "+B("min","मिनट")};
+const barS=a=>{const f=Math.round(a/10);return "█".repeat(f)+"░".repeat(10-f)};
+function reportInit(){head("report","🔐 "+B("Parent Dashboard","पैरेंट डैशबोर्ड"));
+ const kids=ALLP.filter(x=>x.uid!=="admin"),q=kids.find(x=>x.id===rpid)||(ST.uid==="admin"?kids[0]:ST)||ST,days=[];
+ for(let i=6;i>=0;i--){const d=new Date(Date.now()-i*864e5).toLocaleDateString("en-CA"),h=q.hist[d]||{};days.push({d,m:Math.round((h.s||0)/60),g:h.g||0,xp:h.xp||0,r:h.r||0,n:h.n||0})}
+ const wmin=days.reduce((a,x)=>a+x.m,0),act=days.filter(x=>x.g>0).length,mx=Math.max(1,...days.map(x=>x.m));
+ const acc=q.total?Math.round(q.right*100/q.total):0,SS=subjStats(q),lv=Math.floor(q.xp/100)+1;
+ const tp=Object.entries(q.by).filter(e=>e[1].n>=5).map(e=>({k:e[0],a:Math.round(e[1].r*100/e[1].n)}));
+ const strong=tp.filter(x=>x.a>=80).sort((a,b)=>b.a-a.a).slice(0,3),weak=tp.filter(x=>x.a<70).sort((a,b)=>a.a-b.a).slice(0,3);
+ const ln=a=>a.length?a.map(x=>"<div>"+tl(x.k)+" — "+x.a+"%</div>").join(""):"<div style='color:var(--muted)'>—</div>";
+ const RC=[],ranked=SS.filter(x=>x.n>=10).sort((a,b)=>b.a-a.a);
+ if(ranked.length&&ranked[0].a>=75)RC.push(["👍",B("Your child is doing very well in "+ranked[0].en+".","आपका बच्चा "+ranked[0].hi+" में बहुत अच्छा कर रहा है।")]);
+ ranked.slice().reverse().filter(x=>x.a<70).slice(0,2).forEach(w=>{let en="More "+w.en+" practice is recommended.",hi=w.hi+" का और अभ्यास करना अच्छा रहेगा।";
+  if(w.id==="hin"){const hv=q.by.hvbox,hm=q.by.hmbox;
+   if(hm&&(!hv||hm.r/hm.n<=hv.r/hv.n)){en="More Hindi Matra practice is recommended.";hi="हिंदी मात्रा का और अभ्यास करना अच्छा रहेगा।"}
+   else if(hv){en="More Hindi Varnamala practice is recommended.";hi="हिंदी वर्णमाला का और अभ्यास करना अच्छा रहेगा।"}}
+  RC.push(["📌",B(en,hi)])});
+ SS.filter(x=>x.n===0).slice(0,2).forEach(x=>RC.push(["🆕",B("Try some "+x.en+" practice too.",x.hi+" का भी अभ्यास करके देखें।")]));
+ if(q.played>0&&act<3)RC.push(["📅",B("Try to practise a little every day — even 10 minutes helps.","रोज़ थोड़ा अभ्यास करें — 10 मिनट भी मदद करते हैं।")]);
+ else if(act>=5)RC.push(["🔥",B("Great learning habit this week!","इस हफ़्ते सीखने की बहुत अच्छी आदत!")]);
+ if(!RC.length)RC.push(["💡",B("Play a few quizzes to see recommendations here.","सुझाव देखने के लिए कुछ क्विज़ खेलने दें।")]);
+ const tiles=[["🔥",q.streak+" "+B("days","दिन"),B("Learning streak","लगातार सीखना")],["⏱",fmtT(q.secs),B("Total learning time","कुल पढ़ाई का समय")],["✅",q.played,B("Lessons completed","पूरे किए पाठ")],["🎯",acc+"%",B("Quiz accuracy","क्विज़ सटीकता")],["❓",q.total,B("Questions practiced","अभ्यास किए सवाल")]].map(k=>"<div class='kpi'><b>"+k[0]+" "+k[1]+"</b><span>"+k[2]+"</span></div>").join("");
+ const bars=SS.map(x=>"<div class='sb'><span class='sbn'>"+x.ic+" "+B(x.en,x.hi)+"</span>"+(x.n?"<code style='color:"+(x.a>=80?"#2fb36d":x.a>=60?"#4f6df5":"#f5a524")+"'>"+barS(x.a)+"</code> <b>"+x.a+"%</b> <small>("+x.n+")</small>":"<code style='opacity:.35'>"+barS(0)+"</code> <small>"+B("no practice yet","अभी अभ्यास नहीं")+"</small>")+"</div>").join("");
+ const chart=days.map(x=>"<div><small>"+x.m+"m</small><i style='height:"+Math.round(x.m/mx*70)+"px'></i>"+new Date(x.d+"T12:00:00").toLocaleDateString(L()==="en"?"en-IN":"hi-IN",{weekday:"short"})+"</div>").join("");
+ const bd=badgesOf(q),badges=bd.length?bd.map(b=>"<span class='bdg'>"+b[0]+" "+b[1]+"</span>").join(" "):"<span style='color:var(--muted)'>—</span>";
+ const rec=RC.map(x=>"<div class='rl'>"+x[0]+" "+x[1]+"</div>").join("");
+ const sections="<h2>"+(q.hat||"")+(q.av||"🙂")+" "+esc(q.n)+" · "+B("Level","स्तर")+" "+lv+"</h2><div class='kpis pk'>"+tiles+"</div><h3>📚 "+B("Subject performance","विषय के अनुसार प्रदर्शन")+"</h3>"+bars+"<h3>💡 "+B("Recommendations","सुझाव")+"</h3>"+rec+"<div class='two'><div><h3>💪 "+B("Strong areas","मज़बूत विषय")+"</h3>"+ln(strong)+"</div><div><h3>📌 "+B("Weak areas","कमज़ोर विषय")+"</h3>"+ln(weak)+"</div></div><h3>📅 "+B("Learning time, last 7 days","पिछले 7 दिन का समय")+" ("+wmin+" "+B("min","मिनट")+")</h3><div class='wk'>"+chart+"</div><h3>🏅 "+B("Badges","बैज")+"</h3><p>"+badges+"</p>"+((q.uid==="kartik"||q.special)?"<h3>💛 "+B("Special Classes","विशेष कक्षाएँ")+"</h3><p>"+Object.keys(q.sp||{}).length+"/"+SPECIAL.reduce((a,c)=>a+c.lessons.length,0)+" "+B("lessons completed","पाठ पूरे हुए")+"</p>":"");
+ $("b_report").innerHTML="<div class='bar'><select id='rps'>"+kids.map(x=>"<option value='"+x.id+"'"+(x===q?" selected":"")+">"+(x.av||"👤")+" "+esc(x.n)+"</option>").join("")+"</select><button id='rlk'>🔒 "+B("Lock now","अभी लॉक करो")+"</button><button id='rtl'>🧰 "+B("Tools","औज़ार")+"</button>"+(canAdmin()?"<button id='rcm'>🛠️ "+B("Content Manager","कंटेंट मैनेजर")+"</button>":"")+"</div>"+sections+"<div class='bar' style='margin-top:12px'><button id='rpc'>📋 "+B("Copy summary","सारांश कॉपी करो")+"</button> <button id='rpd'>⬇️ "+B("Download report","रिपोर्ट डाउनलोड")+"</button> <button id='rpv'>⬇️ CSV</button></div><textarea id='rpt' style='display:none;width:100%;height:150px;margin-top:8px'></textarea>";
+ $("rps").onchange=()=>{rpid=$("rps").value;reportInit()};
+ $("rlk").onclick=()=>{UNL=false;UNLT=0;go("home")};if($("rcm"))$("rcm").onclick=()=>go("admin");if($("rtl"))$("rtl").onclick=toolsPanel;
+ const plain=()=>"Gyan Ganga — "+q.n+" (Level "+lv+")\nStreak: "+q.streak+" days · Learning time: "+fmtT(q.secs)+"\nLessons completed: "+q.played+" · Questions practiced: "+q.total+" · Quiz accuracy: "+acc+"%\n"+SS.map(x=>x.en+": "+(x.n?barS(x.a)+" "+x.a+"%":"no practice yet")).join("\n")+"\nStrong: "+(strong.map(x=>tl(x.k)+" "+x.a+"%").join(", ")||"-")+"\nWeak: "+(weak.map(x=>tl(x.k)+" "+x.a+"%").join(", ")||"-")+"\n"+RC.map(x=>x[0]+" "+x[1]).join("\n");
+ $("rpc").onclick=()=>{const t=plain(),ta=$("rpt");ta.style.display="block";ta.value=t;ta.select();try{navigator.clipboard.writeText(t)}catch(e){}};
+ let DL=null;
+ (async()=>{try{DL=window.claude&&window.claude.use?await window.claude.use("downloads"):null}catch(e){}})();
+ const dl=async(name,data)=>{try{if(DL)await DL.save({filename:name,data});else blobSave(name,data);toast("✅")}catch(e){if(!e||e.code!=="declined")toast("⚠️ "+B("Could not save","सेव नहीं हो सका"))}};
+ const fn=(q.n||"child").replace(/[^A-Za-z0-9\u0900-\u097F]+/g,"-");
+ $("rpd").onclick=()=>{
+  const css="body{font-family:Arial,sans-serif;max-width:720px;margin:24px auto;padding:0 16px;color:#1d2340}h1{color:#4f6df5}.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}.kpi{background:#eef1f8;border-radius:10px;padding:10px;text-align:center}.kpi b{display:block}.kpi span{font-size:.8em;color:#5b6285}.sb{margin:6px 0}.sbn{display:inline-block;width:130px}code{font-family:monospace;letter-spacing:1px}.rl{margin:4px 0}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.wk{display:flex;gap:6px;align-items:flex-end;height:110px}.wk div{flex:1;text-align:center;font-size:.7em}.wk i{display:block;background:#4f6df5;border-radius:6px 6px 0 0;min-height:3px}.bdg{display:inline-block;background:#eef1f8;border-radius:999px;padding:3px 10px;margin:2px}button{padding:8px 14px}@media print{button{display:none}}";
+  dl("gyan-ganga-parent-report-"+fn+".html","<!DOCTYPE html><html><head><meta charset='utf-8'><title>Gyan Ganga Parent Report</title><style>"+css+"</style></head><body><h1>🌊 Gyan Ganga · ज्ञान गंगा</h1><p>"+B("Report date","रिपोर्ट की तारीख़")+": "+today()+"</p>"+sections+"<p><button onclick='window.print()'>🖨 "+B("Print / Save as PDF","प्रिंट / PDF सेव करो")+"</button></p></body></html>")};
+ $("rpv").onclick=()=>{
+  const csv="\uFEFFDate,Minutes,XP,Games,Correct,Questions\n"+days.map(x=>[x.d,x.m,x.xp,x.g,x.r,x.n].join(",")).join("\n")+"\n\nSubject,Correct %,Questions\n"+SS.map(x=>[x.en,x.a,x.n].join(",")).join("\n")+"\n\nTotals\nStreak days,"+q.streak+"\nLearning minutes,"+Math.round((q.secs||0)/60)+"\nLessons completed,"+q.played+"\nQuestions practiced,"+q.total+"\nAccuracy %,"+acc;
+  dl("gyan-ganga-parent-report-"+fn+".csv",csv)};
+}
+const AVS=["👦","👧","🦁","🐯","🐼","🦊","🐸","🐵","🦄","🐧","🐘","🦋","🚀","⚽","🌟","🤖","🐬","🦉"];
+const avH=cur=>"<div class='avg'>"+AVS.concat(ST.items||[]).map(a=>"<button type='button' class='av"+(a===cur?" sel":"")+"' data-a='"+a+"'>"+a+"</button>").join("")+"</div>";
+function avBind(root,fn){root.querySelectorAll(".av").forEach(b=>b.onclick=()=>{root.querySelectorAll(".av").forEach(x=>x.classList.toggle("sel",x===b));fn(b.dataset.a)})}
+const PIC_ICONS=["🏠","🐟","🌸","🚀","🦋","🚗","🌳","🍦","⛵","🐱"],cdone=new Set();
+PICS.push(
+"<svg viewBox='0 0 200 160'><polygon class='r' points='70,100 85,78 85,122'/><polygon class='r' points='130,100 115,78 115,122'/><polygon class='r' points='88,118 100,152 112,118'/><ellipse class='r' cx='100' cy='70' rx='22' ry='52'/><polygon class='r' points='80,34 100,6 120,34'/><circle class='r' cx='100' cy='64' r='9'/><circle class='r' cx='30' cy='30' r='5'/><circle class='r' cx='168' cy='48' r='4'/><circle class='r' cx='40' cy='120' r='4'/></svg>",
+"<svg viewBox='0 0 200 160'><ellipse class='r' cx='65' cy='58' rx='38' ry='30'/><ellipse class='r' cx='135' cy='58' rx='38' ry='30'/><ellipse class='r' cx='72' cy='105' rx='28' ry='22'/><ellipse class='r' cx='128' cy='105' rx='28' ry='22'/><circle class='r' cx='62' cy='58' r='12'/><circle class='r' cx='138' cy='58' r='12'/><rect class='r' x='95' y='48' width='10' height='80' rx='5'/><circle class='r' cx='100' cy='40' r='9'/><line x1='96' y1='33' x2='86' y2='16' stroke='#333' stroke-width='2'/><line x1='104' y1='33' x2='114' y2='16' stroke='#333' stroke-width='2'/></svg>",
+"<svg viewBox='0 0 200 160'><rect class='r' x='0' y='132' width='200' height='28'/><circle class='r' cx='170' cy='28' r='16'/><rect class='r' x='25' y='80' width='150' height='38' rx='8'/><polygon class='r' points='55,80 75,48 125,48 150,80'/><polygon class='r' points='65,78 80,54 98,54 98,78'/><polygon class='r' points='104,54 120,54 138,78 104,78'/><circle class='r' cx='60' cy='118' r='16'/><circle class='r' cx='140' cy='118' r='16'/><circle class='r' cx='60' cy='118' r='6'/><circle class='r' cx='140' cy='118' r='6'/></svg>",
+"<svg viewBox='0 0 200 160'><circle class='r' cx='165' cy='28' r='15'/><ellipse class='r' cx='40' cy='30' rx='25' ry='12'/><rect class='r' x='0' y='130' width='200' height='30'/><rect class='r' x='90' y='85' width='20' height='50'/><circle class='r' cx='100' cy='60' r='35'/><circle class='r' cx='70' cy='82' r='25'/><circle class='r' cx='130' cy='82' r='25'/><circle class='r' cx='90' cy='55' r='6'/><circle class='r' cx='116' cy='70' r='6'/><circle class='r' cx='74' cy='86' r='5'/></svg>",
+"<svg viewBox='0 0 200 160'><polygon class='r' points='72,84 128,84 100,152'/><circle class='r' cx='100' cy='68' r='28'/><circle class='r' cx='100' cy='38' r='22'/><circle class='r' cx='100' cy='14' r='7'/><circle class='r' cx='88' cy='64' r='3'/><circle class='r' cx='112' cy='72' r='3'/><circle class='r' cx='100' cy='36' r='3'/></svg>",
+"<svg viewBox='0 0 200 160'><circle class='r' cx='165' cy='30' r='16'/><polygon class='r' points='96,28 96,92 55,92'/><polygon class='r' points='105,35 105,92 145,92'/><rect class='r' x='98' y='22' width='5' height='78'/><polygon class='r' points='103,22 103,10 122,16'/><polygon class='r' points='45,100 155,100 135,130 65,130'/><rect class='r' x='0' y='118' width='200' height='42'/></svg>",
+"<svg viewBox='0 0 200 160'><polygon class='r' points='45,62 55,12 88,44'/><polygon class='r' points='155,62 145,12 112,44'/><circle class='r' cx='100' cy='88' r='55'/><circle class='r' cx='78' cy='80' r='9'/><circle class='r' cx='122' cy='80' r='9'/><polygon class='r' points='92,96 108,96 100,108'/><circle class='r' cx='66' cy='102' r='8'/><circle class='r' cx='134' cy='102' r='8'/><line x1='30' y1='96' x2='55' y2='100' stroke='#333' stroke-width='2'/><line x1='170' y1='96' x2='145' y2='100' stroke='#333' stroke-width='2'/></svg>"
+);
+let UNL=false,UNLT=0;
+const hp=t=>{let h=5381;for(const c of t)h=((h*33)^c.charCodeAt(0))>>>0;return String(h)};
+const pinH=()=>{try{return localStorage.getItem("gg_pin")||""}catch(e){return ""}};
+const setPinH=v=>{try{v?localStorage.setItem("gg_pin",v):localStorage.removeItem("gg_pin")}catch(e){}};
+function pinSetup(ok){
+ const o=document.createElement("div");o.className="ov";o.style.zIndex=70;document.body.appendChild(o);
+ o.innerHTML="<div class='ovc'><h2>🔐 "+B("Create Parent PIN","पैरेंट PIN बनाओ")+"</h2><p>"+B("The Parent Area shows your child's progress. Create a 4-digit PIN to keep it private.","पैरेंट एरिया में बच्चे की प्रगति दिखती है। इसे सुरक्षित रखने के लिए 4 अंकों का PIN बनाओ।")+"</p><input id='sp1' type='password' inputmode='numeric' maxlength='4' placeholder='"+B("New PIN","नया PIN")+"'><input id='sp2' type='password' inputmode='numeric' maxlength='4' placeholder='"+B("Confirm PIN","PIN दोबारा")+"'><p id='spm' style='color:var(--bad)'></p><button id='spk'>OK</button> <button id='spc'>✖</button></div>";
+ $("spc").onclick=()=>{o.remove();go("home")};
+ $("spk").onclick=()=>{const a=$("sp1").value;if(!/^\d{4}$/.test(a)){$("spm").textContent=B("Enter exactly 4 digits","ठीक 4 अंक लिखो");return}
+  if(a!==$("sp2").value){$("spm").textContent=B("PINs do not match","PIN मेल नहीं खाते");return}
+  setPinH(hp("gg"+a));UNL=true;UNLT=Date.now();o.remove();toast("✅ "+B("PIN saved","PIN सेव हो गया"));ok()}}
+function askPin(ok,once){
+ if(!pinH()||UNL){ok();return}
+ const o=document.createElement("div");o.className="ov";o.style.zIndex=70;document.body.appendChild(o);let bad=0,lock=0;
+ const main=()=>{o.innerHTML="<div class='ovc'><h2>🔒 "+B("Parent PIN","अभिभावक PIN")+"</h2><input id='ppn' type='password' inputmode='numeric' maxlength='4' placeholder='••••'><p id='pmsg' style='color:var(--bad)'></p><button id='pok'>OK</button> <button id='pno'>✖</button><p><button id='pfg' style='font-size:.8rem'>"+B("Forgot PIN?","PIN भूल गए?")+"</button></p></div>";
+  $("pno").onclick=()=>{o.remove();if(!once)go("home")};
+  $("pok").onclick=()=>{if(Date.now()<lock)return;
+   if(hp("gg"+$("ppn").value)===pinH()){UNL=!once;UNLT=Date.now();o.remove();ok();UNL=!once;if(once)UNL=false}
+   else{bad++;$("ppn").value="";$("pmsg").textContent="❌ "+B("Wrong PIN","गलत PIN");if(bad>=5){lock=Date.now()+30000;bad=0;$("pmsg").textContent=B("Too many tries. Wait 30 seconds.","बहुत गलत कोशिशें। 30 सेकंड रुको।")}}};
+  $("pfg").onclick=()=>{const a=213+Math.floor(Math.random()*700),b=37+Math.floor(Math.random()*60);
+   o.innerHTML="<div class='ovc'><h2>"+B("Parent check","अभिभावक जाँच")+"</h2><p>"+a+" × "+b+" = ?</p><input id='pfa' inputmode='numeric'><p id='pmsg' style='color:var(--bad)'></p><button id='pfo'>OK</button> <button id='pfb'>←</button></div>";
+   $("pfb").onclick=main;
+   $("pfo").onclick=()=>{if(+$("pfa").value===a*b){setPinH("");o.remove();toast("✅ "+B("PIN removed","PIN हटा दिया"));ok()}else{$("pmsg").textContent="❌"}}};
+ };main()}
+const KH="fa48585e85d39dad506f9e83d248270c838b77f789ba6e3e32566f03631765c8";
+async function H(u,pw){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("gg|"+u+"|"+pw));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+const AH="365fd5e173d8ed629e3142913d32fb5d43d9601c9eb4629c85c2b71eedea89ca";
+const isAdminUser=()=>LOGGED&&ST.uid==="admin";
+function seedKartik(){
+ let a=ALLP.find(x=>x.uid==="admin");if(!a){a=DEF();a.n="Admin";a.av="🛠️";a.uid="admin";ALLP.push(a)}if(!a.ph)a.ph=AH;
+ let k=ALLP.find(x=>x.uid==="kartik");
+ if(!k){k=ALLP.find(x=>!x.uid&&/^kartik$/i.test((x.n||"").trim()));if(!k){k=DEF();k.n="Kartik";k.av="🦁";ALLP.push(k)}k.uid="kartik"}
+ if(!k.ph)k.ph=KH;save()}
+function enter(p){LOGGED=true;ST=p;if(!ST.lc)ST.lc=lvl();sv();applyTheme();$("lang").value=ST.lang||"both";document.querySelectorAll(".ov").forEach(x=>x.remove());go(p.uid==="admin"?"admin":"home")}
+function logoutAsk(){
+ document.querySelectorAll(".loov").forEach(x=>x.remove());
+ const o=document.createElement("div");o.className="ov loov";o.style.zIndex=75;o.setAttribute("role","dialog");document.body.appendChild(o);
+ o.innerHTML="<div class='ovc'><h2>🚪 "+B("Log out?","लॉग आउट करें?")+"</h2><p>"+esc(ST.n)+"</p><div class='bar'><button id='lo_y'>"+B("Yes, log out","हाँ, लॉग आउट")+"</button><button id='lo_n'>"+B("No, stay","नहीं, रुको")+"</button></div></div>";
+ $("lo_y").onclick=()=>{o.remove();logout()};$("lo_n").onclick=()=>o.remove();$("lo_n").focus()}
+function logout(){UNL=false;HIST=[];page="home";try{speechSynthesis.cancel()}catch(e){}loginScreen()}
+function accMenu(){
+ document.querySelectorAll(".accov").forEach(x=>x.remove());
+ const o=document.createElement("div");o.className="ov accov";o.style.zIndex=75;o.setAttribute("role","dialog");o.setAttribute("aria-label","Menu");document.body.appendChild(o);
+ const draw=()=>{const lg=$("lang").value,mi=(id,ic,t)=>"<button class='mi' id='"+id+"'><span>"+ic+"</span>"+t+"</button>";
+  o.innerHTML="<div class='ovc menu'><div class='mh'><span class='avt'>"+avd()+"</span><div><b>"+esc(ST.n)+"</b><br><small>@"+esc(ST.uid||"")+" · ⚡"+ST.xp+" · ⭐"+(ST.stars||0)+"</small></div></div><div class='bar lgb'>"+[["en","English"],["hi","हिंदी"],["both","English + हिंदी"]].map(x=>"<button class='lg"+(lg===x[0]?" act":"")+"' data-l='"+x[0]+"'>"+x[1]+"</button>").join("")+"</div>"+mi("m_pd","🔐",B("Parent Dashboard","पैरेंट डैशबोर्ड"))+(canAdmin()?mi("m_cm","🛠️",B("Content Manager","कंटेंट मैनेजर")):"")+mi("m_st","⚙️",B("Settings","सेटिंग"))+mi("m_ac","♿",B("Accessibility","सुगम्यता"))+mi("m_rd","🔊",B("Read this page aloud","यह पेज बोलकर सुनाओ"))+"<button id='m_x' class='mx'>✖ "+B("Close","बंद करो")+"</button></div>";
+  o.querySelectorAll(".lg").forEach(b=>b.onclick=()=>{$("lang").value=b.dataset.l;$("lang").onchange();draw();const e=o.querySelector(".lg.act");if(e)e.focus()});
+  $("m_pd").onclick=()=>{o.remove();go("report")};
+  if($("m_cm"))$("m_cm").onclick=()=>{o.remove();go("admin")};
+  $("m_st").onclick=()=>{o.remove();go("settings")};
+  $("m_ac").onclick=()=>{o.remove();a11yPanel()};
+  $("m_rd").onclick=()=>{o.remove();speakT(cleanForSpeech(pageText()))};
+  $("m_x").onclick=()=>o.remove()};
+ draw();const f=$("m_x");if(f)f.focus()}
+function chgPw(){const o=document.createElement("div");o.className="ov";o.style.zIndex=75;document.body.appendChild(o);
+ o.innerHTML="<div class='ovc'><h2>🔑 "+B("Change password","पासवर्ड बदलो")+"</h2><input id='c0' type='password' placeholder='"+B("Current password","मौजूदा पासवर्ड")+"'><input id='c1' type='password' placeholder='"+B("New password (4+ characters)","नया पासवर्ड (4+ अक्षर)")+"'><p id='cm' style='color:var(--bad)'></p><button id='cok'>OK</button> <button id='ccl'>✖</button></div>";
+ $("ccl").onclick=()=>o.remove();
+ $("cok").onclick=async()=>{const n=$("c1").value;if(n.length<4){$("cm").textContent=B("At least 4 characters","कम से कम 4 अक्षर");return}
+  if(await H(ST.uid,$("c0").value)!==ST.ph){$("cm").textContent="❌ "+B("Wrong password","पासवर्ड गलत है");return}
+  ST.ph=await H(ST.uid,n);sv();o.remove();toast("✅")}}
+function loginScreen(){
+ LOGGED=false;ST=DEF();document.querySelectorAll(".ov").forEach(x=>x.remove());
+ const o=document.createElement("div");o.className="ov solid";o.style.zIndex=80;document.body.appendChild(o);
+ let mode="in",bad=0,lock=0,nav="🦁";
+ const msg=t=>{$("lmsg").textContent=t};
+ const submit=async()=>{
+  if(Date.now()<lock){msg(B("Please wait a little.","थोड़ा रुको।"));return}
+  const u=($("lu").value||"").trim().toLowerCase(),pw=$("lp").value||"";
+  if(!/^[a-z0-9_]{3,15}$/.test(u)){msg(B("Enter a valid User ID","सही यूज़र ID लिखो"));return}
+  if(!(window.crypto&&crypto.subtle)){msg("⚠️ "+B("This browser cannot do secure login","यह ब्राउज़र सुरक्षित लॉगिन नहीं कर सकता"));return}
+  const h=await H(u,pw);
+  if(mode==="in"){
+   const p=ALLP.find(x=>x.uid===u);
+   if(p&&p.ph===h){enter(p)}
+   else{bad++;msg("❌ "+B("Wrong ID or password","ID या पासवर्ड गलत है"));if(bad>=5){lock=Date.now()+30000;bad=0;msg(B("Too many tries. Wait 30 seconds.","बहुत गलत कोशिशें। 30 सेकंड रुको।"))}}
+  }else{
+   const nm=($("lnm").value||"").trim().slice(0,20),pw2=$("lp2").value||"";
+   if(!nm){msg(B("Enter your name","अपना नाम लिखो"));return}
+   if(pw.length<4){msg(B("Password must be at least 4 characters","पासवर्ड कम से कम 4 अक्षर का हो"));return}
+   if(pw!==pw2){msg(B("Passwords do not match","पासवर्ड मेल नहीं खाते"));return}
+   if(ALLP.some(x=>x.uid===u)){msg(B("This ID is taken. Try another.","यह ID ले ली गई है। दूसरी चुनो।"));return}
+   let p=ALLP.find(x=>!x.uid&&(x.n||"").trim().toLowerCase()===nm.toLowerCase());
+   if(!p){p=DEF();ALLP.push(p)}
+   p.uid=u;p.ph=h;p.n=nm;p.av=nav;enter(p)}
+ };
+ const draw=()=>{
+  o.innerHTML="<div class='ovc'><h1>🌊 ज्ञान गंगा</h1><p>Gyan Ganga</p><div class='bar'><button id='tin' class='"+(mode==="in"?"act":"")+"'>"+B("Login","लॉगिन")+"</button><button id='tup' class='"+(mode==="up"?"act":"")+"'>"+B("Create ID","नई ID बनाओ")+"</button></div>"
+  +(mode==="up"?"<input id='lnm' maxlength='20' placeholder='"+B("Your name","तुम्हारा नाम")+"'>"+avH(nav):"")
+  +"<input id='lu' maxlength='15' autocapitalize='none' autocomplete='username' placeholder='"+B("User ID","यूज़र ID")+"'><input id='lp' type='password' maxlength='30' autocomplete='current-password' placeholder='"+B("Password","पासवर्ड")+"'>"
+  +(mode==="up"?"<input id='lp2' type='password' maxlength='30' placeholder='"+B("Confirm password","पासवर्ड दोबारा")+"'><small>"+B("ID: 3-15 letters or numbers. Password: at least 4 characters.","ID: 3-15 अक्षर या अंक। पासवर्ड: कम से कम 4 अक्षर।")+"</small>":"")
+  +"<p id='lmsg' style='color:var(--bad);min-height:1.2em'></p><button id='lgo'>"+(mode==="in"?B("Login ▶","लॉगिन ▶"):B("Create & start ▶","बनाओ और शुरू करो ▶"))+"</button><p><small>"+(mode==="in"?B("New here? Tap Create ID first.","नए हो? पहले 'नई ID बनाओ' दबाओ।"):"")+"</small></p><p style='font-size:.75rem;color:var(--muted)'>© "+new Date().getFullYear()+" imjsthakur · Gyan Ganga. All rights reserved.</p></div>";
+  $("tin").onclick=()=>{mode="in";draw()};$("tup").onclick=()=>{mode="up";draw()};
+  if(mode==="up")avBind(o,a=>{nav=a});
+  $("lgo").onclick=submit;["lu","lp"].forEach(id=>{$(id).onkeydown=e=>{if(e.key==="Enter")submit()}})};
+ draw()}
+const TOP0=()=>[["home","🏠",B("Home","होम")],["learn","📚",B("Learn","सीखो")],["practice","✏️",B("Practice","अभ्यास")],["play","🎮",B("Play","खेलो")],["stories","📖",B("Stories","कहानियाँ")],["rewards","🏆",B("My Rewards","मेरे इनाम")],["report","🔐",B("Parent Dashboard","पैरेंट डैशबोर्ड")]];
+const canSpecial=()=>LOGGED&&(ST.uid==="kartik"||ST.uid==="admin"||ST.special===true);
+const TOP=()=>{const t=TOP0();if(canSpecial())t.splice(5,0,["special","💛",B("Special Classes","विशेष कक्षाएँ")]);return t};
+const SECMAP={l_math:"learn",l_hindi:"learn",l_english:"learn",l_gk:"learn",l_science:"learn",p_weak:"practice",p_rev:"practice",daily:"practice",pl_math:"play",pl_word:"play",pl_mem:"play",pl_puz:"play",memory:"play",pattern:"play",puzzle:"play",diff:"play",color:"play",math:"learn",tables:"learn",numbers:"learn",shapes:"learn",hindi:"learn",quiz:"learn",words:"learn",gk:"learn",quick:"learn",shop:"rewards",progress:"rewards",bank:"learn"};
+function LEAFF(){const L0={home:["🏠",B("Home","होम")],memory:["🧠",B("Memory Match","याददाश्त")],quiz:["🖼️",B("Picture Quiz","तस्वीर क्विज़")],math:["➕",B("Math Sprint","गणित दौड़")],tables:["📒",B("Tables","पहाड़े")],progress:["📊",B("Progress","प्रगति")],settings:["⚙️",B("Settings","सेटिंग")],report:["🔐",B("Parent Dashboard","पैरेंट डैशबोर्ड")],stories:["📖",B("Stories","कहानियाँ")],special:["💛",B("Special Classes","विशेष कक्षाएँ")],rewards:["🏆",B("My Rewards","मेरे इनाम")],p_weak:["🎯",B("Weak Areas","कमज़ोर विषय")],p_rev:["🔁",B("Revision","दोहराव")],bank:["🗂️",B("Question Bank","प्रश्न बैंक")],admin:["🛠️",B("Content Manager","कंटेंट मैनेजर")],daily:["🗓️",B("Daily Challenge","आज की चुनौती")]};EXTRA().forEach(x=>{L0[x[0]]=[x[1],x[4]]});return L0}
+function HUBS(){const h=HUBS0();
+ const add=(id,sb)=>{const n=cmsActive().filter(c=>c.subject===sb).length;if(n)h[id].it.push(["bank:"+sb,"🗂️",B("Extra practice","अतिरिक्त अभ्यास"),B(n+" questions from your teacher",n+" सवाल शिक्षक की ओर से")])};
+ add("l_math","Math");add("l_hindi","Hindi");add("l_english","English");add("l_gk","GK");add("l_science","Science");
+ const tot=cmsActive().filter(c=>!SJL[c.subject]).length;if(tot)h.learn.it.push(["bank","🗂️",B("Question Bank","प्रश्न बैंक"),B(tot+" extra questions",tot+" अतिरिक्त सवाल")]);return h}
+function HUBS0(){
+ const sci=SCI.map(k=>["gk:"+k,GKD[k][0],B(GKD[k][1],GKD[k][2]),B("Quiz","क्विज़")]);
+ return{
+ learn:{ic:"📚",t:B("Learn","सीखो"),it:[["l_math","🔢",B("Math","गणित"),B("Numbers, tables, shapes","संख्या, पहाड़े, आकृति")],["l_hindi","अ",B("Hindi","हिंदी"),B("Varnamala, matra, stories","वर्णमाला, मात्रा, कहानियाँ")],["l_english","🔤",B("English","अंग्रेज़ी"),B("Words, pictures, stories","शब्द, तस्वीरें, कहानियाँ")],["l_gk","🌍",B("GK","सामान्य ज्ञान"),B("India, world, festivals","भारत, दुनिया, त्योहार")],["l_science","🔬",B("Science","विज्ञान"),B("Space, body, nature","अंतरिक्ष, शरीर, प्रकृति")]]},
+ l_math:{ic:"🔢",t:B("Math","गणित"),it:[["numbers:miss","🔢",B("Missing numbers","छूटी संख्या"),B("Find the missing number","छूटी संख्या ढूँढो")],["numbers:cmp","↔️",B("Small & Big numbers","छोटी-बड़ी संख्या"),B("Learn, order, before & after","सीखो, क्रम, पहले-बाद")],["tables:learn","📒",B("Tables 2–20","पहाड़े 2–20"),B("Learn and practice","याद करो और अभ्यास करो")],["shapes","🧱",B("Shapes","आकृतियाँ"),B("Names and sides","नाम और भुजाएँ")]]},
+ l_hindi:{ic:"अ",t:B("Hindi","हिंदी"),it:[["hindi:varn","🔤",B("Varnamala","वर्णमाला"),B("Letters with pictures","तस्वीरों के साथ अक्षर")],["hindi:matra","ा",B("Matra","मात्रा"),B("Join letter and matra","अक्षर और मात्रा जोड़ो")]]},
+ l_english:{ic:"🔤",t:B("English","अंग्रेज़ी"),it:[["quiz","🖼️",B("Picture Quiz","तस्वीर क्विज़"),B("Name the picture","तस्वीर का नाम बताओ")]]},
+ l_gk:{ic:"🌍",t:B("GK","सामान्य ज्ञान"),it:[["gk","🌍",B("General Knowledge","सामान्य ज्ञान"),B("18 topics","18 विषय")],["quick","🎯",B("Quick Quiz","क्विक क्विज़"),B("10 fast questions","10 तेज़ सवाल")]]},
+ l_science:{ic:"🔬",t:B("Science","विज्ञान"),it:sci},
+ practice:{ic:"✏️",t:B("Practice","अभ्यास"),it:[["p_weak","🎯",B("Weak Areas","कमज़ोर विषय"),B("Practise what needs help","जहाँ मदद चाहिए वहाँ अभ्यास")],["p_rev","🔁",B("Revision","दोहराव"),B("Redo your mistakes","अपनी गलतियाँ दोबारा करो")],["daily","🗓️",B("Daily Challenge","आज की चुनौती"),B("20 questions · bonus XP","20 सवाल · बोनस XP")]]},
+ play:{ic:"🎮",t:B("Play","खेलो"),it:[["pl_math","🔢",B("Math Games","गणित खेल"),B("Sprint, tables, shapes","स्प्रिंट, पहाड़े, आकृति")],["pl_word","🔤",B("Word Games","शब्द खेल"),B("Words and Hindi letters","शब्द और हिंदी अक्षर")],["pl_mem","🧠",B("Memory Games","याददाश्त खेल"),B("Match and repeat","मिलाओ और दोहराओ")],["pl_puz","🧩",B("Puzzle Games","पहेली खेल"),B("Puzzles, differences, colouring","पहेली, अंतर, रंग")]]},
+ pl_math:{ic:"🔢",t:B("Math Games","गणित खेल"),it:[["math","➕",B("Math Sprint","गणित दौड़"),B("3 levels","3 स्तर")],["numbers:ord","🔢",B("Tap in order","क्रम से दबाओ"),B("Race the clock","समय से दौड़")]]},
+ pl_word:{ic:"🔤",t:B("Word Games","शब्द खेल"),it:[["words","🔤",B("Word Scramble","शब्द पहेली"),B("Unscramble letters","अक्षर सजाओ")]]},
+ pl_mem:{ic:"🧠",t:B("Memory Games","याददाश्त खेल"),it:[["memory","🧠",B("Memory Match","याददाश्त मिलान"),B("1 or 2 players","1 या 2 खिलाड़ी")],["pattern","🟦",B("Pattern Memory","पैटर्न याद करो"),B("Repeat the colours","रंगों का क्रम दोहराओ")]]},
+ pl_puz:{ic:"🧩",t:B("Puzzle Games","पहेली खेल"),it:[["puzzle","🧩",B("Sliding Puzzle","सरकाओ पहेली"),B("Numbers or picture","संख्या या तस्वीर")],["diff","🔎",B("Find the Difference","अंतर खोजो"),B("3 levels","3 स्तर")],["color","🎨",B("Coloring","रंग भरो"),B("10 pictures","10 तस्वीरें")]]}}}
+function openA(a){const x=a.split(":");
+ if(x[0]==="bank"){bankSub=x[1]||"";bankTopic="";bankDiff="";go("bank");return}
+ if(x[0]==="gk"&&x[1]){go("gk");gkStart(x[1]);return}
+ if(x[0]==="numbers"&&x[1])nmode=x[1];
+ if(x[0]==="tables"&&x[1])tmode=x[1];
+ if(x[0]==="hindi"&&x[1])hmode=x[1];
+ go(x[0])}
+function hubInit(id){const h=HUBS()[id];
+ $("g_hub").innerHTML="<h1>"+h.ic+" "+h.t+"</h1><div class='hcards'>"+h.it.map(g=>"<button class='hc' onclick=\"openA('"+g[0]+"')\"><i class='ic'>"+g[1]+"</i><b>"+g[2]+"</b><span>"+(g[3]||"")+"</span><em>▶ "+B("Open","खोलो")+"</em></button>").join("")+"</div>"}
+function navBuild(n){
+ const sec=SECMAP[n]||n,T=TOP().filter(x=>x[0]!=="report");
+ $("nav").innerHTML=T.map(x=>"<button class='ni"+(sec===x[0]?" on":"")+"' onclick=\"go('"+x[0]+"')\"><span>"+x[1]+"</span>"+x[2]+"</button>").join("");
+ $("navf").innerHTML="<button class='ni' onclick=\"logoutAsk()\"><span>🚪</span>"+B("Log out","लॉग आउट")+"</button>";
+ $("tabs").innerHTML=T.map(x=>"<button class='"+(sec===x[0]?"on":"")+"' onclick=\"go('"+x[0]+"')\"><div style='font-size:1.3rem'>"+x[1]+"</div>"+x[2]+"</button>").join("")}
+function secCards(){const D={learn:B("Math, Hindi, English, GK, Science","गणित, हिंदी, अंग्रेज़ी, GK, विज्ञान"),practice:B("Weak areas, revision, daily challenge","कमज़ोर विषय, दोहराव, रोज़ की चुनौती"),play:B("Math, word, memory and puzzle games","गणित, शब्द, याददाश्त और पहेली खेल"),stories:B("Read, listen and answer","पढ़ो, सुनो और जवाब दो"),special:B("Special lessons made just for you","सिर्फ़ तुम्हारे लिए बने विशेष पाठ"),rewards:B("Stars, badges and shop","सितारे, बैज और दुकान")};
+ return "<div class='hcards'>"+TOP().filter(x=>D[x[0]]).map(x=>"<button class='hc' onclick=\"go('"+x[0]+"')\"><i class='ic'>"+x[1]+"</i><b>"+x[2]+"</b><span>"+D[x[0]]+"</span></button>").join("")+"</div><div class='bar' style='margin-top:22px'><button class='lo' onclick=\"logoutAsk()\">🚪 "+B("Log out","लॉग आउट")+"</button></div>"}
+$("bk").onclick=()=>{const p=HIST.pop();go(p||"home",true)};
+
+/* mistakes log + weak areas + revision */
+const ACTMAP={qbox:"quiz",mbox:"math",tbox:"tables:practice",nbox:"numbers:miss",cbox:"numbers:cmp",b_shapes:"shapes",words:"words",hvbox:"hindi:varn",hmbox:"hindi:matra",b_quick:"quick",b_daily:"daily",stbox:"stories"};
+function logWrong(q){const key=wkey(q);ST.wr=(ST.wr||[]).filter(x=>x.k!==key);ST.wr.push({k:key,p:(String(q.p).length>300?"📝":q.p),h:q.h,o:q.o.map(x=>({l:x.l,ok:x.ok}))});if(ST.wr.length>60)ST.wr.shift();sv()}
+function weakInit(){head("p_weak","🎯 "+B("Weak Areas","कमज़ोर विषय"));
+ const tp=Object.entries(ST.by||{}).filter(e=>e[0]!=="rvbox"&&e[1].n>=3).map(e=>({k:e[0],a:Math.round(e[1].r*100/e[1].n),n:e[1].n})).filter(x=>x.a<70).sort((a,b)=>a.a-b.a).slice(0,8);
+ const bx=$("b_p_weak");
+ if(!tp.length){bx.innerHTML="<p class='tipb'>🎉 "+B("No weak areas yet! Keep playing quizzes — your weak topics will show up here.","अभी कोई कमज़ोर विषय नहीं! क्विज़ खेलते रहो — कमज़ोर विषय यहाँ दिखेंगे।")+"</p><div class='bar'><button id='wd'>🗓️ "+B("Daily Challenge","आज की चुनौती")+"</button><button id='wr'>🔁 "+B("Revision","दोहराव")+"</button></div>";$("wd").onclick=()=>go("daily");$("wr").onclick=()=>go("p_rev");return}
+ bx.innerHTML="<p>"+B("Practise these topics to get stronger:","इन विषयों का अभ्यास करके मज़बूत बनो:")+"</p>"+tp.map((x,i)=>"<div class='sb'><span class='sbn' style='width:150px'>"+tl(x.k)+"</span><code style='color:#f5a524'>"+barS(x.a)+"</code> <b>"+x.a+"%</b> <button data-i='"+i+"'>▶ "+B("Practise","अभ्यास")+"</button></div>").join("");
+ bx.querySelectorAll("button[data-i]").forEach(b=>b.onclick=()=>{const k=tp[+b.dataset.i].k;openA(k.startsWith("gk:")?k:k.startsWith("cms:")?"bank:"+k.slice(4):k.startsWith("sc:")?"special":(ACTMAP[k]||"home"))})}
+function revInit(){head("p_rev","🔁 "+B("Revision","दोहराव"));
+ const w=ST.wr||[];
+ $("b_p_rev").innerHTML="<div id='rvinfo'></div><div id='rvbox'></div>";
+ const info=$("rvinfo");
+ info.innerHTML="<p class='tipb'>"+(w.length?"🔁 "+B("You have "+w.length+" question(s) to revise. Get them right to clear them!","तुम्हारे पास दोहराने के लिए "+w.length+" सवाल हैं। सही जवाब दो तो वे हट जाएँगे!"):"🎉 "+B("No mistakes to revise right now! Try a mixed revision.","अभी दोहराने के लिए कोई गलती नहीं! मिक्स दोहराव आज़माओ।"))+"</p><button id='rvgo'>▶ "+(w.length?B("Start revision","दोहराव शुरू करो"):B("Mixed revision","मिक्स दोहराव"))+"</button>";
+ $("rvgo").onclick=()=>{info.innerHTML="";
+  if(w.length){const items=shuffle(w.slice()).slice(0,10).map(x=>({p:x.p,h:x.h,o:shuffle(x.o.map(y=>({l:y.l,ok:y.ok})))}));
+   play("rvbox",items,revInit,null,(q,ok)=>{if(ok){ST.wr=(ST.wr||[]).filter(z=>z.k!==wkey(q));sv()}})}
+  else{const pool=Object.values(GKD).flatMap(v=>v[3].map(q=>({q})));play("rvbox",shuffle(pool).slice(0,10).map(gkItem),revInit,null,(q,ok)=>{if(!ok)logWrong(q)})}}}
+/* stories */
+const STORIES=[
+{ic:"🐦",te:"The Thirsty Crow",th:"प्यासा कौआ",en:"On a hot day, a crow was very thirsty. He found a pot with a little water at the bottom, but his beak could not reach it. The clever crow picked up small stones and dropped them into the pot, one by one. Slowly the water rose, and he drank happily.",hi:"गर्मी के दिन एक कौआ बहुत प्यासा था। उसे एक घड़ा मिला जिसमें नीचे थोड़ा पानी था, पर उसकी चोंच वहाँ तक नहीं पहुँचती थी। समझदार कौए ने छोटे-छोटे कंकड़ उठाकर घड़े में डालने शुरू किए। धीरे-धीरे पानी ऊपर आ गया और कौए ने मज़े से पानी पिया।",me:"Where there is a will, there is a way.",mh:"जहाँ चाह, वहाँ राह।",q:[["What was the crow looking for?|कौआ क्या ढूँढ रहा था?","Water|पानी","Milk|दूध","Food|खाना","A nest|घोंसला"],["What did the crow drop into the pot?|कौए ने घड़े में क्या डाला?","Small stones|छोटे कंकड़","Leaves|पत्ते","Sand|रेत","Sticks|डंडियाँ"],["What does the story teach?|कहानी क्या सिखाती है?","Think smart and try|समझदारी से कोशिश करो","Give up|हार मान लो","Sleep more|ज़्यादा सोओ","Be lazy|आलसी बनो"]]},
+{ic:"🐢",te:"The Hare and the Tortoise",th:"खरगोश और कछुआ",en:"A hare laughed at a slow tortoise and asked him to race. The hare ran fast and then took a nap under a tree. The tortoise kept walking slowly and never stopped. When the hare woke up, the tortoise had already won the race.",hi:"एक खरगोश ने धीमे कछुए का मज़ाक उड़ाया और उसे दौड़ के लिए ललकारा। खरगोश तेज़ भागा और फिर पेड़ के नीचे सो गया। कछुआ धीरे-धीरे बिना रुके चलता रहा। जब खरगोश जागा, तो कछुआ दौड़ जीत चुका था।",me:"Slow and steady wins the race.",mh:"धीरे-धीरे लगातार चलने वाला जीतता है।",q:[["Who won the race?|दौड़ कौन जीता?","Tortoise|कछुआ","Hare|खरगोश","Fox|लोमड़ी","Nobody|कोई नहीं"],["What did the hare do during the race?|दौड़ के बीच में खरगोश ने क्या किया?","Took a nap|सो गया","Ate food|खाना खाया","Swam|तैरा","Sang a song|गाना गाया"],["The tortoise was...|कछुआ कैसा था?","Slow but steady|धीमा पर लगातार","Very fast|बहुत तेज़","Lazy|आलसी","Angry|गुस्सैल"]]},
+{ic:"🦁",te:"The Lion and the Mouse",th:"शेर और चूहा",en:"A little mouse woke a sleeping lion by accident. The lion was angry, but he let the mouse go. Later, the lion got caught in a hunter's net. The mouse chewed the ropes and set him free.",hi:"एक छोटे चूहे ने गलती से सोते हुए शेर को जगा दिया। शेर को गुस्सा आया, पर उसने चूहे को छोड़ दिया। बाद में शेर शिकारी के जाल में फँस गया। चूहे ने रस्सियाँ कुतरकर उसे आज़ाद कर दिया।",me:"Even small friends can help in big ways.",mh:"छोटे दोस्त भी बड़ी मदद कर सकते हैं।",q:[["Who was caught in the net?|जाल में कौन फँसा?","Lion|शेर","Mouse|चूहा","Hunter|शिकारी","Deer|हिरन"],["How did the mouse help?|चूहे ने कैसे मदद की?","He chewed the ropes|उसने रस्सियाँ कुतरीं","He ran away|वह भाग गया","He shouted|वह चिल्लाया","He slept|वह सो गया"],["What did the lion do first?|शेर ने पहले क्या किया?","Let the mouse go|चूहे को छोड़ दिया","Ate the mouse|चूहे को खा लिया","Ran away|भाग गया","Cried|रोया"]]},
+{ic:"🍇",te:"The Sour Grapes",th:"खट्टे अंगूर",en:"A hungry fox saw juicy grapes high on a vine. He jumped and jumped but could not reach them. At last he walked away and said, \"Those grapes must be sour anyway.\"",hi:"एक भूखी लोमड़ी ने बेल पर ऊँचे लटके रसीले अंगूर देखे। उसने बार-बार कूदकर कोशिश की, पर अंगूर तक नहीं पहुँच सकी। आख़िर में वह यह कहकर चली गई, \"ये अंगूर तो वैसे भी खट्टे होंगे।\"",me:"Do not blame things just because you could not get them.",mh:"जो चीज़ न मिले, उसे बुरा मत कहो।",q:[["What did the fox want?|लोमड़ी को क्या चाहिए था?","Grapes|अंगूर","Apples|सेब","Mangoes|आम","Bananas|केले"],["Why could the fox not eat them?|लोमड़ी क्यों नहीं खा सकी?","They were too high|वे बहुत ऊँचे थे","They were rotten|वे सड़े थे","She was full|उसका पेट भरा था","They were gone|वे ख़त्म थे"],["What did the fox say at the end?|आख़िर में लोमड़ी ने क्या कहा?","The grapes are sour|अंगूर खट्टे हैं","The grapes are sweet|अंगूर मीठे हैं","I am tired|मैं थक गई","Thank you|धन्यवाद"]]},
+{ic:"🕊️",te:"Unity is Strength",th:"एकता में शक्ति",en:"A hunter spread a net and some birds got trapped. The birds were scared, but they made a plan. All of them flapped their wings together and flew up with the net. They reached their friend, a mouse, who cut the net and set them free.",hi:"एक शिकारी ने जाल बिछाया और कुछ चिड़ियाँ उसमें फँस गईं। चिड़ियाँ डर गईं, पर उन्होंने मिलकर योजना बनाई। सबने एक साथ पंख फड़फड़ाए और जाल लेकर उड़ गईं। वे अपने दोस्त चूहे के पास पहुँचीं, जिसने जाल काटकर उन्हें आज़ाद कर दिया।",me:"Together we are strong.",mh:"एकता में शक्ति है।",q:[["What trapped the birds?|चिड़ियों को किसने फँसाया?","A net|एक जाल","A cage|पिंजरा","A box|डिब्बा","A bridge|पुल"],["How did the birds escape?|चिड़ियाँ कैसे बचीं?","They flew up together|सब साथ उड़ीं","They fought|वे लड़ीं","They slept|वे सो गईं","They cried|वे रोईं"],["Who cut the net?|जाल किसने काटा?","A mouse|चूहे ने","A cat|बिल्ली ने","A hunter|शिकारी ने","A crow|कौए ने"]]}];
+STORIES.push(
+{ic:"🐒",te:"The Monkey and the Crocodile",th:"बंदर और मगरमच्छ",en:"A monkey lived on a tree by a river and shared sweet fruits with a crocodile. One day the crocodile's wife wished to eat the monkey's heart. The crocodile carried the monkey on his back, but in the middle of the river he told the truth. The quick monkey said, 'My heart is hanging on the tree. Take me back to get it!' The crocodile did so, and the monkey jumped up the tree and was safe.",hi:"एक बंदर नदी किनारे पेड़ पर रहता था और मगरमच्छ को मीठे फल खिलाता था। एक दिन मगरमच्छ की पत्नी ने बंदर का दिल खाने की ज़िद की। मगरमच्छ बंदर को पीठ पर बैठाकर चला, पर नदी के बीच में उसने सच बता दिया। चतुर बंदर बोला, 'मेरा दिल तो पेड़ पर टँगा है। मुझे वापस ले चलो, मैं ले आता हूँ!' मगरमच्छ उसे वापस ले गया, और बंदर उछलकर पेड़ पर चढ़ गया और बच गया।",me:"Stay calm and think quickly in danger.",mh:"मुसीबत में शांत रहो और जल्दी सोचो।",q:[["What did the monkey share with the crocodile?|बंदर ने मगरमच्छ के साथ क्या बाँटा?","Sweet fruits|मीठे फल","Fish|मछली","Nuts|मेवे","Water|पानी"],["Where did the monkey say his heart was?|बंदर ने कहा कि उसका दिल कहाँ है?","On the tree|पेड़ पर","In the river|नदी में","At home|घर में","In a box|डिब्बे में"],["How did the monkey save himself?|बंदर ने खुद को कैसे बचाया?","By thinking quickly|जल्दी सोचकर","By fighting|लड़कर","By crying|रोकर","By swimming away|तैरकर भागकर"]]},
+{ic:"🥚",te:"The Golden Egg",th:"सोने का अंडा",en:"A farmer had a hen that laid one golden egg every day. He sold the eggs and slowly became rich. But he became greedy and thought, 'If I cut the hen open, I will get all the gold at once.' He cut the hen, but found nothing inside. Now he had no hen and no more golden eggs.",hi:"एक किसान के पास एक मुर्गी थी जो रोज़ एक सोने का अंडा देती थी। अंडे बेचकर किसान धीरे-धीरे अमीर होने लगा। फिर उसे लालच आया और उसने सोचा, 'मुर्गी को काट दूँ तो सारा सोना एक साथ मिल जाएगा।' उसने मुर्गी को काटा, पर अंदर कुछ नहीं निकला। अब न मुर्गी बची, न सोने के अंडे।",me:"Greed spoils everything.",mh:"लालच बुरी बला है।",q:[["What did the hen lay every day?|मुर्गी रोज़ क्या देती थी?","A golden egg|सोने का अंडा","A silver coin|चाँदी का सिक्का","A white egg|सफ़ेद अंडा","A diamond|हीरा"],["Why did the farmer cut the hen?|किसान ने मुर्गी को क्यों काटा?","He became greedy|उसे लालच आ गया","He was hungry|उसे भूख लगी थी","He was angry|उसे गुस्सा आया","By mistake|गलती से"],["What did the farmer find inside?|किसान को अंदर क्या मिला?","Nothing|कुछ नहीं","Gold|सोना","Eggs|अंडे","A key|चाबी"]]},
+{ic:"🐺",te:"The Boy Who Cried Wolf",th:"भेड़िया आया!",en:"A shepherd boy looked after sheep near a village. For fun he shouted, 'Wolf! Wolf!' and the villagers ran to help, but there was no wolf. He laughed and did it again. One day a real wolf came, and he shouted for help, but nobody believed him. The wolf scattered the sheep.",hi:"एक चरवाहा लड़का गाँव के पास भेड़ें चराता था। मज़ाक में वह चिल्लाया, 'भेड़िया! भेड़िया!' गाँव वाले मदद को दौड़े, पर कोई भेड़िया नहीं था। वह हँसा और उसने फिर यही किया। एक दिन सच में भेड़िया आ गया। उसने मदद माँगी, पर किसी ने उसका विश्वास नहीं किया, और भेड़िये ने भेड़ें बिखेर दीं।",me:"A liar is not believed even when he tells the truth.",mh:"झूठ बोलने वाले की सच बात पर भी कोई भरोसा नहीं करता।",q:[["What was the boy's job?|लड़के का काम क्या था?","Looking after sheep|भेड़ें चराना","Selling milk|दूध बेचना","Teaching|पढ़ाना","Fishing|मछली पकड़ना"],["Why did the villagers not help the last time?|आख़िरी बार गाँव वाले मदद को क्यों नहीं आए?","They did not believe him|उन्होंने उसका विश्वास नहीं किया","They were asleep|वे सो रहे थे","They were afraid|वे डर गए","They were away|वे बाहर गए थे"],["What does the story teach?|कहानी क्या सिखाती है?","Always tell the truth|हमेशा सच बोलो","Play tricks|मज़ाक करते रहो","Run fast|तेज़ दौड़ो","Sleep early|जल्दी सोओ"]]},
+{ic:"🐜",te:"The Ant and the Grasshopper",th:"चींटी और टिड्डा",en:"In summer, a grasshopper sang and played all day. A little ant worked hard and kept grains for winter. The grasshopper laughed at her. When winter came, the grasshopper was hungry and cold, and the ant shared some food with him. He promised to work hard next time.",hi:"गर्मियों में एक टिड्डा दिन भर गाता और खेलता रहता था। एक छोटी चींटी मेहनत करके सर्दियों के लिए अनाज जमा करती रही। टिड्डा उस पर हँसा। जब सर्दी आई तो टिड्डा भूखा और ठंड से परेशान था। चींटी ने उसे थोड़ा खाना दिया, और टिड्डे ने वादा किया कि अगली बार वह भी मेहनत करेगा।",me:"Work hard today to be safe tomorrow.",mh:"आज मेहनत करो, कल सुरक्षित रहोगे।",q:[["What did the ant collect?|चींटी ने क्या जमा किया?","Grains|अनाज","Flowers|फूल","Stones|पत्थर","Leaves|पत्ते"],["What did the grasshopper do all summer?|टिड्डा पूरी गर्मी क्या करता रहा?","Sang and played|गाता और खेलता रहा","Worked hard|मेहनत करता रहा","Slept|सोता रहा","Travelled|घूमता रहा"],["How did the ant help the grasshopper?|चींटी ने टिड्डे की कैसे मदद की?","She shared food|उसने खाना बाँटा","She gave a house|उसने घर दिया","She sang a song|उसने गाना गाया","She ran away|वह भाग गई"]]},
+{ic:"🐰",te:"The Clever Rabbit and the Lion",th:"चतुर खरगोश और शेर",en:"A fierce lion ate the animals of the forest every day. The animals asked him to take only one animal a day, so he would not hunt everyone. One day it was the turn of a small rabbit. The clever rabbit reached late and said, 'Another lion in a well wants your place!' The angry lion looked into the well, saw his own shadow, and jumped in. The forest was safe again.",hi:"एक खूँखार शेर रोज़ जंगल के जानवरों को खा जाता था। जानवरों ने कहा कि वे रोज़ एक जानवर खुद भेज देंगे, ताकि वह सबका शिकार न करे। एक दिन एक छोटे खरगोश की बारी आई। चतुर खरगोश देर से पहुँचा और बोला, 'कुएँ में एक और शेर है, जो तुम्हारी जगह लेना चाहता है!' गुस्से में शेर ने कुएँ में झाँका, अपनी परछाईं देखी और कूद पड़ा। जंगल फिर सुरक्षित हो गया।",me:"Brains are stronger than strength.",mh:"बुद्धि ताकत से बड़ी होती है।",q:[["Whose turn was it that day?|उस दिन किसकी बारी थी?","A small rabbit|एक छोटे खरगोश की","A deer|एक हिरन की","A monkey|एक बंदर की","An elephant|एक हाथी की"],["What did the lion see in the well?|शेर ने कुएँ में क्या देखा?","His own shadow|अपनी परछाईं","A real lion|एक असली शेर","A fish|एक मछली","Gold|सोना"],["Who saved the forest?|जंगल को किसने बचाया?","The clever rabbit|चतुर खरगोश ने","The hunter|शिकारी ने","The farmer|किसान ने","The fox|लोमड़ी ने"]]}
+);
+function speakStory(x){try{speechSynthesis.cancel();const ps=[];if(L()!=="hi")ps.push([x.en,"en-IN"]);if(L()!=="en")ps.push([x.hi,"hi-IN"]);ps.forEach(q=>{const u=new SpeechSynthesisUtterance(q[0]);u.lang=q[1];u.rate=.9;speechSynthesis.speak(u)})}catch(e){}}
+function storiesInit(){head("stories","📖 "+B("Stories","कहानियाँ"));
+ $("b_stories").innerHTML="<p>"+B("Pick a story. Read it, listen to it, then answer the questions.","एक कहानी चुनो। पढ़ो, सुनो और फिर सवालों के जवाब दो।")+"</p><div class='hcards'>"+STORIES.map((x,i)=>"<button class='hc' data-i='"+i+"'><i class='ic'>"+x.ic+"</i><b>"+B(x.te,x.th)+"</b><span>"+B("Moral: ","सीख: ")+B(x.me,x.mh)+"</span><em>▶ "+B("Read","पढ़ो")+"</em></button>").join("")+"</div>";
+ $("b_stories").querySelectorAll("button[data-i]").forEach(b=>b.onclick=()=>storyOpen(+b.dataset.i))}
+function storyOpen(i){const x=STORIES[i],tx=L()==="hi"?"<p>"+x.hi+"</p>":L()==="en"?"<p>"+x.en+"</p>":"<p>"+x.en+"</p><p>"+x.hi+"</p>";
+ $("b_stories").innerHTML="<button id='sbk'>← "+B("Stories","कहानियाँ")+"</button><h2>"+x.ic+" "+B(x.te,x.th)+"</h2><div class='story'>"+tx+"</div><p class='tipb'>💡 "+B("Moral: "+x.me,"सीख: "+x.mh)+"</p><div class='bar'><button id='sls'>🔊 "+B("Read aloud","सुनाओ")+"</button><button id='sst'>⏹</button><button id='sq'>📝 "+B("Quiz","क्विज़")+"</button></div><div id='stbox'></div>";
+ $("sbk").onclick=storiesInit;$("sls").onclick=()=>speakStory(x);$("sst").onclick=()=>{try{speechSynthesis.cancel()}catch(e){}};
+ $("sq").onclick=()=>{try{speechSynthesis.cancel()}catch(e){}play("stbox",x.q.map(q=>gkItem({q:q,i:x.ic})),()=>storyOpen(i))}}
+/* rewards */
+function rewardsInit(){head("rewards","🏆 "+B("My Rewards","मेरे इनाम"));
+ const bd=badgesOf(ST),own=(ST.items||[]).concat(ST.acc||[]);
+ $("b_rewards").innerHTML="<div class='hero'><h1><span class='avt'>"+avd()+"</span> "+esc(ST.n)+"</h1><p>"+B("Level","स्तर")+" "+lvl()+" — "+lvtitle()+"</p><div class='xpb'><i style='width:"+(ST.xp%100)+"%'></i></div><small>⚡ "+ST.xp+" XP · "+(100-ST.xp%100)+" "+B("XP to next level","XP अगले स्तर तक")+"</small></div><div class='kpis pk'>"+[["⭐",ST.stars||0,B("Stars","सितारे")],["🏅",bd.length,B("Badges","बैज")],["🎁",own.length,B("Items","चीज़ें")],["🔥",ST.streak,B("Day streak","दिन लगातार")]].map(k=>"<div class='kpi'><b>"+k[0]+" "+k[1]+"</b><span>"+k[2]+"</span></div>").join("")+"</div><h3>🏅 "+B("My badges","मेरे बैज")+"</h3><p>"+(bd.length?bd.map(b=>"<span class='bdg'>"+b[0]+" "+b[1]+"</span>").join(" "):"<span style='color:var(--muted)'>"+B("Play to earn badges!","बैज पाने के लिए खेलो!")+"</span>")+"</p><h3>🎁 "+B("My items","मेरी चीज़ें")+"</h3><p style='font-size:1.6rem'>"+(own.length?own.join(" "):"<span style='font-size:1rem;color:var(--muted)'>"+B("Level up or visit the shop!","लेवल बढ़ाओ या दुकान जाओ!")+"</span>")+"</p><div class='bar'><button id='rwsh'>🛍️ "+B("Star Shop","सितारा दुकान")+"</button><button id='rwpr'>📊 "+B("My Progress","मेरी प्रगति")+"</button></div>";
+ $("rwsh").onclick=()=>go("shop");$("rwpr").onclick=()=>go("progress")}
+/* ===== Content Management System ===== */
+const SJL={Math:"गणित",Hindi:"हिंदी",English:"अंग्रेज़ी",GK:"सामान्य ज्ञान",Science:"विज्ञान"};
+const eh=t=>String(t==null?"":t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const subjLabel=x=>SJL[x]?B(x,SJL[x]):eh(x);
+const wkey=q=>q.h+"|"+String(q.p).slice(0,40);
+const AUD={},QSP={};
+let cmsTop="Math",bankSub="",bankTopic="",bankDiff="";
+const CMS={list:[],mode:"local",admin:true,ready:false,db:null};
+const canAdmin=()=>isAdminUser();
+const validQ=c=>!!(c&&c.q&&Array.isArray(c.o)&&c.o.length>=2&&Number.isInteger(c.c)&&c.c>=0&&c.c<c.o.length);
+const cmsActive=()=>CMS.list.filter(c=>c.active!==false&&validQ(c));
+function cmsLocalLoad(){try{CMS.list=JSON.parse(localStorage.getItem("gg_cms")||"[]")}catch(e){CMS.list=[]}}
+function cmsLocalSave(){try{localStorage.setItem("gg_cms",JSON.stringify(CMS.list))}catch(e){toast("⚠️ "+B("Storage is full","जगह भर गई है"))}}
+async function cmsInit(){
+ try{const db=window.claude&&window.claude.use?await window.claude.use("db"):null;
+  if(db){CMS.db=db;let u=null;try{u=await window.claude.use("user")}catch(e){}
+   CMS.admin=u?await u.canEdit():false;CMS.mode="db";
+   db.collection("cms_q").limit(1000).onSnapshot(sn=>{CMS.list=sn.docs.map(d=>Object.assign({id:d.id},d.data()));CMS.ready=true;if(LOGGED){navBuild(page);if(page==="admin")adminList();if(page==="bank")bankInit()}},e=>{CMS.mode="local";cmsLocalLoad()});return}
+ }catch(e){}
+ CMS.mode="local";cmsLocalLoad();CMS.ready=true}
+async function cmsPut(q){q.ts=Date.now();
+ if(CMS.mode==="db"){const d=Object.assign({},q);delete d.id;await CMS.db.collection("cms_q").doc(q.id).set(d)}
+ else{const i=CMS.list.findIndex(x=>x.id===q.id);if(i>=0)CMS.list[i]=q;else CMS.list.push(q);cmsLocalSave()}}
+async function cmsDel(id){if(CMS.mode==="db")await CMS.db.collection("cms_q").doc(id).delete();else{CMS.list=CMS.list.filter(x=>x.id!==id);cmsLocalSave()}}
+async function cmsToggle(c){const v=c.active===false;if(CMS.mode==="db")await CMS.db.collection("cms_q").doc(c.id).update({active:v});else{c.active=v;cmsLocalSave()}}
+function imgHtml(im){if(!im)return "";return /^data:image\//.test(im)?"<img class='qimg' src='"+im+"'>":eh(im)}
+function qAud(id){const a=AUD[id];if(a){try{new Audio(a).play();return}catch(e){}}speak(QSP[id]||"")}
+function cmsItem(c){
+ const lg=L(),pick=o=>{o=o||{};return lg==="hi"?(o.hi||o.en||""):lg==="en"?(o.en||o.hi||""):(o.en&&o.hi?(o.en===o.hi?o.en:o.en+" / "+o.hi):(o.en||o.hi||""))};
+ const id=c.id;if(c.aud)AUD[id]=c.aud;QSP[id]=lg==="hi"?(c.q.hi||c.q.en||""):(c.q.en||c.q.hi||"");
+ const x=pick(c.x);
+ return{p:imgHtml(c.img)||"📝",h:eh(pick(c.q))+" <button class='sp' aria-label='Listen' onclick=\"qAud('"+id+"')\">🔊</button>",o:c.o.map((o,i)=>({l:pick(o),ok:i===c.c})),x:x?eh(x):""}}
+/* child-facing question bank */
+function bankInit(){head("bank","🗂️ "+B("Question Bank","प्रश्न बैंक"));
+ const bx=$("b_bank"),act=cmsActive();
+ if(!act.length){bx.innerHTML="<p class='tipb'>"+B("No extra questions yet. Ask your teacher or parent to add some!","अभी अतिरिक्त सवाल नहीं हैं। शिक्षक या अभिभावक से जुड़वाओ!")+"</p>";return}
+ const subs=[...new Set(act.map(c=>c.subject))];if(!bankSub||!subs.includes(bankSub))bankSub=subs[0];
+ const inS=act.filter(c=>c.subject===bankSub),tops=[...new Set(inS.map(c=>c.topic||"").filter(Boolean))];
+ if(bankTopic&&!tops.includes(bankTopic))bankTopic="";
+ const pool=inS.filter(c=>(!bankTopic||c.topic===bankTopic)&&(!bankDiff||c.diff===bankDiff));
+ const chip=(k,v,on,t)=>"<button class='bk"+(on?" act":"")+"' data-k='"+k+"' data-v='"+eh(v)+"'>"+t+"</button>";
+ bx.innerHTML="<div id='bkctl'><div class='bar'>"+subs.map(x=>chip("s",x,x===bankSub,subjLabel(x))).join("")+"</div>"+(tops.length?"<div class='bar'>"+chip("t","",!bankTopic,B("All topics","सभी विषय-वस्तु"))+tops.map(x=>chip("t",x,x===bankTopic,eh(x))).join("")+"</div>":"")+"<div class='bar'>"+[["",B("All levels","सभी स्तर")],["easy",B("Easy","आसान")],["medium",B("Medium","मध्यम")],["hard",B("Hard","कठिन")]].map(x=>chip("d",x[0],x[0]===bankDiff,x[1])).join("")+"</div><p>"+pool.length+" "+B("questions","सवाल")+"</p><button id='bkgo'"+(pool.length?"":" disabled")+">▶ "+B("Start","शुरू करो")+"</button></div><div id='cmsbox'></div>";
+ bx.querySelectorAll(".bk").forEach(b=>b.onclick=()=>{const k=b.dataset.k,v=b.dataset.v;if(k==="s"){bankSub=v;bankTopic=""}else if(k==="t")bankTopic=v;else bankDiff=v;bankInit()});
+ $("bkgo").onclick=()=>{cmsTop=bankSub;$("bkctl").innerHTML="";play("cmsbox",shuffle(pool.slice()).slice(0,10).map(cmsItem),()=>bankInit())}}
+/* admin */
+const ADM={sub:"",top:"",st:"all",q:""};
+function compressImg(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const sc=Math.min(1,360/Math.max(im.width,im.height)),w=Math.round(im.width*sc),h=Math.round(im.height*sc),c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(im,0,0,w,h);let qv=.75,d=c.toDataURL("image/jpeg",qv);while(d.length>60000&&qv>.3){qv-=.15;d=c.toDataURL("image/jpeg",qv)}res(d)};im.onerror=rej;im.src=fr.result};fr.onerror=rej;fr.readAsDataURL(file)})}
+function readAudio(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>fr.result.length>190000?rej("big"):res(fr.result);fr.onerror=rej;fr.readAsDataURL(file)})}
+function normQ(r,k){if(!r||typeof r!=="object")return null;
+ const lg=["en","hi","both"].includes(r.lang)?r.lang:"both";
+ const tx=v=>typeof v==="string"?(lg==="hi"?{en:"",hi:v}:{en:v,hi:""}):{en:(v&&v.en)||"",hi:(v&&v.hi)||""};
+ const q=tx(r.q||r.question||""),o=(r.o||r.options||[]).map(tx),x=tx(r.x||r.explanation||"");
+ const c=Number.isInteger(r.c)?r.c:Number.isInteger(r.correct)?r.correct:-1,subject=String(r.subject||"").trim();if(!subject)return null;
+ const df=r.diff||r.difficulty;
+ const out={id:"q"+Date.now().toString(36)+(k||0)+Math.floor(Math.random()*9999),subject,topic:String(r.topic||"").trim(),lang:lg,diff:["easy","medium","hard"].includes(df)?df:"easy",q,o,c,x,img:String(r.img||r.image||""),aud:String(r.aud||r.audio||""),active:r.active!==false};
+ return validQ(out)&&(lg==="en"?q.en:lg==="hi"?q.hi:(q.en&&q.hi))?out:null}
+function adminInit(){head("admin","🛠️ "+B("Content Manager","कंटेंट मैनेजर"));
+ const bx=$("b_admin");
+ if(!canAdmin()){bx.innerHTML="<p class='tipb'>🔒 "+B("Please log in with the admin ID to manage content.","कंटेंट बदलने के लिए एडमिन ID से लॉगिन करो।")+"</p>";return}
+ const ro=CMS.mode==="db"&&!CMS.admin;
+ bx.innerHTML="<p class='tipb'>"+(CMS.mode==="db"?"☁️ "+B("Shared database: new questions appear for all children, on all devices, without any app update.","साझा डेटाबेस: नए सवाल बिना ऐप बदले सभी बच्चों को सभी डिवाइस पर दिखते हैं।"):"💾 "+B("This device only: questions are saved in this browser.","सिर्फ़ इस डिवाइस पर: सवाल इसी ब्राउज़र में सेव होते हैं।"))+"</p>"+(ro?"<p class='tipb' style='border-color:var(--bad)'>⚠️ "+B("The shared database is read-only here. To save changes, open this app while signed in to the owner's Claude account.","साझा डेटाबेस यहाँ सिर्फ़ पढ़ने के लिए है। बदलाव सेव करने के लिए ऐप को मालिक के Claude खाते से साइन-इन करके खोलो।")+"</p>":"")+"<div class='bar'>"+(ro?"":"<button id='aadd'>➕ "+B("Add question","सवाल जोड़ो")+"</button><button id='aimp'>⬆️ "+B("Import","इम्पोर्ट")+"</button>")+"<button id='aexp'>⬇️ "+B("Export","एक्सपोर्ट")+"</button></div><div id='admf'></div><div id='aio'></div><div class='bar'><select id='as'></select><select id='at'></select><select id='aa'><option value='all'>"+B("All","सभी")+"</option><option value='on'>✅ "+B("Active","सक्रिय")+"</option><option value='off'>⛔ "+B("Inactive","निष्क्रिय")+"</option></select><input id='aq' placeholder='"+B("Search","खोजो")+"' style='max-width:160px'></div><p id='acnt'></p><div id='adml'></div>";
+ if($("aadd"))$("aadd").onclick=()=>adminForm(null);
+ $("aexp").onclick=async()=>{const json=JSON.stringify(CMS.list,null,1);let DL=null;try{DL=window.claude&&window.claude.use?await window.claude.use("downloads"):null}catch(e){}
+  if(DL){try{await DL.save({filename:"gyan-ganga-questions.json",data:json});toast("✅");return}catch(e){if(e&&e.code==="declined")return}}
+  try{blobSave("gyan-ganga-questions.json",json);toast("✅");return}catch(e){}
+  $("aio").innerHTML="<textarea readonly style='width:100%;height:160px'>"+eh(json)+"</textarea>"};
+ if($("aimp"))$("aimp").onclick=()=>{$("aio").innerHTML="<div class='qr'><p>"+B("Paste a JSON list of questions:","सवालों की JSON सूची यहाँ चिपकाओ:")+"</p><textarea id='ajs' style='width:100%;height:150px'></textarea><div class='bar'><button id='asm'>"+B("Show sample","नमूना दिखाओ")+"</button><button id='ago'>⬆️ "+B("Import","इम्पोर्ट")+"</button></div><p id='aim'></p></div>";
+  $("asm").onclick=()=>{$("ajs").value=JSON.stringify([{subject:"Math",topic:"Addition",lang:"both",difficulty:"easy",question:{en:"What is 5 + 3?",hi:"5 + 3 कितना होता है?"},options:[{en:"7",hi:"7"},{en:"8",hi:"8"},{en:"9",hi:"9"}],correct:1,explanation:{en:"5 and 3 make 8.",hi:"5 और 3 मिलकर 8 होते हैं।"},image:"🍎",audio:"",active:true}],null,1)};
+  $("ago").onclick=async()=>{let arr;try{arr=JSON.parse($("ajs").value)}catch(e){$("aim").textContent="⚠️ JSON?";return}
+   if(!Array.isArray(arr))arr=[arr];arr=arr.slice(0,200);let ok=0,bad=0;
+   for(let i=0;i<arr.length;i++){const q=normQ(arr[i],i);if(!q){bad++;continue}try{await cmsPut(q);ok++}catch(e){bad++}}
+   $("aim").textContent="✅ "+ok+(bad?" · ⚠️ "+bad+" "+B("skipped","छोड़े गए"):"");adminFilters();adminList()}};
+ adminFilters();adminList()}
+function adminFilters(){
+ const subs=[...new Set(CMS.list.map(c=>c.subject))],sel=$("as"),tp=$("at");if(!sel)return;
+ sel.innerHTML="<option value=''>"+B("All subjects","सभी विषय")+"</option>"+subs.map(x=>"<option value='"+eh(x)+"'"+(x===ADM.sub?" selected":"")+">"+eh(x)+"</option>").join("");
+ const tops=[...new Set(CMS.list.filter(c=>!ADM.sub||c.subject===ADM.sub).map(c=>c.topic).filter(Boolean))];
+ tp.innerHTML="<option value=''>"+B("All topics","सभी विषय-वस्तु")+"</option>"+tops.map(x=>"<option value='"+eh(x)+"'"+(x===ADM.top?" selected":"")+">"+eh(x)+"</option>").join("");
+ sel.onchange=()=>{ADM.sub=sel.value;ADM.top="";adminFilters();adminList()};tp.onchange=()=>{ADM.top=tp.value;adminList()};
+ $("aa").onchange=()=>{ADM.st=$("aa").value;adminList()};$("aq").oninput=()=>{ADM.q=$("aq").value.toLowerCase();adminList()}}
+function adminList(){const el=$("adml");if(!el)return;
+ const f=CMS.list.filter(c=>(!ADM.sub||c.subject===ADM.sub)&&(!ADM.top||c.topic===ADM.top)&&(ADM.st==="all"||(ADM.st==="on")===(c.active!==false))&&(!ADM.q||JSON.stringify(c.q).toLowerCase().includes(ADM.q)));
+ $("acnt").textContent=f.length+" / "+CMS.list.length+" "+B("questions","सवाल")+" · ✅ "+CMS.list.filter(c=>c.active!==false).length;
+ const lg=c=>c.lang==="both"?"EN+हि":c.lang==="hi"?"हि":"EN";
+ el.innerHTML=f.map(c=>{const t=(c.q&&(c.q.en||c.q.hi))||"?",on=c.active!==false;
+  return "<div class='qr"+(on?"":" off")+"' data-id='"+eh(c.id)+"'><div><span class='bdg'>"+eh(c.subject)+"</span><span class='bdg'>"+eh(c.topic||"—")+"</span><span class='bdg'>"+eh(c.diff)+"</span><span class='bdg'>"+lg(c)+"</span>"+(c.img?"<span class='bdg'>🖼️</span>":"")+(c.aud?"<span class='bdg'>🔊</span>":"")+"</div><div style='margin:6px 0'><b>"+eh(t)+"</b></div><div style='font-size:.85rem;color:var(--muted)'>"+c.o.map((o,i)=>(i===c.c?"✔ ":"")+eh(o.en||o.hi)).join(" · ")+"</div><div class='bar' style='justify-content:flex-start;margin-top:6px'><button data-a='tg'>"+(on?"✅ "+B("Active","सक्रिय"):"⛔ "+B("Inactive","निष्क्रिय"))+"</button><button data-a='ed'>✏️</button><button data-a='dp'>⧉</button><button data-a='dl'>🗑</button></div></div>"}).join("")||"<p style='color:var(--muted)'>—</p>";
+ el.querySelectorAll("[data-a]").forEach(b=>b.onclick=async()=>{const row=b.closest(".qr"),c=CMS.list.find(x=>x.id===row.dataset.id),a=b.dataset.a;if(!c)return;
+  try{if(a==="tg"){await cmsToggle(c)}
+   else if(a==="ed")adminForm(c);
+   else if(a==="dp"){const d=JSON.parse(JSON.stringify(c));d.id="";adminForm(d)}
+   else if(a==="dl"){if(!b.dataset.sure){b.dataset.sure=1;b.textContent="❓";return}await cmsDel(c.id)}
+   if(CMS.mode==="local"){adminFilters();adminList()}}catch(e){toast("⚠️ "+B("Not allowed or failed","अनुमति नहीं या विफल"))}})}
+function adminForm(q){
+ const e=q?JSON.parse(JSON.stringify(q)):{subject:ADM.sub||"",topic:ADM.top||"",lang:"both",diff:"easy",q:{en:"",hi:""},o:[],c:0,x:{en:"",hi:""},img:"",aud:"",active:true};
+ e.q=e.q||{en:"",hi:""};e.x=e.x||{en:"",hi:""};while(e.o.length<4)e.o.push({en:"",hi:""});
+ const subs=[...new Set(Object.keys(SJL).concat(CMS.list.map(c=>c.subject)))],tops=[...new Set(CMS.list.map(c=>c.topic).filter(Boolean))];
+ const cur={pic:/^data:image\//.test(e.img||"")?e.img:"",aud:e.aud||""},emo=/^data:image\//.test(e.img||"")?"":(e.img||"");
+ $("admf").innerHTML=`<div class="af qr"><h3>${q&&q.id?"✏️":"➕"} ${B("Question","सवाल")}</h3>
+ <label>${B("Subject","विषय")}</label><input id="fs" list="dls" value="${eh(e.subject)}" placeholder="Math / Hindi / English / GK / Science / ..."><datalist id="dls">${subs.map(x=>`<option value="${eh(x)}">`).join("")}</datalist>
+ <label>${B("Topic","विषय-वस्तु")}</label><input id="ft" list="dlt" value="${eh(e.topic)}"><datalist id="dlt">${tops.map(x=>`<option value="${eh(x)}">`).join("")}</datalist>
+ <div class="arow2"><div style="flex:1"><label>${B("Language","भाषा")}</label><select id="fl"><option value="en">English</option><option value="hi">हिंदी</option><option value="both">English + हिंदी</option></select></div><div style="flex:1"><label>${B("Difficulty","कठिनाई")}</label><select id="fd"><option value="easy">${B("Easy","आसान")}</option><option value="medium">${B("Medium","मध्यम")}</option><option value="hard">${B("Hard","कठिन")}</option></select></div></div>
+ <label class="eng">${B("Question (English)","सवाल (English)")}</label><textarea id="fqe" rows="2" class="eng">${eh(e.q.en)}</textarea>
+ <label class="hin">${B("Question (Hindi)","सवाल (हिंदी)")}</label><textarea id="fqh" rows="2" class="hin">${eh(e.q.hi)}</textarea>
+ <label>${B("Options (tick the correct one)","विकल्प (सही वाले पर टिक करो)")}</label>
+ ${e.o.slice(0,4).map((o,i)=>`<div class="arow2 orow"><input type="radio" name="fc" value="${i}"${i===e.c?" checked":""} style="width:auto"><input class="foe eng" placeholder="English ${i+1}" value="${eh(o.en||"")}"><input class="foh hin" placeholder="हिंदी ${i+1}" value="${eh(o.hi||"")}"></div>`).join("")}
+ <label class="eng">${B("Explanation (English)","व्याख्या (English)")}</label><textarea id="fxe" rows="2" class="eng">${eh(e.x.en)}</textarea>
+ <label class="hin">${B("Explanation (Hindi)","व्याख्या (हिंदी)")}</label><textarea id="fxh" rows="2" class="hin">${eh(e.x.hi)}</textarea>
+ <label>🖼️ ${B("Image: emoji or upload","तस्वीर: इमोजी या अपलोड")}</label><div class="arow2"><input id="fie" maxlength="8" value="${eh(emo)}" placeholder="🍎" style="max-width:90px"><input id="fif" type="file" accept="image/*"><button type="button" id="fic">✖</button></div><div id="fip"></div>
+ <label>🔊 ${B("Audio (short clip, max ~140 KB) — otherwise the question is read aloud","ऑडियो (छोटी क्लिप, अधिकतम ~140 KB) — वरना सवाल बोलकर पढ़ा जाएगा")}</label><div class="arow2"><input id="faf" type="file" accept="audio/*"><button type="button" id="fac">✖</button></div><div id="fap"></div>
+ <label><input id="fa" type="checkbox" ${e.active!==false?"checked":""} style="width:auto"> ✅ ${B("Active (shown to children)","सक्रिय (बच्चों को दिखे)")}</label>
+ <p id="fm" style="color:var(--bad)"></p><div class="bar"><button id="fsv">💾 ${B("Save","सेव")}</button><button id="fcn">✖ ${B("Cancel","रद्द")}</button></div></div>`;
+ $("fl").value=e.lang||"both";$("fd").value=e.diff||"easy";
+ const fm=t=>{$("fm").textContent=t};
+ const applyLang=()=>{const lg=$("fl").value;document.querySelectorAll("#admf .eng").forEach(x=>x.style.display=lg==="hi"?"none":"");document.querySelectorAll("#admf .hin").forEach(x=>x.style.display=lg==="en"?"none":"")};
+ const prev=()=>{$("fip").innerHTML=cur.pic?"<img class='qimg' src='"+cur.pic+"'>":"";$("fap").innerHTML=cur.aud?"<audio controls src='"+cur.aud+"'></audio>":""};
+ $("fl").onchange=applyLang;applyLang();prev();
+ $("fif").onchange=async()=>{const f=$("fif").files[0];if(!f)return;try{cur.pic=await compressImg(f);prev()}catch(x){fm(B("Could not read the image","तस्वीर नहीं पढ़ी जा सकी"))}};
+ $("faf").onchange=async()=>{const f=$("faf").files[0];if(!f)return;try{cur.aud=await readAudio(f);prev()}catch(x){fm(x==="big"?B("Audio is too large (max ~140 KB)","ऑडियो बहुत बड़ा है (अधिकतम ~140 KB)"):B("Could not read the audio","ऑडियो नहीं पढ़ा जा सका"))}};
+ $("fic").onclick=()=>{cur.pic="";$("fie").value="";prev()};$("fac").onclick=()=>{cur.aud="";prev()};
+ $("fcn").onclick=()=>{$("admf").innerHTML=""};
+ $("fsv").onclick=async()=>{
+  const g=id=>($(id).value||"").trim(),lg=g("fl"),subject=g("fs");
+  if(!subject){fm(B("Enter a subject","विषय लिखो"));return}
+  const qe=g("fqe"),qh=g("fqh");
+  if((lg!=="hi"&&!qe)||(lg!=="en"&&!qh)){fm(B("Write the question in the chosen language(s)","चुनी हुई भाषा में सवाल लिखो"));return}
+  const rows=[...document.querySelectorAll("#admf .orow")].map((r,i)=>({i,en:(r.querySelector(".foe").value||"").trim(),hi:(r.querySelector(".foh").value||"").trim()}));
+  const keep=rows.filter(r=>lg==="en"?r.en:lg==="hi"?r.hi:(r.en||r.hi));
+  if(keep.length<2){fm(B("Add at least 2 options","कम से कम 2 विकल्प लिखो"));return}
+  if(lg==="both"&&keep.some(r=>!r.en||!r.hi)){fm(B("Fill both languages for each option","हर विकल्प दोनों भाषाओं में लिखो"));return}
+  const cr=document.querySelector("#admf input[name=fc]:checked"),ci=cr?+cr.value:-1,ni=keep.findIndex(r=>r.i===ci);
+  if(ni<0){fm(B("Tick the correct answer (it must have text)","सही उत्तर पर टिक करो (उसमें लिखा होना चाहिए)"));return}
+  const obj={id:(q&&q.id)?q.id:"q"+Date.now().toString(36)+Math.floor(Math.random()*9999),subject,topic:g("ft"),lang:lg,diff:g("fd"),q:{en:lg==="hi"?"":qe,hi:lg==="en"?"":qh},o:keep.map(r=>({en:lg==="hi"?"":r.en,hi:lg==="en"?"":r.hi})),c:ni,x:{en:lg==="hi"?"":g("fxe"),hi:lg==="en"?"":g("fxh")},img:cur.pic||g("fie"),aud:cur.aud||"",active:$("fa").checked};
+  try{await cmsPut(obj);toast("✅ "+B("Saved","सेव हो गया"));$("admf").innerHTML="";if(CMS.mode==="local"){adminFilters();adminList()}}
+  catch(err){fm("⚠️ "+(err&&err.code==="invalid_argument"?B("You do not have permission to save here","यहाँ सेव करने की अनुमति नहीं है"):B("Could not save","सेव नहीं हो सका")))}}}
+/* ===== Accessibility ===== */
+const A11=Object.assign({ts:"n",hc:false,rm:null,au:false,aq:false},(()=>{try{return JSON.parse(localStorage.getItem("gg_a11y")||"{}")}catch(e){return {}}})());
+const a11ySave=()=>{try{localStorage.setItem("gg_a11y",JSON.stringify(A11))}catch(e){}};
+function a11yApply(){const d=document.documentElement;
+ d.classList.toggle("ts-l",A11.ts==="l");d.classList.toggle("ts-x",A11.ts==="x");d.classList.toggle("hc",!!A11.hc);
+ const rm=A11.rm===null?(typeof matchMedia!=="undefined"&&matchMedia("(prefers-reduced-motion: reduce)").matches):A11.rm;d.classList.toggle("rm",!!rm)}
+function cleanForSpeech(t){t=String(t||"").replace(/[\u{1F000}-\u{1FFFF}\u2600-\u27BF\uFE0F\u200D▶▲●■★✔✘←→‹]/gu," ");
+ if(L()==="both")t=t.replace(/[\u0900-\u097F][\u0900-\u097F\s।,.'"()?!:;\-–·]*/g," ").replace(/\s\/\s/g," ");return t.replace(/\s+/g," ").trim()}
+function speakT(t){if(!t)return;try{const u=new SpeechSynthesisUtterance(t);u.lang=/[\u0900-\u097F]/.test(t)?"hi-IN":"en-IN";u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+function pageText(){const g=[...document.querySelectorAll(".game")].find(x=>x.style.display==="block");let t=($("ptitle").textContent||"")+". ";
+ if(g)t+=[...g.querySelectorAll("h1,h2,h3,p")].filter(x=>(x.textContent||"").trim().length>2).slice(0,4).map(x=>x.textContent.trim()).join(". ");return t}
+function speakQ(q){const st=x=>String(x||"").replace(/<[^>]*>/g," ").replace(/[\u{1F000}-\u{1FFFF}\u2600-\u27BF\uFE0F\u200D]/gu," ").replace(/\s+/g," ").trim();
+ speakT(cleanForSpeech(st(q.p)+". "+st(q.h)+". "+q.o.map((o,i)=>(i+1)+". "+st(o.l)).join(". ")))}
+function announce(t){const e=$("srlive");if(e){e.textContent="";setTimeout(()=>{e.textContent=t},60)}}
+function fbk(el,ok,cor,qq){const p=document.createElement("p");p.className="fb";p.setAttribute("role","status");
+ const ap=qq&&qq.ap?" "+qq.ap:"";p.textContent=gentle?(ok?"✅ "+B("Yes, that is right!","हाँ, यह सही है!")+ap:"💛 "+B("Let us look again. The answer is:","आइए फिर देखें। उत्तर है:")+" "+(cor?String(cor.l):"")+ap):(ok?"✅ "+B("Correct!","सही!")+ap:"❌ "+B("Not quite. Correct answer:","गलत। सही उत्तर:")+" "+(cor?String(cor.l):"")+ap);el.appendChild(p);announce(p.textContent)}
+function a11yPanel(){
+ document.querySelectorAll(".a11yov").forEach(x=>x.remove());
+ const o=document.createElement("div");o.className="ov a11yov";o.style.zIndex=95;o.setAttribute("role","dialog");o.setAttribute("aria-label","Accessibility");document.body.appendChild(o);
+ const draw=()=>{const rm=A11.rm===null?"auto":A11.rm?"on":"off";
+  const btn=(id,on,t)=>"<button id='"+id+"' aria-pressed='"+(on?"true":"false")+"' class='"+(on?"act":"")+"'>"+t+"</button>";
+  o.innerHTML="<div class='ovc'><h2>♿ "+B("Accessibility","सुगम्यता")+"</h2><h3>"+B("Text size","अक्षरों का आकार")+"</h3><div class='bar'>"+btn("a_n",A11.ts==="n","A")+btn("a_l",A11.ts==="l","A+")+btn("a_x",A11.ts==="x","A++")+"</div><h3>"+B("Contrast","कंट्रास्ट")+"</h3><div class='bar'>"+btn("a_hc",A11.hc,(A11.hc?"✔ ":"")+B("High contrast","अधिक कंट्रास्ट"))+"</div><h3>"+B("Animation","एनिमेशन")+"</h3><div class='bar'>"+btn("a_r0",rm==="auto",B("Auto","ऑटो"))+btn("a_r1",rm==="on",B("Reduced","कम"))+btn("a_r2",rm==="off",B("Full","पूरा"))+"</div><h3>"+B("Audio","आवाज़")+"</h3><div class='bar'>"+btn("a_au",A11.au,(A11.au?"✔ ":"")+"🔊 "+B("Read page instructions","निर्देश बोलकर सुनाओ"))+btn("a_aq",A11.aq,(A11.aq?"✔ ":"")+"🗣️ "+B("Read questions","सवाल बोलकर सुनाओ"))+"</div><div class='bar'><button id='a_t'>▶ "+B("Test voice","आवाज़ जाँचो")+"</button><button id='a_c'>✖ "+B("Close","बंद करो")+"</button></div></div>";
+  const set=(k,v,id)=>{A11[k]=v;a11ySave();a11yApply();draw();const e=$(id);if(e)e.focus()};
+  $("a_n").onclick=()=>set("ts","n","a_n");$("a_l").onclick=()=>set("ts","l","a_l");$("a_x").onclick=()=>set("ts","x","a_x");
+  $("a_hc").onclick=()=>set("hc",!A11.hc,"a_hc");
+  $("a_r0").onclick=()=>set("rm",null,"a_r0");$("a_r1").onclick=()=>set("rm",true,"a_r1");$("a_r2").onclick=()=>set("rm",false,"a_r2");
+  $("a_au").onclick=()=>set("au",!A11.au,"a_au");$("a_aq").onclick=()=>set("aq",!A11.aq,"a_aq");
+  $("a_t").onclick=()=>speakT(cleanForSpeech(B("This is how I will read to you.","मैं इस तरह आपको पढ़कर सुनाऊँगा।")));
+  $("a_c").onclick=()=>o.remove()};
+ draw();const f=$("a_c");if(f)f.focus()}
+
+[["bk","Back"]].forEach(a=>{const e=$(a[0]);if(e){e.setAttribute("aria-label",a[1]);e.title=a[1]}});
+document.addEventListener("keydown",e=>{const t=e.target||{};
+ if((e.key==="Enter"||e.key===" ")&&t.getAttribute&&t.getAttribute("role")==="button"&&t.tagName!=="BUTTON"){e.preventDefault();t.dispatchEvent(new MouseEvent("click",{bubbles:true}));return}
+ if(e.key==="Escape"){const ov=[...document.querySelectorAll(".ov:not(.solid)")].pop();if(ov){ov.remove();return}}
+ if(/^[1-9]$/.test(e.key)&&!/INPUT|TEXTAREA|SELECT/.test(t.tagName||"")){const b=document.querySelectorAll(".opts .o")[+e.key-1];if(b)b.click()}});
+if(typeof MutationObserver!=="undefined")new MutationObserver(()=>{document.querySelectorAll(".dc,.tr,.cv .r").forEach(x=>{if(!x.hasAttribute("tabindex")){x.setAttribute("tabindex","0");x.setAttribute("role","button")}})}).observe(document.body,{childList:true,subtree:true});
+/* ===== offline / downloaded-file helpers ===== */
+function blobSave(name,data){const b=new Blob([data],{type:name.endsWith(".html")?"text/html":name.endsWith(".csv")?"text/csv":"application/json"});const u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(u);a.remove()},1500)}
+const APP_LINK="https://claude.ai/artifact/Qc1Z7imbuooiiX17JMqviu";
+function shareLinkPanel(){
+ document.querySelectorAll(".shov").forEach(x=>x.remove());
+ const o=document.createElement("div");o.className="ov shov";o.style.zIndex=95;o.setAttribute("role","dialog");document.body.appendChild(o);
+ o.innerHTML="<div class='ovc'><h2>📲 "+B("Share the app","ऐप भेजो")+"</h2><p>"+B("Send this link once. After that, every change you make shows up for the children automatically. No need to send the file again.","ये लिंक एक बार भेजो। इसके बाद आप जो भी बदलाव करोगे, बच्चों के पास अपने आप दिखेगा। फ़ाइल दोबारा भेजने की ज़रूरत नहीं।")+"</p><input id='shl' readonly value='"+APP_LINK+"'><div class='bar'><button id='shc'>📋 "+B("Copy","कॉपी")+"</button><button id='shs'>📤 "+B("Share","भेजो")+"</button><button id='shx'>✖</button></div><h3>"+B("Make it look like an app","ऐप जैसा बनाओ")+"</h3><p style='text-align:left;font-size:.9rem'>1. "+B("Open the link on the child's phone.","बच्चे के फ़ोन पर लिंक खोलो।")+"<br>2. "+B("Chrome: ⋮ menu → Add to Home screen.","Chrome: ⋮ मेनू → Add to Home screen।")+"<br>3. "+B("Safari: Share → Add to Home Screen.","Safari: Share → Add to Home Screen।")+"</p><p id='shm2'></p></div>";
+ const msg=t=>{$("shm2").textContent=t};
+ const copy=async()=>{try{await navigator.clipboard.writeText(APP_LINK);msg("✅ "+B("Link copied","लिंक कॉपी हो गया"))}catch(e){$("shl").select();msg(B("Select and copy the link above.","ऊपर का लिंक चुनकर कॉपी करो।"))}};
+ $("shc").onclick=copy;
+ $("shs").onclick=async()=>{if(navigator.share){try{await navigator.share({title:"Gyan Ganga",url:APP_LINK})}catch(e){}}else copy()};
+ $("shx").onclick=()=>o.remove()}
+async function saveAny(name,data){let DL=null;try{DL=window.claude&&window.claude.use?await window.claude.use("downloads"):null}catch(e){}if(DL)await DL.save({filename:name,data});else blobSave(name,data)}
+function toolsPanel(){
+ document.querySelectorAll(".tlov").forEach(x=>x.remove());
+ const o=document.createElement("div");o.className="ov tlov";o.style.zIndex=80;o.setAttribute("role","dialog");document.body.appendChild(o);
+ const mi=(id,ic,t)=>"<button class='mi' id='"+id+"'><span>"+ic+"</span>"+t+"</button>";
+ const kids=()=>ALLP.filter(x=>x.uid&&x.uid!=="admin");
+ const home=()=>{o.innerHTML="<div class='ovc menu'><h2>🧰 "+B("Tools","औज़ार")+"</h2>"+mi("t_sh","📲",B("Share app link","ऐप लिंक भेजो"))+mi("t_pw","🔑",B("Reset a child's password","बच्चे का पासवर्ड रीसेट करो"))+mi("t_bk","💾",B("Backup all progress","सारी प्रगति का बैकअप"))+mi("t_rs","♻️",B("Restore from backup","बैकअप से वापस लाओ"))+"<button id='t_x' class='mx'>✖ "+B("Close","बंद करो")+"</button></div>";
+  $("t_sh").onclick=()=>{o.remove();shareLinkPanel()};$("t_pw").onclick=pw;$("t_bk").onclick=bk;$("t_rs").onclick=rs;$("t_x").onclick=()=>o.remove()};
+ const pw=()=>{o.innerHTML="<div class='ovc'><h2>🔑 "+B("Reset password","पासवर्ड रीसेट")+"</h2><select id='t_k'>"+kids().map(x=>"<option value='"+eh(x.uid)+"'>"+eh(x.av||"")+" "+eh(x.n)+" (@"+eh(x.uid)+")</option>").join("")+"</select><input id='t_p' type='password' placeholder='"+B("New password (4+ characters)","नया पासवर्ड (4+ अक्षर)")+"'><p id='t_m'></p><div class='bar'><button id='t_s'>💾 "+B("Save","सेव")+"</button><button id='t_b'>←</button></div></div>";
+  $("t_b").onclick=home;
+  $("t_s").onclick=async()=>{const u=$("t_k").value,v=$("t_p").value;if(!u)return;if(v.length<4){$("t_m").textContent=B("At least 4 characters","कम से कम 4 अक्षर");return}
+   const p=ALLP.find(x=>x.uid===u);if(!p)return;p.ph=await H(u,v);save();$("t_p").value="";$("t_m").textContent="✅ "+B("Password changed","पासवर्ड बदल गया")}};
+ const bk=async()=>{o.innerHTML="<div class='ovc'><h2>💾 "+B("Backup","बैकअप")+"</h2><p id='t_m'>…</p><div class='bar'><button id='t_b'>←</button></div></div>";$("t_b").onclick=home;
+  try{await saveAny("gyan-ganga-backup-"+today()+".json",JSON.stringify({app:"gyan-ganga",v:1,date:today(),list:ALLP},null,1));$("t_m").textContent="✅ "+B("Backup saved. Keep this file safe.","बैकअप सेव हो गया। फ़ाइल संभालकर रखो।")}catch(e){$("t_m").textContent=(e&&e.code==="declined")?"—":"⚠️ "+B("Could not save","सेव नहीं हो सका")}};
+ const rs=()=>{o.innerHTML="<div class='ovc'><h2>♻️ "+B("Restore","वापस लाओ")+"</h2><input id='t_f' type='file' accept='.json,application/json'><textarea id='t_t' style='width:100%;height:90px' placeholder='"+B("or paste the backup here","या बैकअप यहाँ चिपकाओ")+"'></textarea><p id='t_m'></p><div class='bar'><button id='t_go'>♻️ "+B("Restore","वापस लाओ")+"</button><button id='t_b'>←</button></div></div>";
+  $("t_b").onclick=home;
+  $("t_f").onchange=()=>{const f=$("t_f").files[0];if(!f)return;const fr=new FileReader();fr.onload=()=>{$("t_t").value=fr.result};fr.readAsText(f)};
+  let sure=false;
+  $("t_go").onclick=()=>{let d;try{d=JSON.parse($("t_t").value)}catch(e){$("t_m").textContent="⚠️ "+B("This is not a valid backup","यह सही बैकअप नहीं है");return}
+   const arr=Array.isArray(d)?d:(d&&d.list),good=(Array.isArray(arr)?arr:[]).filter(x=>x&&typeof x==="object"&&x.uid&&x.uid!=="admin"&&x.ph&&typeof x.xp==="number");
+   if(!good.length){$("t_m").textContent="⚠️ "+B("No child profiles found","कोई बच्चे की प्रोफ़ाइल नहीं मिली");return}
+   if(!sure){sure=true;$("t_m").textContent=B("Tap again to restore "+good.length+" profile(s). Progress of the same IDs will be replaced.","फिर दबाओ: "+good.length+" प्रोफ़ाइल वापस आएँगी। उन्हीं IDs की मौजूदा प्रगति बदल जाएगी।");return}
+   good.forEach(inc=>{const cur=ALLP.find(x=>x.uid===inc.uid);if(cur){Object.keys(cur).forEach(k=>delete cur[k]);Object.assign(cur,DEF(),inc)}else ALLP.push(Object.assign(DEF(),inc))});
+   save();$("t_m").textContent="✅ "+good.length+" "+B("restored","वापस आ गईं")}};
+ home()}
+/* ===== Special Classes (Kartik) ===== */
+let spCourse=null,spLesson=null,gentle=false,scTop="feel";
+const FEEL=[["😀","Happy","खुश","Smiling, with a light and warm feeling inside.","मुस्कुराहट, और अंदर हल्का व गर्म एहसास।"],["😢","Sad","उदास","A heavy feeling, and the mouth turns down.","भारी एहसास, और मुँह नीचे की ओर मुड़ता है।"],["😠","Angry","गुस्सा","A frown and a tight, tense body.","माथे पर बल और तना हुआ शरीर।"],["😨","Scared","डरा हुआ","Wide eyes and a fast heartbeat.","बड़ी आँखें और तेज़ धड़कन।"],["😐","Alright","ठीक-ठाक","Calm. Nothing special is happening.","शांत। कुछ ख़ास नहीं हो रहा।"],["😒","Jealous","जलन","Wanting something that someone else has.","जो किसी और के पास है उसे पाने की चाह।"]];
+const scRow=a=>"<div class='scn'>"+a.map(x=>x==="→"?"<span class='ar'>→</span>":"<div><b>"+x[0]+"</b><small>"+x[1]+"</small></div>").join("")+"</div>";
+const SPECIAL=[{id:"feel",ic:"💛",te:"Feelings and Emotions",th:"भावनाएँ और एहसास",de:"Learn to notice, name and understand feelings with Rohan and his class.",dh:"रोहन और उसकी कक्षा के साथ भावनाओं को पहचानना, नाम देना और समझना सीखो।",lessons:[
+{n:1,ic:"🙂",te:"Rohan Learns to Read Faces",th:"रोहन चेहरे पढ़ना सीखता है",se:"Recognising emotions",sh:"भावनाओं को पहचानना",
+ en:"Every morning, Ms. Bhatia's class looks at a feelings chart on the wall. It has six faces: happy, sad, angry, scared, alright and jealous. Rohan practises matching each face to its name. Soon he starts to notice feelings on real people too: a tired smile, folded arms, or eyes that look around nervously.",
+ hi:"हर सुबह मिस भाटिया की कक्षा दीवार पर लगे भावनाओं के चार्ट को देखती है। उसमें छह चेहरे हैं: खुश, उदास, गुस्सा, डरा हुआ, ठीक-ठाक और जलन। रोहन हर चेहरे को उसके नाम से मिलाने का अभ्यास करता है। जल्दी ही वह असली लोगों में भी भावनाएँ पहचानने लगता है: थकी हुई मुस्कान, मोड़कर रखे हाथ, या घबराकर इधर-उधर देखती आँखें।",
+ ke:"Feelings show on our faces and in our bodies, and every feeling has a name.",kh:"भावनाएँ हमारे चेहरे और शरीर में दिखती हैं, और हर भावना का अपना एक नाम होता है।",
+ sc:()=>"",
+ q:[["What does the feelings chart show?|भावनाओं का चार्ट क्या दिखाता है?","Faces with feeling names|भावनाओं के नाम वाले चेहरे","Animals|जानवर","Numbers|संख्याएँ","Maps|नक्शे"],["Where can we see feelings?|हम भावनाएँ कहाँ देख सकते हैं?","On faces and in bodies|चेहरे और शरीर में","Only in books|सिर्फ़ किताबों में","Nowhere|कहीं नहीं","Only in dreams|सिर्फ़ सपनों में"]]},
+{n:2,ic:"🎁",te:"The Birthday Morning",th:"जन्मदिन की सुबह",se:"Things that happen can cause a feeling",sh:"जो घटता है, वह भावना पैदा करता है",
+ en:"On his birthday morning, Rohan opens a present from his mother. It is a brand-new cricket bat, and he feels very happy. A few minutes later, a balloon pops with a loud bang near the window. Rohan jumps and his heart beats fast. He feels scared. Two feelings, two events, only a few minutes apart.",
+ hi:"जन्मदिन की सुबह रोहन अपनी माँ का दिया तोहफ़ा खोलता है। उसमें एकदम नया क्रिकेट बल्ला है और वह बहुत खुश हो जाता है। कुछ ही मिनट बाद खिड़की के पास एक गुब्बारा ज़ोर की आवाज़ के साथ फूट जाता है। रोहन उछल पड़ता है और उसका दिल तेज़ धड़कने लगता है। वह डर जाता है। दो एहसास, दो घटनाएँ, और बीच में बस कुछ मिनट।",
+ ke:"Things that happen around us, like a gift or a loud noise, can cause a feeling very quickly.",kh:"हमारे आसपास होने वाली बातें, जैसे तोहफ़ा या तेज़ आवाज़, बहुत जल्दी कोई भावना पैदा कर सकती हैं।",
+ sc:()=>scRow([["🎁🏏",B("A new bat","नया बल्ला")],"→",["😀",B("Happy","खुश")]])+scRow([["🎈💥",B("A loud pop","तेज़ धमाका")],"→",["😨",B("Scared","डरा हुआ")]]),
+ q:[["How did Rohan feel when he opened the cricket bat?|क्रिकेट बल्ला खोलकर रोहन को कैसा लगा?","Happy|खुश","Sad|उदास","Angry|गुस्सा","Bored|ऊब"],["What made Rohan feel scared?|रोहन को किस बात से डर लगा?","A balloon popping loudly|गुब्बारे का ज़ोर से फूटना","A gift|एक तोहफ़ा","A cricket bat|क्रिकेट बल्ला","A cake|केक"],["Can a loud noise cause a feeling quickly?|क्या तेज़ आवाज़ जल्दी कोई भावना पैदा कर सकती है?","Yes|हाँ","No|नहीं","Only at night|सिर्फ़ रात को","Only for adults|सिर्फ़ बड़ों के लिए"]]},
+{n:3,ic:"📖",te:"The Wish List",th:"इच्छाओं की सूची",se:"What we want shapes how we feel",sh:"हम जो चाहते हैं, वही हमारी भावना बनाता है",
+ en:"At the party, Rohan's uncle gives him a thick book of cricket stories. It is a good book, but Rohan had been hoping for a puppy all week, so he feels quietly sad. His friend Aryan sees the very same book and lights up, because it is exactly what he wanted. Ms. Bhatia explains that a feeling also depends on whether what happens matches what we hoped for.",
+ hi:"पार्टी में रोहन के चाचा उसे क्रिकेट की कहानियों की एक मोटी किताब देते हैं। किताब अच्छी है, पर रोहन पूरे हफ़्ते से पिल्ले की उम्मीद कर रहा था, इसलिए वह चुपचाप उदास हो जाता है। उसका दोस्त आर्यन वही किताब देखकर खिल उठता है, क्योंकि उसे ठीक यही चाहिए थी। मिस भाटिया समझाती हैं कि भावना इस पर भी निर्भर करती है कि जो हुआ वह हमारी उम्मीद से मेल खाता है या नहीं।",
+ ke:"The same thing can make different people feel different things, depending on what each one wanted.",kh:"एक ही चीज़ अलग-अलग लोगों को अलग एहसास दे सकती है, इस पर निर्भर करता है कि हर किसी ने क्या चाहा था।",
+ sc:()=>scRow([["💭🐶",B("Rohan wanted a puppy","रोहन को पिल्ला चाहिए था")],["📖",B("He got a book","उसे किताब मिली")],"→",["😢",B("Sad","उदास")]])+scRow([["💭📖",B("Aryan wanted this book","आर्यन को यही किताब चाहिए थी")],["📖",B("He got the book","उसे किताब मिली")],"→",["😀",B("Happy","खुश")]]),
+ q:[["Why did Rohan feel sad about the book?|किताब मिलने पर रोहन उदास क्यों हुआ?","He had hoped for a puppy|उसे पिल्ले की उम्मीद थी","The book was torn|किताब फटी थी","He did not like his uncle|उसे अपने चाचा पसंद नहीं थे","He was tired|वह थका था"],["Why was Aryan happy about the same book?|उसी किताब से आर्यन क्यों खुश हुआ?","It was exactly what he wanted|ठीक यही उसे चाहिए थी","It was very big|वह बहुत बड़ी थी","It was free|वह मुफ़्त थी","It had a red cover|उसका कवर लाल था"],["The same thing can make different people feel...|एक ही चीज़ अलग लोगों को कैसा एहसास दे सकती है?","Different feelings|अलग-अलग भावनाएँ","The same feeling|एक जैसी भावना","No feeling|कोई भावना नहीं","Only anger|सिर्फ़ गुस्सा"]]},
+{n:4,ic:"🤔",te:"What Rohan Believed",th:"रोहन ने क्या माना",se:"What we believe can cause a feeling, even if it is wrong",sh:"जो हम मानते हैं, वह गलत हो तब भी भावना बनाता है",
+ en:"Rohan sees Kabir arrive without a present. His tummy feels tight and he thinks, 'Kabir forgot my birthday.' Then Kabir pulls a small wrapped gift from behind his back. It was a surprise all along! The tight feeling goes away at once. Kabir did not change at all. Only what Rohan believed changed.",
+ hi:"रोहन ने देखा कि कबीर खाली हाथ आया है। उसके पेट में कसाव-सा हुआ और उसने सोचा, 'कबीर मेरा जन्मदिन भूल गया।' फिर कबीर ने पीठ के पीछे से एक छोटा लिपटा हुआ तोहफ़ा निकाला। वह तो पूरे समय सरप्राइज़ छिपाए हुए था! कसाव उसी पल गायब हो गया। कबीर में कुछ नहीं बदला था, बस रोहन का विश्वास बदल गया।",
+ ke:"What we believe can cause a feeling, even when the belief is wrong.",kh:"जो हम मानते हैं, वह गलत हो तब भी कोई भावना पैदा कर सकता है।",
+ sc:()=>scRow([["🧒🤷",B("Kabir arrives with empty hands","कबीर खाली हाथ आया")],["💭❓",B("“He forgot!”","“वह भूल गया!”")],"→",["😠",B("Upset","नाराज़")]])+scRow([["🎁",B("A gift behind his back","पीठ के पीछे तोहफ़ा")],"→",["😀",B("Happy","खुश")]]),
+ q:[["What did Rohan think when Kabir came with empty hands?|कबीर को खाली हाथ देखकर रोहन ने क्या सोचा?","Kabir forgot his birthday|कबीर उसका जन्मदिन भूल गया","Kabir was late|कबीर देर से आया","Kabir was sick|कबीर बीमार था","Kabir was angry|कबीर गुस्से में था"],["What was Kabir hiding behind his back?|कबीर ने पीठ के पीछे क्या छिपाया था?","A small wrapped gift|एक छोटा लिपटा तोहफ़ा","A ball|एक गेंद","A balloon|एक गुब्बारा","A book|एक किताब"],["What changed between the two moments?|दोनों पलों के बीच क्या बदला?","What Rohan believed|रोहन का विश्वास","Kabir's face|कबीर का चेहरा","The room|कमरा","The weather|मौसम"]]},
+{n:5,ic:"🎥",te:"The Old Video",th:"पुराना वीडियो",se:"Memories can bring an old feeling back",sh:"यादें पुरानी भावना लौटा सकती हैं",
+ en:"Rohan's father plays a video from last year's birthday. A younger Rohan wobbles on a new bike and tumbles into a bush. Everyone laughs. But Rohan's tummy drops and the old fright comes back, even though he is safely sitting with cake on his plate. His father explains that memories can do that.",
+ hi:"रोहन के पापा ने पिछले साल के जन्मदिन का वीडियो चलाया। उसमें छोटा रोहन नई साइकिल पर डगमगाता है और फिर झाड़ी में गिर जाता है। सब हँस पड़े। पर रोहन का पेट अंदर से सिकुड़ गया और पुराना डर लौट आया, जबकि वह सुरक्षित बैठा अपनी प्लेट में केक खा रहा था। पापा ने समझाया कि यादें ऐसा कर सकती हैं।",
+ ke:"Remembering something can bring back the feeling that went with it, long after it is over.",kh:"किसी बात को याद करना उसके साथ जुड़ी भावना को वापस ला सकता है, भले ही वह बात कब की बीत चुकी हो।",
+ sc:()=>scRow([["🎥🚲",B("Last year's birthday video","पिछले साल का जन्मदिन वीडियो")],"→",["😨",B("The old fright comes back","पुराना डर लौट आता है")]])+scRow([["🍰",B("But he is safe now","पर अब वह सुरक्षित है")]]),
+ q:[["What did Rohan's father play?|रोहन के पापा ने क्या चलाया?","A video from last year's birthday|पिछले साल के जन्मदिन का वीडियो","A song|एक गाना","A cartoon|एक कार्टून","A news show|समाचार"],["What came back when Rohan watched the fall?|गिरना देखकर रोहन को क्या लौट आया?","The old fright|पुराना डर","A new toy|नया खिलौना","Hunger|भूख","Sleep|नींद"],["Rohan was safe. Why did he still feel scared?|रोहन सुरक्षित था, फिर भी डर क्यों लगा?","Memories can bring feelings back|यादें भावनाएँ वापस ला सकती हैं","The cake was bad|केक खराब था","He was cold|उसे ठंड लगी थी","Someone shouted|किसी ने चिल्लाया"]]}
+]}];
+function speakLesson(l){try{speechSynthesis.cancel();const ps=[];if(L()!=="hi")ps.push([l.en+" "+l.ke,"en-IN"]);if(L()!=="en")ps.push([l.hi+" "+l.kh,"hi-IN"]);ps.forEach(q=>{const u=new SpeechSynthesisUtterance(q[0]);u.lang=q[1];u.rate=.85;speechSynthesis.speak(u)})}catch(e){}}
+const spDone=c=>c.lessons.filter(l=>(ST.sp||{})[c.id+"_"+l.n]).length;
+function specialInit(){head("special","💛 "+B("Special Classes","विशेष कक्षाएँ"));
+ const bx=$("b_special");
+ if(spCourse!==null&&spLesson!==null){lessonView();return}
+ if(spCourse!==null){courseView();return}
+ bx.innerHTML="<p>"+B("Your special classes. Take your time. There is no hurry and no wrong way to learn.","तुम्हारी विशेष कक्षाएँ। आराम से करो। कोई जल्दी नहीं, और सीखने का कोई गलत तरीका नहीं।")+"</p><div class='hcards'>"+SPECIAL.map((c,i)=>"<button class='hc' data-i='"+i+"'><i class='ic'>"+c.ic+"</i><b>"+B(c.te,c.th)+"</b><span>"+B(c.de,c.dh)+" · "+spDone(c)+"/"+c.lessons.length+" ✓</span><em>▶ "+B("Open","खोलो")+"</em></button>").join("")+"</div>";
+ bx.querySelectorAll("button[data-i]").forEach(b=>b.onclick=()=>{spCourse=+b.dataset.i;courseView()})}
+function courseView(){const c=SPECIAL[spCourse],bx=$("b_special");
+ bx.innerHTML="<button id='spb'>← "+B("Special Classes","विशेष कक्षाएँ")+"</button><h2>"+c.ic+" "+B(c.te,c.th)+"</h2><p>"+spDone(c)+"/"+c.lessons.length+" "+B("lessons done","पाठ पूरे")+"</p><div class='hcards'>"+c.lessons.map((l,i)=>"<button class='hc' data-i='"+i+"'><i class='ic'>"+l.ic+"</i><b>"+l.n+". "+B(l.te,l.th)+((ST.sp||{})[c.id+"_"+l.n]?" ✓":"")+"</b><span>"+B(l.se,l.sh)+"</span><em>▶ "+B("Start","शुरू करो")+"</em></button>").join("")+"</div>";
+ $("spb").onclick=()=>{spCourse=null;specialInit()};
+ bx.querySelectorAll("button[data-i]").forEach(b=>b.onclick=()=>{spLesson=+b.dataset.i;lessonView()})}
+function lessonView(){const c=SPECIAL[spCourse],l=c.lessons[spLesson],bx=$("b_special"),key=c.id+"_"+l.n;
+ const tx=L()==="hi"?"<p>"+l.hi+"</p>":L()==="en"?"<p>"+l.en+"</p>":"<p>"+l.en+"</p><p>"+l.hi+"</p>";
+ const chart=l.n===1?"<h3>"+B("The feelings chart","भावनाओं का चार्ट")+"</h3><div class='fcg'>"+FEEL.map((f,i)=>"<button class='fc' data-f='"+i+"'><i>"+f[0]+"</i>"+B(f[1],f[2])+"</button>").join("")+"</div><p id='fcd' class='tipb'>"+B("Tap a face to learn about it.","किसी चेहरे को दबाकर उसके बारे में जानो।")+"</p>":"";
+ bx.innerHTML="<button id='spb'>← "+B(c.te,c.th)+"</button><h2>"+l.ic+" "+l.n+". "+B(l.te,l.th)+"</h2><p style='color:var(--muted)'>"+B(l.se,l.sh)+"</p>"+l.sc()+"<div class='story'>"+tx+"</div>"+chart+"<p class='tipb'>💡 "+B("Rohan learns: "+l.ke,"रोहन सीखता है: "+l.kh)+"</p><div class='bar'><button id='sls'>🔊 "+B("Read aloud","सुनाओ")+"</button><button id='sst'>⏹</button><button id='sq'>📝 "+B("Practice","अभ्यास")+"</button></div><div id='scbox'></div>";
+ $("spb").onclick=()=>{try{speechSynthesis.cancel()}catch(e){}gentle=false;spLesson=null;courseView()};
+ $("sls").onclick=()=>speakLesson(l);$("sst").onclick=()=>{try{speechSynthesis.cancel()}catch(e){}};
+ bx.querySelectorAll("button[data-f]").forEach(b=>b.onclick=()=>{const f=FEEL[+b.dataset.f];$("fcd").textContent=f[0]+" "+B(f[1],f[2])+": "+B(f[3],f[4]);speakT(cleanForSpeech(B(f[1]+". "+f[3],f[2]+". "+f[4])))});
+ $("sq").onclick=()=>{try{speechSynthesis.cancel()}catch(e){}gentle=true;scTop=c.id;
+  let items=l.q.map(q=>gkItem({q:q,i:l.ic}));
+  if(l.n===1){const faces=shuffle(FEEL.slice()).map(f=>({p:f[0],h:B("Which feeling is this?","यह कौन सी भावना है?"),o:shuffle([f,...shuffle(FEEL.filter(x=>x!==f)).slice(0,3)]).map(x=>({l:B(x[1],x[2]),ok:x===f}))}));items=faces.concat(items)}
+  play("scbox",items,()=>lessonView(),()=>{if(!(ST.sp||{})[key]){ST.sp=ST.sp||{};ST.sp[key]=true;sv();award(20,0,0,null,true);toast("💛 "+B("Lesson complete!","पाठ पूरा हुआ!"))}})}}
+let lastAct=Date.now(),tk=0;
+["click","keydown","touchstart"].forEach(ev=>document.addEventListener(ev,()=>{lastAct=Date.now()},true));
+setInterval(()=>{if(!LOGGED||ST.uid==="admin"||document.hidden||page==="report"||Date.now()-lastAct>60000)return;
+ ST.secs=(ST.secs||0)+5;const t=today(),h=(ST.hist[t]=ST.hist[t]||{xp:0,g:0,r:0,n:0});h.s=(h.s||0)+5;if(++tk%6===0)sv()},5000);
+document.querySelectorAll(".cy").forEach(x=>{x.textContent=new Date().getFullYear()});
+applyTheme();$("lang").value="both";
+a11yApply();cmsInit();seedKartik();loginScreen();
+</script></body></html>
